@@ -116,6 +116,14 @@ X)
 		: ${HOST:=${HOSTNAME}}
 		: ${HOST:=${shinit_systype}}
 
+		case X${HOST} in
+		Xtoolbox)
+			if [ -f /run/.containerenv ]; then
+				HOST=$(source /run/.containerenv && echo $name)
+			fi
+			;;
+		esac
+
 		# Add ${HOST} to start of command prompt.
 		if [ -n "${BASH_VERSION}" ]; then
 			#PS1='\[\e[33m\]${HOST}\[\e[m\]'
