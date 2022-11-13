@@ -1,0 +1,211 @@
+# $HOME/.shinit -- called for each invocation of a shell
+
+case X${HOME_SHINIT_SOURCED} in
+X)
+	HOME_SHINIT_SOURCED=yes
+
+	if [ -n "${KSH_VERSION}" ]; then
+		# ${HOME}/.kshrc should be called for each invocation of a shell.
+		if [ -f "${HOME}/.kshrc" ]; then
+			. "${HOME}/.kshrc"
+		fi
+	fi
+
+	###########################################################################
+	# Shell environment
+
+	case X${shinit_systype} in
+	X)	case X${SHELL} in
+		*/com.termux/*)
+			shinit_systype=termux
+			;;
+		*)
+			case X${MSYSTEM} in
+			X)
+				if [ -f /bin/cygwin1.dll ]; then
+					shinit_systype=cygwin
+				else
+					shinit_systype=$(uname -s | tr '[:upper:]' '[:lower:]')
+				fi
+				;;
+			*)
+				if [ -f /git-bash.exe ]; then
+					# Git for Windows
+					case X${MSYSTEM} in
+					XMSYS*)		shinit_systype=git-sdk-msys2 ;;
+					XMINGW32)	shinit_systype=git-sdk-32 ;;
+					XMINGW64)	shinit_systype=git-sdk-64 ;;
+					*)		shinit_systype="git-sdk-${MSYSTEM}" ;;
+					esac
+				else
+					# MSYS2
+					case X${MSYSTEM} in
+					XMSYS*)		shinit_systype=msys2 ;;
+					XMINGW32)	shinit_systype=mingw32 ;;
+					XMINGW64)	shinit_systype=mingw64 ;;
+					*)		shinit_systype="${MSYSTEM}" ;;
+					esac
+				fi
+				;;
+			esac
+		esac
+		;;
+	esac
+
+	prepend_to_path() {
+		case ":${PATH}:" in
+		*:"${1}":*)
+			;;
+		*)
+			PATH="${1}:${PATH}"
+		esac
+	}
+
+	# Prepend system-specific directories to ${PATH}.
+	case ${shinit_systype} in
+	termux)
+		export TERMUX_ROOT="/data/data/com.termux/files"
+		prepend_to_path "${HOME}/local/bin"
+		prepend_to_path "${HOME}/local/sbin"
+		;;
+	cygwin)
+		if [ -d /drv/PortableApps/CommonFiles/node ]; then
+			prepend_to_path /drv/PortableApps/CommonFiles/node
+			prepend_to_path /drv/PortableApps/CommonFiles/node/Data/npm-global
+		fi
+		export LANG=$(/usr/bin/locale -uU)
+		;;
+	esac
+
+	# Prepend user directories to ${PATH}.
+	prepend_to_path "${HOME}/bin
+	prepend_to_path "${HOME}/.local/bin
+
+	unset prepend_to_path
+
+	export PATH
+
+	# Use vi(1) as the main editor.
+	export EDITOR="/usr/bin/vi"
+
+	###########################################################################
+	# Shell functions and aliases
+
+	# Check for interactive shell.
+	case $- in
+	*i*)
+		########################################
+		# Shell options
+
+		if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+			set -o emacs			# emacs command-line editing mode
+			set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
+			set -o notify			# Asynchronous reports on children
+			#ulimit -c unlimited	# core dump size limit
+			if [ -n "${KSH_VERSION}" ]; then
+				set -o nohup		# Don't send jobs HUP on logout
+			fi
+			if [ -n "${BASH_VERSION}" ]; then
+				shopt -s checkwinsize	# check window size after each command
+			fi
+		fi
+
+		########################################
+		# Command prompt
+
+		: ${HOST:=${HOSTNAME}}
+		: ${HOST:=${shinit_systype}}
+
+		# Add ${HOST} to start of command prompt.
+		if [ -n "${BASH_VERSION}" ]; then
+			#PS1='\[\e[33m\]${HOST}\[\e[m\]'
+			PS1='[33m${HOST}[m'
+		elif [ -n "${KSH_VERSION}" ]; then
+			PS1='[33m${HOST}[m'
+		else
+			PS1='${HOST}'
+		fi
+		# Append last component of current directory.
+		if [ -n "${BASH_VERSION}" ]; then
+			PS1="${PS1}"' [\W]'
+		else
+			PS1="${PS1}"' [${PWD##*/}]'
+		fi
+
+		case ${shinit_systype} in
+		git-sdk-*)
+			PS1="${PS1}"'$(__git_ps1)'	# (git status)
+		esac
+		# Append '$' to end command prompt.
+		PS1="${PS1}"'\$ '
+
+		########################################
+		# Functions
+
+		agent() {
+			agent_env="${HOME}/.ssh/environment"
+			case "${1}" in
+			start)
+				# Start ssh-agent(1) if not already started.
+				shift
+				/usr/bin/ssh-add -l >/dev/null 2>&1
+				if [ "$?" = 2 ]; then
+					if [ -r "${agent_env}" ]; then
+						. "${agent_env}" >/dev/null
+					fi
+					/usr/bin/ssh-add -l >/dev/null 2>&1
+					if [ "$?" = 2 ]; then
+						( umask 066; /usr/bin/ssh-agent > "${agent_env}" )
+						. "${agent_env}"
+					fi
+				fi
+				;;
+			stop)
+				# Stop ssh-agent(1) if it is running.
+				shift
+				/usr/bin/ssh-add -l >/dev/null 2>&1
+				[ "$?" = 2 ] || eval `/usr/bin/ssh-agent -k`
+				;;
+			esac
+			unset agent_env
+		}
+
+		########################################
+		# Aliases
+
+		alias cp='cp -i'
+		alias mv='mv -i'
+		alias ls='ls -CF'
+		alias ll='ls -lF'
+		alias la='ls -aCF'
+
+		case ${shinit_systype} in
+		cygwin|linux)
+			# Assume that Cygwin and Linux use GNU ls(1).
+			alias ls='ls -CF --color=auto'
+			alias ll='ls -laF --color=auto --group-directories-first'
+			;;
+		esac
+		case ${shinit_systype} in
+		cygwin)
+			if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
+				alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
+			fi
+			alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
+			;;
+		esac
+		if [ -d "${HOME}/.home" ]; then
+			#
+			# Special alias to version control the home directory
+			# using a bare Git repository in ${HOME}/.home:
+			#
+			# $ git init --bare="${HOME}/.home"
+			#
+			alias home='/usr/bin/git --git-dir="${HOME}/.home" --work-tree="${HOME}"'
+		fi
+		;;
+	esac
+
+	unset shinit_systype
+	;;
+esac
