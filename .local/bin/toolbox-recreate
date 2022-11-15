@@ -1,0 +1,88 @@
+#!/bin/sh
+
+script=${0##*/}
+podman=/usr/bin/podman
+toolbox=/usr/bin/toolbox
+xargs=/usr/bin/xargs
+
+default=
+doit=
+exists=
+
+while getopts "n" opt "$@"; do
+	case ${opt} in
+	n)	doit=echo ;;
+	*)	echo 1>&2 "Usage: ${script} [-n] [name]"
+		exit 1 ;;
+	esac
+done
+shift $((OPTIND - 1))
+
+toolbox_name="$1"
+container_name=
+name_cmd='source /run/.containerenv && printf "${name}"'
+
+if [ -f /run/.containerenv ]; then
+	container_name=$(/bin/bash -c "${name_cmd}")
+	echo 1>&2 "${script}: cannot be inside container \`${container_name}'"
+	exit 2
+fi
+
+if [ -n "${toolbox_name}" ]; then
+	run="${toolbox} run -c \"${toolbox_name}\""
+else
+	default=yes
+	run="${toolbox} run"
+fi
+
+# Test if the container exists.
+if ${run} true 2>/dev/null; then
+	exists=yes
+	if [ -n "${default}" ]; then
+		toolbox_name=$(${run} /bin/bash -c "${name_cmd}")
+		echo "toolbox: ${toolbox_name}"
+	fi
+fi
+
+# Stop container and remove it if it exists.
+if [ -n "${exists}" ]; then
+	${doit} ${podman} stop "${toolbox_name}"
+	if [ $? -gt 0 ]; then
+		echo 1>&2 "${script}: container \`${toolbox_name}' is busy; close other sessions"
+		exit 3
+	fi
+	${doit} ${toolbox} rm "${toolbox_name}"
+	if [ $? -gt 0 ]; then
+		echo 1>&2 "${script}: container \`${toolbox_name}' could not be removed"
+		exit 4
+	fi
+fi
+
+# Create a new toolbox container with the latest Fedora release.
+# Specific containers can be matched by name to use custom create options,
+# e.g., different distro, image, or release.
+#
+if [ -n "${default}" ]; then
+	${doit} ${toolbox} create
+	if [ $? -gt 0 ]; then
+		echo 1>&2 "${script}: error creating default toolbox"
+		exit 5
+	fi
+else
+	${doit} ${toolbox} create -c "${toolbox_name}"
+	if [ $? -gt 0 ]; then
+		echo 1>&2 "${script}: error creating toolbox \`${toolbox_name}'"
+		exit 5
+	fi
+fi
+
+# Common packages to all containers.
+${xargs} -r ${doit} ${run} sudo dnf install -y << EOF
+vim
+EOF
+
+if [ -n "${default}" ]; then
+	: "Packages for the default toolbox container."
+else
+	: "Packages for non-default containers, matched by name."
+fi
