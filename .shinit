@@ -58,6 +58,7 @@ X)
 			;;
 		*)
 			PATH="${1}:${PATH}"
+			;;
 		esac
 	}
 
@@ -78,8 +79,8 @@ X)
 	esac
 
 	# Prepend user directories to ${PATH}.
-	prepend_to_path "${HOME}/bin
-	prepend_to_path "${HOME}/.local/bin
+	prepend_to_path "${HOME}/bin"
+	prepend_to_path "${HOME}/.local/bin"
 
 	unset prepend_to_path
 
