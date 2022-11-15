@@ -117,10 +117,13 @@ X)
 		: ${HOST:=${HOSTNAME}}
 		: ${HOST:=${shinit_systype}}
 
+		shinit_is_toolbox=
+
 		case X${HOST} in
 		Xtoolbox)
 			if [ -f /run/.containerenv ]; then
-				HOST=$(source /run/.containerenv && echo $name)
+				shinit_is_toolbox=yes
+				HOST=$(source /run/.containerenv && printf $name)
 			fi
 			;;
 		esac
@@ -140,6 +143,10 @@ X)
 		else
 			PS1="${PS1}"' [${PWD##*/}]'
 		fi
+		# Prepend colored dot for toolboxes.
+		if [ -n "$shinit_is_toolbox" ]; then
+			PS1='[35m⬢[m'" ${PS1}"
+		fi
 
 		case ${shinit_systype} in
 		git-sdk-*)
@@ -147,6 +154,8 @@ X)
 		esac
 		# Append '$' to end command prompt.
 		PS1="${PS1}"'\$ '
+
+		unset shinit_is_toolbox
 
 		########################################
 		# Functions
