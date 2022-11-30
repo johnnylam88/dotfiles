@@ -78,6 +78,7 @@ fi
 
 # Common packages to all containers.
 ${xargs} -r ${doit} ${run} sudo dnf install -y << EOF
+tmux
 vim
 EOF
 
