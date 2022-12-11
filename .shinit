@@ -212,15 +212,6 @@ X)
 			alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
 			;;
 		esac
-		if [ -d "${HOME}/.home" ]; then
-			#
-			# Special alias to version control the home directory
-			# using a bare Git repository in ${HOME}/.home:
-			#
-			# $ git init --bare="${HOME}/.home"
-			#
-			alias home='/usr/bin/git --git-dir="${HOME}/.home" --work-tree="${HOME}"'
-		fi
 		;;
 	esac
 

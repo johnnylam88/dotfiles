@@ -1,0 +1,36 @@
+#!/bin/sh
+
+script=${0##*/}
+git="/usr/bin/git"
+repo_path="${HOME}/.home"
+
+case "${1}" in
+help)
+	echo "Usage: ${script} help"
+	echo "       ${script} init"
+	echo "       ${script} vcs subcommand [option ...]"
+	exit 0
+	;;
+
+init)
+	if [ -d "${repo_path}" ]; then
+		echo 1>&2 "${script}: path already exists \`${repo_path}'"
+		exit 2
+	fi
+	${git} init --bare="${repo_path}"
+	;;
+
+vcs)
+	if [ ! -d "${repo_path}" ]; then
+		echo 1>&2 "${script}: path does not exist \`${repo_path}'"
+		exit 3
+	fi
+	shift
+	${git} --git-dir="${repo_path}" --work-tree="${HOME}" "$@"
+	;;
+
+*)
+	echo 1>&2 "${script}: unknown action \`${1}'"
+	exit 1
+	;;
+esac
