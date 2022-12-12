@@ -1,0 +1,10 @@
+# $HOME/.bashrc.d/0-dotprofile
+#
+# Fedora's default user dotfiles for bash(1) have ${HOME}/.bash_profile
+# source ${HOME}/.bashrc, which invokes every file in ${HOME}/.bashrc.d.
+# Create a file in ${HOME}/.bashrc.d that is sourced first that just
+# sources our ${HOME}/.profile.
+
+if [ -f "${HOME}/.profile" ]; then
+	. "${HOME}/.profile"
+fi
