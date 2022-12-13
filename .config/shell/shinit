@@ -153,6 +153,10 @@ X)
 		if [ -n "${shinit_container_name}" ]; then
 			PS1="${PS1}"' on ${shinit_esc_purple}⬢ ${shinit_container_name}${shinit_esc_end}'
 		fi
+		# Add the hostname if we're in an SSH session.
+		if [ -n "${SSH_CLIENT}" ]; then
+			PS1="${PS1}"' on ${shinit_esc_brown}${HOST}${shinit_esc_end}'
+		fi
 		case ${shinit_systype} in
 		git-sdk-*)
 			# Append Git status from Git For Windows if available.
