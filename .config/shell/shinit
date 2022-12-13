@@ -120,27 +120,38 @@ X)
 		shinit_container_name=
 		if [ -f /run/.containerenv ]; then
 			shinit_container_name=$(source /run/.containerenv && printf $name)
-			HOST="${shinit_container_name}"
+		fi
+
+		if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
+			shinit_esc_black='[30m'
+			shinit_esc_blue='[34m'
+			shinit_esc_brown='[33m'
+			shinit_esc_cyan='[36m'
+			shinit_esc_gray='[37m'
+			shinit_esc_green='[32m'
+			shinit_esc_purple='[35m'
+			shinit_esc_red='[31m'
+			shinit_esc_end='[m'
+		else
+			shinit_esc_black=
+			shinit_esc_blue=
+			shinit_esc_brown=
+			shinit_esc_cyan=
+			shinit_esc_gray=
+			shinit_esc_green=
+			shinit_esc_purple=
+			shinit_esc_red=
+			shinit_esc_end=
 		fi
 
 		# Start with a new line.
 		PS1='
 '
 		# Add the last component of the current directory.
-		if [ -n "${BASH_VERSION}" ]; then
-			PS1="${PS1}"'[36m\W[m'
-		elif [ -n "${KSH_VERSION}" ]; then
-			PS1="${PS1}"'[36m${PWD##*/}[m'
-		else
-			PS1="${PS1}"'${PWD##*/}'
-		fi
+		PS1="${PS1}"'${shinit_esc_cyan}${PWD##*/}${shinit_esc_end}'
 		# Add container name if we're in a container.
 		if [ -n "${shinit_container_name}" ]; then
-			if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
-				PS1="${PS1}"' on [35m⬢ ${HOST}[m'
-			else
-				PS1="${PS1}"' on (${HOST})'
-			fi
+			PS1="${PS1}"' on ${shinit_esc_purple}⬢ ${shinit_container_name}${shinit_esc_end}'
 		fi
 		case ${shinit_systype} in
 		git-sdk-*)
@@ -150,8 +161,6 @@ X)
 		# Append a new line followed by '$' to end the prompt.
 		PS1="${PS1}"'
 \$ '
-
-		unset shinit_container_name
 
 		########################################
 		# Functions
