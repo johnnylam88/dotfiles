@@ -117,45 +117,41 @@ X)
 		: ${HOST:=${HOSTNAME}}
 		: ${HOST:=${shinit_systype}}
 
-		shinit_is_toolbox=
+		shinit_container_name=
+		if [ -f /run/.containerenv ]; then
+			shinit_container_name=$(source /run/.containerenv && printf $name)
+			HOST="${shinit_container_name}"
+		fi
 
-		case X${HOST} in
-		Xtoolbox)
-			if [ -f /run/.containerenv ]; then
-				shinit_is_toolbox=yes
-				HOST=$(source /run/.containerenv && printf $name)
-			fi
-			;;
-		esac
-
-		# Add ${HOST} to start of command prompt.
+		# Start with a new line.
+		PS1='
+'
+		# Add the last component of the current directory.
 		if [ -n "${BASH_VERSION}" ]; then
-			#PS1='\[\e[33m\]${HOST}\[\e[m\]'
-			PS1='[33m${HOST}[m'
+			PS1="${PS1}"'[36m\W[m'
 		elif [ -n "${KSH_VERSION}" ]; then
-			PS1='[33m${HOST}[m'
+			PS1="${PS1}"'[36m${PWD##*/}[m'
 		else
-			PS1='${HOST}'
+			PS1="${PS1}"'${PWD##*/}'
 		fi
-		# Append last component of current directory.
-		if [ -n "${BASH_VERSION}" ]; then
-			PS1="${PS1}"' [\W]'
-		else
-			PS1="${PS1}"' [${PWD##*/}]'
+		# Add container name if we're in a container.
+		if [ -n "${shinit_container_name}" ]; then
+			if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
+				PS1="${PS1}"' on [35m⬢ ${HOST}[m'
+			else
+				PS1="${PS1}"' on (${HOST})'
+			fi
 		fi
-		# Prepend colored dot for toolboxes.
-		if [ -n "$shinit_is_toolbox" ]; then
-			PS1='[35m⬢[m'" ${PS1}"
-		fi
-
 		case ${shinit_systype} in
 		git-sdk-*)
+			# Append Git status from Git For Windows if available.
 			PS1="${PS1}"'$(__git_ps1)'	# (git status)
 		esac
-		# Append '$' to end command prompt.
-		PS1="${PS1}"'\$ '
+		# Append a new line followed by '$' to end the prompt.
+		PS1="${PS1}"'
+\$ '
 
-		unset shinit_is_toolbox
+		unset shinit_container_name
 
 		########################################
 		# Functions
