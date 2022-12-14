@@ -123,14 +123,14 @@ X)
 		fi
 
 		if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
-			esc_black='[30m'
-			esc_blue='[34m'
-			esc_brown='[33m'
-			esc_cyan='[36m'
-			esc_gray='[37m'
-			esc_green='[32m'
-			esc_purple='[35m'
-			esc_red='[31m'
+			esc_black='[1;30m'
+			esc_blue='[1;34m'
+			esc_brown='[1;33m'
+			esc_cyan='[1;36m'
+			esc_gray='[1;37m'
+			esc_green='[1;32m'
+			esc_purple='[1;35m'
+			esc_red='[1;31m'
 			esc_end='[m'
 		else
 			esc_black=
