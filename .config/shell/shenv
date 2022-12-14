@@ -14,36 +14,36 @@ X)
 	###########################################################################
 	# Shell environment
 
-	case X${shenv_systype} in
+	case X${SYSTYPE} in
 	X)	case X${SHELL} in
 		*/com.termux/*)
-			shenv_systype=termux
+			SYSTYPE=termux
 			;;
 		*)
 			case X${MSYSTEM} in
 			X)
 				if [ -f /bin/cygwin1.dll ]; then
-					shenv_systype=cygwin
+					SYSTYPE=cygwin
 				else
-					shenv_systype=$(uname -s | tr '[:upper:]' '[:lower:]')
+					SYSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
 				fi
 				;;
 			*)
 				if [ -f /git-bash.exe ]; then
 					# Git for Windows
 					case X${MSYSTEM} in
-					XMSYS*)		shenv_systype=git-sdk-msys2 ;;
-					XMINGW32)	shenv_systype=git-sdk-32 ;;
-					XMINGW64)	shenv_systype=git-sdk-64 ;;
-					*)		shenv_systype="git-sdk-${MSYSTEM}" ;;
+					XMSYS*)		SYSTYPE=git-sdk-msys2 ;;
+					XMINGW32)	SYSTYPE=git-sdk-32 ;;
+					XMINGW64)	SYSTYPE=git-sdk-64 ;;
+					*)		SYSTYPE="git-sdk-${MSYSTEM}" ;;
 					esac
 				else
 					# MSYS2
 					case X${MSYSTEM} in
-					XMSYS*)		shenv_systype=msys2 ;;
-					XMINGW32)	shenv_systype=mingw32 ;;
-					XMINGW64)	shenv_systype=mingw64 ;;
-					*)		shenv_systype="${MSYSTEM}" ;;
+					XMSYS*)		SYSTYPE=msys2 ;;
+					XMINGW32)	SYSTYPE=mingw32 ;;
+					XMINGW64)	SYSTYPE=mingw64 ;;
+					*)		SYSTYPE="${MSYSTEM}" ;;
 					esac
 				fi
 				;;
@@ -63,7 +63,7 @@ X)
 	}
 
 	# Prepend system-specific directories to ${PATH}.
-	case ${shenv_systype} in
+	case ${SYSTYPE} in
 	termux)
 		export TERMUX_ROOT="/data/data/com.termux/files"
 		prepend_to_path "${HOME}/local/bin"
@@ -97,7 +97,5 @@ X)
 		fi
 		;;
 	esac
-
-	unset shenv_systype
 	;;
 esac

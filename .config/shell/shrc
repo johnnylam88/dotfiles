@@ -27,7 +27,7 @@ X)
 	# Command prompt
 
 	: ${HOST:=${HOSTNAME}}
-	: ${HOST:=${shenv_systype}}
+	: ${HOST:=${SYSTYPE}}
 
 	shrc_container_name=
 	if [ -f /run/.containerenv ]; then
@@ -57,7 +57,7 @@ X)
 	fi
 
 	shrc_git_prompt_sourced=
-	case ${shenv_systype} in
+	case ${SYSTYPE} in
 	git-sdk-*)
 		# Git For Windows automatically sources git-prompt.sh.
 		shrc_git_prompt_sourced=yes
@@ -159,14 +159,14 @@ X)
 	alias ll='ls -lF'
 	alias la='ls -aCF'
 
-	case ${shenv_systype} in
+	case ${SYSTYPE} in
 	cygwin|linux)
 		# Assume that Cygwin and Linux use GNU ls(1).
 		alias ls='ls -CF --color=auto'
 		alias ll='ls -laF --color=auto --group-directories-first'
 		;;
 	esac
-	case ${shenv_systype} in
+	case ${SYSTYPE} in
 	cygwin)
 		if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
 			alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
