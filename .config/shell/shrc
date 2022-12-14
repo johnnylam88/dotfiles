@@ -128,7 +128,7 @@ X)
 	# Append a new line.
 	PS1="${PS1}"'
 '
-	# Append a symbol depending on if the user is root to end the prompt.
+	# Append a final prompt symbol.
 	# NOTE: This should not contain any escape codes or else command-line
 	#       editing may break.
 	PS1="${PS1}${shrc_prompt_symbol} "
