@@ -94,22 +94,22 @@ X)
 		root)	PS1="${PS1}${esc_red}root${esc_end}" ;;
 		*)		PS1="${PS1}${esc_yellow}"'${USER}'"${esc_end}" ;;
 		esac
-		PS1="${PS1} in "
+		PS1="${PS1} ${esc_white}in${esc_end} "
 	fi
 	# Add the last component of the current directory.
 	PS1="${PS1}${esc_cyan}"'${PWD##*/}'"${esc_end}"
 	# Add the hostname if we're in an SSH session.
 	if [ -n "${SSH_CLIENT}" ]; then
-		PS1="${PS1} at ${esc_green}"'${HOST}'"${esc_end}"
+		PS1="${PS1} ${esc_white}at${esc_end} ${esc_green}"'${HOST}'"${esc_end}"
 	fi
 	if [ -n "${shrc_git_prompt_sourced}" ]; then
 		# Append Git status.
-		shrc_git_status_fmt=" on ${esc_purple}%s${esc_end}"
+		shrc_git_status_fmt=" ${esc_white}on${esc_end} ${esc_purple}ѱ %s${esc_end}"
 		PS1="${PS1}"'$(__git_ps1 "${shrc_git_status_fmt}")'
 	fi
 	# Add container name if we're in a container.
 	if [ -n "${shrc_container_name}" ]; then
-		PS1="${PS1} on ${esc_cyan}"'⬢ (${shrc_container_name})'"${esc_end}"
+		PS1="${PS1} ${esc_white}on${esc_end} ${esc_cyan}"'⬢ (${shrc_container_name})'"${esc_end}"
 	fi
 	# Append a new line followed by '$' to end the prompt.
 	PS1="${PS1}"'
