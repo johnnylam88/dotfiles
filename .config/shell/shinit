@@ -177,20 +177,27 @@ X)
 		# Start with a new line.
 		PS1='
 '
+		if [ -n "${SSH_CLIENT}" ]; then
+			case ${USER} in
+			root)	PS1="${PS1}${esc_red}root${esc_end}" ;;
+			*)		PS1="${PS1}${esc_brown}"'${USER}'"${esc_end}" ;;
+			esac
+			PS1="${PS1} in "
+		fi
 		# Add the last component of the current directory.
 		PS1="${PS1}${esc_cyan}"'${PWD##*/}'"${esc_end}"
-		# Add container name if we're in a container.
-		if [ -n "${shinit_container_name}" ]; then
-			PS1="${PS1} on ${esc_brown}"'⬢ ${shinit_container_name}'"${esc_end}"
-		fi
 		# Add the hostname if we're in an SSH session.
 		if [ -n "${SSH_CLIENT}" ]; then
-			PS1="${PS1} on ${esc_brown}"'${HOST}'"${esc_end}"
+			PS1="${PS1} at ${esc_green}"'${HOST}'"${esc_end}"
 		fi
 		if [ -n "${shinit_git_prompt_sourced}" ]; then
 			# Append Git status.
 			shinit_git_status_fmt=" on ${esc_purple}%s${esc_end}"
 			PS1="${PS1}"'$(__git_ps1 "${shinit_git_status_fmt}")'
+		fi
+		# Add container name if we're in a container.
+		if [ -n "${shinit_container_name}" ]; then
+			PS1="${PS1} on ${esc_cyan}"'⬢ (${shinit_container_name})'"${esc_end}"
 		fi
 		# Append a new line followed by '$' to end the prompt.
 		PS1="${PS1}"'
