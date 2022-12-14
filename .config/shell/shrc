@@ -102,6 +102,7 @@ X)
 	# Start with a new line.
 	PS1='
 '
+	# Add the user if this is not localhost.
 	if [ -n "${SSH_CLIENT}" ]; then
 		case ${USER} in
 		root)	PS1="${PS1}${esc_red}${shrc_prompt_user}${esc_end}" ;;
