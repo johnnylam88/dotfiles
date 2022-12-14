@@ -35,24 +35,24 @@ X)
 	fi
 
 	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-		esc_black='[1;30m'
 		esc_blue='[1;34m'
-		esc_brown='[1;33m'
 		esc_cyan='[1;36m'
-		esc_gray='[1;37m'
+		esc_gray='[1;30m'
 		esc_green='[1;32m'
 		esc_purple='[1;35m'
 		esc_red='[1;31m'
+		esc_white='[1;37m'
+		esc_yellow='[1;33m'
 		esc_end='[m'
 	else
-		esc_black=
 		esc_blue=
-		esc_brown=
 		esc_cyan=
 		esc_gray=
 		esc_green=
 		esc_purple=
 		esc_red=
+		esc_white=
+		esc_yellow=
 		esc_end=
 	fi
 
@@ -92,7 +92,7 @@ X)
 	if [ -n "${SSH_CLIENT}" ]; then
 		case ${USER} in
 		root)	PS1="${PS1}${esc_red}root${esc_end}" ;;
-		*)		PS1="${PS1}${esc_brown}"'${USER}'"${esc_end}" ;;
+		*)		PS1="${PS1}${esc_yellow}"'${USER}'"${esc_end}" ;;
 		esac
 		PS1="${PS1} in "
 	fi
@@ -115,9 +115,9 @@ X)
 	PS1="${PS1}"'
 \$ '
 
-	unset esc_black esc_blue esc_brown
-	unset esc_cyan esc_gray esc_green
-	unset esc_purple esc_red esc_end
+	unset esc_blue esc_cyan esc_gray
+	unset esc_green esc_purple esc_red
+	unset esc_white esc_yellow esc_end
 
 	########################################
 	# Functions
