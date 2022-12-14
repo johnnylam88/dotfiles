@@ -1,8 +1,8 @@
-# $HOME/.shinit -- called for each invocation of a shell
+# shenv -- called for each invocation of a shell
 
-case X${HOME_SHINIT_SOURCED} in
+case X${SHENV_SOURCED} in
 X)
-	HOME_SHINIT_SOURCED=yes
+	SHENV_SOURCED=yes
 
 	if [ -n "${KSH_VERSION}" ]; then
 		# ${HOME}/.kshrc should be called for each invocation of a shell.
@@ -14,36 +14,36 @@ X)
 	###########################################################################
 	# Shell environment
 
-	case X${shinit_systype} in
+	case X${shenv_systype} in
 	X)	case X${SHELL} in
 		*/com.termux/*)
-			shinit_systype=termux
+			shenv_systype=termux
 			;;
 		*)
 			case X${MSYSTEM} in
 			X)
 				if [ -f /bin/cygwin1.dll ]; then
-					shinit_systype=cygwin
+					shenv_systype=cygwin
 				else
-					shinit_systype=$(uname -s | tr '[:upper:]' '[:lower:]')
+					shenv_systype=$(uname -s | tr '[:upper:]' '[:lower:]')
 				fi
 				;;
 			*)
 				if [ -f /git-bash.exe ]; then
 					# Git for Windows
 					case X${MSYSTEM} in
-					XMSYS*)		shinit_systype=git-sdk-msys2 ;;
-					XMINGW32)	shinit_systype=git-sdk-32 ;;
-					XMINGW64)	shinit_systype=git-sdk-64 ;;
-					*)		shinit_systype="git-sdk-${MSYSTEM}" ;;
+					XMSYS*)		shenv_systype=git-sdk-msys2 ;;
+					XMINGW32)	shenv_systype=git-sdk-32 ;;
+					XMINGW64)	shenv_systype=git-sdk-64 ;;
+					*)		shenv_systype="git-sdk-${MSYSTEM}" ;;
 					esac
 				else
 					# MSYS2
 					case X${MSYSTEM} in
-					XMSYS*)		shinit_systype=msys2 ;;
-					XMINGW32)	shinit_systype=mingw32 ;;
-					XMINGW64)	shinit_systype=mingw64 ;;
-					*)		shinit_systype="${MSYSTEM}" ;;
+					XMSYS*)		shenv_systype=msys2 ;;
+					XMINGW32)	shenv_systype=mingw32 ;;
+					XMINGW64)	shenv_systype=mingw64 ;;
+					*)		shenv_systype="${MSYSTEM}" ;;
 					esac
 				fi
 				;;
@@ -63,7 +63,7 @@ X)
 	}
 
 	# Prepend system-specific directories to ${PATH}.
-	case ${shinit_systype} in
+	case ${shenv_systype} in
 	termux)
 		export TERMUX_ROOT="/data/data/com.termux/files"
 		prepend_to_path "${HOME}/local/bin"
@@ -115,11 +115,11 @@ X)
 		# Command prompt
 
 		: ${HOST:=${HOSTNAME}}
-		: ${HOST:=${shinit_systype}}
+		: ${HOST:=${shenv_systype}}
 
-		shinit_container_name=
+		shenv_container_name=
 		if [ -f /run/.containerenv ]; then
-			shinit_container_name=$(source /run/.containerenv && printf $name)
+			shenv_container_name=$(source /run/.containerenv && printf $name)
 		fi
 
 		if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
@@ -144,29 +144,29 @@ X)
 			esc_end=
 		fi
 
-		shinit_git_prompt_sourced=
-		case ${shinit_systype} in
+		shenv_git_prompt_sourced=
+		case ${shenv_systype} in
 		git-sdk-*)
 			# Git For Windows automatically sources git-prompt.sh.
-			shinit_git_prompt_sourced=yes
+			shenv_git_prompt_sourced=yes
 			;;
 		esac
-		if [ -z "${shinit_git_prompt_sourced}" ]; then
+		if [ -z "${shenv_git_prompt_sourced}" ]; then
 			if [ -n "${BASH_VERSION}" ]; then
 				# git-prompt.sh is designed for bash(1) and zsh(1).
-				for shinit_git_prompt_path in \
+				for shenv_git_prompt_path in \
 					/usr/share/git-core/contrib/completion
 				do
-					if [ -f "${shinit_git_prompt_path}/git-prompt.sh" ]; then
-						shinit_git_prompt_sourced=yes
-					    . "${shinit_git_prompt_path}/git-prompt.sh"
+					if [ -f "${shenv_git_prompt_path}/git-prompt.sh" ]; then
+						shenv_git_prompt_sourced=yes
+					    . "${shenv_git_prompt_path}/git-prompt.sh"
 						break
 					fi
 				done
-				unset shinit_git_prompt_path
+				unset shenv_git_prompt_path
 			fi
 		fi
-		if [ -n "${shinit_git_prompt_sourced}" ]; then
+		if [ -n "${shenv_git_prompt_sourced}" ]; then
 			# Configure __git_ps1 to show the state of working directory
 			# relative to the branch.
 			GIT_PS1_SHOWDIRTYSTATE=yes
@@ -190,14 +190,14 @@ X)
 		if [ -n "${SSH_CLIENT}" ]; then
 			PS1="${PS1} at ${esc_green}"'${HOST}'"${esc_end}"
 		fi
-		if [ -n "${shinit_git_prompt_sourced}" ]; then
+		if [ -n "${shenv_git_prompt_sourced}" ]; then
 			# Append Git status.
-			shinit_git_status_fmt=" on ${esc_purple}%s${esc_end}"
-			PS1="${PS1}"'$(__git_ps1 "${shinit_git_status_fmt}")'
+			shenv_git_status_fmt=" on ${esc_purple}%s${esc_end}"
+			PS1="${PS1}"'$(__git_ps1 "${shenv_git_status_fmt}")'
 		fi
 		# Add container name if we're in a container.
-		if [ -n "${shinit_container_name}" ]; then
-			PS1="${PS1} on ${esc_cyan}"'⬢ (${shinit_container_name})'"${esc_end}"
+		if [ -n "${shenv_container_name}" ]; then
+			PS1="${PS1} on ${esc_cyan}"'⬢ (${shenv_container_name})'"${esc_end}"
 		fi
 		# Append a new line followed by '$' to end the prompt.
 		PS1="${PS1}"'
@@ -247,14 +247,14 @@ X)
 		alias ll='ls -lF'
 		alias la='ls -aCF'
 
-		case ${shinit_systype} in
+		case ${shenv_systype} in
 		cygwin|linux)
 			# Assume that Cygwin and Linux use GNU ls(1).
 			alias ls='ls -CF --color=auto'
 			alias ll='ls -laF --color=auto --group-directories-first'
 			;;
 		esac
-		case ${shinit_systype} in
+		case ${shenv_systype} in
 		cygwin)
 			if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
 				alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
@@ -265,6 +265,6 @@ X)
 		;;
 	esac
 
-	unset shinit_systype
+	unset shenv_systype
 	;;
 esac
