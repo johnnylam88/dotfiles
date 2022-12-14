@@ -123,25 +123,25 @@ X)
 		fi
 
 		if [ -n "${BASH_VERSION}" -o -n "${KSH_VERSION}" ]; then
-			shinit_esc_black='[30m'
-			shinit_esc_blue='[34m'
-			shinit_esc_brown='[33m'
-			shinit_esc_cyan='[36m'
-			shinit_esc_gray='[37m'
-			shinit_esc_green='[32m'
-			shinit_esc_purple='[35m'
-			shinit_esc_red='[31m'
-			shinit_esc_end='[m'
+			esc_black='[30m'
+			esc_blue='[34m'
+			esc_brown='[33m'
+			esc_cyan='[36m'
+			esc_gray='[37m'
+			esc_green='[32m'
+			esc_purple='[35m'
+			esc_red='[31m'
+			esc_end='[m'
 		else
-			shinit_esc_black=
-			shinit_esc_blue=
-			shinit_esc_brown=
-			shinit_esc_cyan=
-			shinit_esc_gray=
-			shinit_esc_green=
-			shinit_esc_purple=
-			shinit_esc_red=
-			shinit_esc_end=
+			esc_black=
+			esc_blue=
+			esc_brown=
+			esc_cyan=
+			esc_gray=
+			esc_green=
+			esc_purple=
+			esc_red=
+			esc_end=
 		fi
 
 		shinit_git_prompt_sourced=
@@ -178,23 +178,27 @@ X)
 		PS1='
 '
 		# Add the last component of the current directory.
-		PS1="${PS1}"'${shinit_esc_cyan}${PWD##*/}${shinit_esc_end}'
+		PS1="${PS1}${esc_cyan}"'${PWD##*/}'"${esc_end}"
 		# Add container name if we're in a container.
 		if [ -n "${shinit_container_name}" ]; then
-			PS1="${PS1}"' on ${shinit_esc_brown}⬢ ${shinit_container_name}${shinit_esc_end}'
+			PS1="${PS1} on ${esc_brown}"'⬢ ${shinit_container_name}'"${esc_end}"
 		fi
 		# Add the hostname if we're in an SSH session.
 		if [ -n "${SSH_CLIENT}" ]; then
-			PS1="${PS1}"' on ${shinit_esc_brown}${HOST}${shinit_esc_end}'
+			PS1="${PS1} on ${esc_brown}"'${HOST}'"${esc_end}"
 		fi
 		if [ -n "${shinit_git_prompt_sourced}" ]; then
 			# Append Git status.
-			shinit_git_status_fmt=" on ${shinit_esc_purple}%s${shinit_esc_end}"
+			shinit_git_status_fmt=" on ${esc_purple}%s${esc_end}"
 			PS1="${PS1}"'$(__git_ps1 "${shinit_git_status_fmt}")'
 		fi
 		# Append a new line followed by '$' to end the prompt.
 		PS1="${PS1}"'
 \$ '
+
+		unset esc_black esc_blue esc_brown
+		unset esc_cyan esc_gray esc_green
+		unset esc_purple esc_red esc_end
 
 		########################################
 		# Functions
