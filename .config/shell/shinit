@@ -144,6 +144,36 @@ X)
 			shinit_esc_end=
 		fi
 
+		shinit_git_prompt_sourced=
+		case ${shinit_systype} in
+		git-sdk-*)
+			# Git For Windows automatically sources git-prompt.sh.
+			shinit_git_prompt_sourced=yes
+			;;
+		esac
+		if [ -z "${shinit_git_prompt_sourced}" ]; then
+			if [ -n "${BASH_VERSION}" ]; then
+				# git-prompt.sh is designed for bash(1) and zsh(1).
+				for shinit_git_prompt_path in \
+					/usr/share/git-core/contrib/completion
+				do
+					if [ -f "${shinit_git_prompt_path}/git-prompt.sh" ]; then
+						shinit_git_prompt_sourced=yes
+					    . "${shinit_git_prompt_path}/git-prompt.sh"
+						break
+					fi
+				done
+				unset shinit_git_prompt_path
+			fi
+		fi
+		if [ -n "${shinit_git_prompt_sourced}" ]; then
+			# Configure __git_ps1 to show the state of working directory
+			# relative to the branch.
+			GIT_PS1_SHOWDIRTYSTATE=yes
+			GIT_PS1_SHOWSTATESTATE=yes
+			GIT_PS1_SHOWUNTRACKEDFILES=yes
+		fi
+
 		# Start with a new line.
 		PS1='
 '
@@ -151,17 +181,17 @@ X)
 		PS1="${PS1}"'${shinit_esc_cyan}${PWD##*/}${shinit_esc_end}'
 		# Add container name if we're in a container.
 		if [ -n "${shinit_container_name}" ]; then
-			PS1="${PS1}"' on ${shinit_esc_purple}⬢ ${shinit_container_name}${shinit_esc_end}'
+			PS1="${PS1}"' on ${shinit_esc_brown}⬢ ${shinit_container_name}${shinit_esc_end}'
 		fi
 		# Add the hostname if we're in an SSH session.
 		if [ -n "${SSH_CLIENT}" ]; then
 			PS1="${PS1}"' on ${shinit_esc_brown}${HOST}${shinit_esc_end}'
 		fi
-		case ${shinit_systype} in
-		git-sdk-*)
-			# Append Git status from Git For Windows if available.
-			PS1="${PS1}"'$(__git_ps1)'	# (git status)
-		esac
+		if [ -n "${shinit_git_prompt_sourced}" ]; then
+			# Append Git status.
+			shinit_git_status_fmt=" on ${shinit_esc_purple}%s${shinit_esc_end}"
+			PS1="${PS1}"'$(__git_ps1 "${shinit_git_status_fmt}")'
+		fi
 		# Append a new line followed by '$' to end the prompt.
 		PS1="${PS1}"'
 \$ '
