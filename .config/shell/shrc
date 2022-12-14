@@ -26,9 +26,6 @@ X)
 	########################################
 	# Command prompt
 
-	: ${HOST:=${HOSTNAME}}
-	: ${HOST:=${SYSTYPE}}
-
 	shrc_container_name=
 	if [ -f /run/.containerenv ]; then
 		shrc_container_name=$(source /run/.containerenv && printf $name)
@@ -86,21 +83,37 @@ X)
 		GIT_PS1_SHOWUNTRACKEDFILES=yes
 	fi
 
+	# Prompt section definitions
+	if [ -n "${BASH_VERSION}" ]; then
+		: ${shrc_prompt_host:='\h'}
+		: ${shrc_prompt_pwd:='\W'}
+		: ${shrc_prompt_symbol:='\$'}
+		: ${shrc_prompt_user:='\u'}
+	fi
+	: ${shrc_prompt_host:='${HOSTNAME}'}
+	: ${shrc_prompt_host:='${SYSTYPE}'}
+	: ${shrc_prompt_pwd:='${PWD##*/}'}
+	case ${USER} in
+	root)	: ${shrc_prompt_symbol:='#'} ;;
+	*)		: ${shrc_prompt_symbol:='$'} ;;
+	esac
+	: ${shrc_prompt_user:='${USER}'}
+
 	# Start with a new line.
 	PS1='
 '
 	if [ -n "${SSH_CLIENT}" ]; then
 		case ${USER} in
-		root)	PS1="${PS1}${esc_red}root${esc_end}" ;;
-		*)		PS1="${PS1}${esc_yellow}"'${USER}'"${esc_end}" ;;
+		root)	PS1="${PS1}${esc_red}${shrc_prompt_user}${esc_end}" ;;
+		*)		PS1="${PS1}${esc_yellow}${shrc_prompt_user}${esc_end}" ;;
 		esac
 		PS1="${PS1} ${esc_white}in${esc_end} "
 	fi
 	# Add the last component of the current directory.
-	PS1="${PS1}${esc_cyan}"'${PWD##*/}'"${esc_end}"
+	PS1="${PS1}${esc_cyan}${shrc_prompt_pwd}${esc_end}"
 	# Add the hostname if we're in an SSH session.
 	if [ -n "${SSH_CLIENT}" ]; then
-		PS1="${PS1} ${esc_white}at${esc_end} ${esc_green}"'${HOST}'"${esc_end}"
+		PS1="${PS1} ${esc_white}at${esc_end} ${esc_green}${shrc_prompt_host}${esc_end}"
 	fi
 	if [ -n "${shrc_git_prompt_sourced}" ]; then
 		# Append Git status.
@@ -109,15 +122,21 @@ X)
 	fi
 	# Add container name if we're in a container.
 	if [ -n "${shrc_container_name}" ]; then
-		PS1="${PS1} ${esc_white}on${esc_end} ${esc_cyan}"'⬢ (${shrc_container_name})'"${esc_end}"
+		PS1="${PS1} ${esc_white}on${esc_end} ${esc_cyan}⬢ (${shrc_container_name})${esc_end}"
 	fi
-	# Append a new line followed by '$' to end the prompt.
+	# Append a new line.
 	PS1="${PS1}"'
-\$ '
+'
+	# Append a symbol depending on if the user is root to end the prompt.
+	# NOTE: This should not contain any escape codes or else command-line
+	#       editing may break.
+	PS1="${PS1}${shrc_prompt_symbol} "
 
 	unset esc_blue esc_cyan esc_gray
 	unset esc_green esc_purple esc_red
 	unset esc_white esc_yellow esc_end
+	unset shrc_container_name
+	unset shrc_prompt_host shrc_prompt_pwd shrc_prompt_symbol shrc_prompt_user
 
 	########################################
 	# Functions
