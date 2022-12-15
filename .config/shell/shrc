@@ -64,6 +64,7 @@ X)
 		if [ -n "${BASH_VERSION}${ZSH_VERSION}" ]; then
 			# git-prompt.sh is designed for bash(1) and zsh(1).
 			for shrc_git_prompt_path in \
+				"${HOME}"/.config/shell \
 				/usr/share/git-core/contrib/completion
 			do
 				if [ -f "${shrc_git_prompt_path}/git-prompt.sh" ]; then
