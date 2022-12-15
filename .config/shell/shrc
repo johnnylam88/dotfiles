@@ -87,18 +87,17 @@ X)
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${shrc_prompt_host:='\h'}
 		: ${shrc_prompt_pwd:='\W'}
-		: ${shrc_prompt_symbol:='➜'}
 		: ${shrc_prompt_user:='\u'}
 	fi
 	: ${shrc_prompt_host:='${HOSTNAME}'}
 	: ${shrc_prompt_host:='${SYSTYPE}'}
 	: ${shrc_prompt_pwd:='${PWD##*/}'}
-	: ${shrc_prompt_symbol:='➜'}
 	: ${shrc_prompt_user:='${USER}'}
 
 	# Start with a new line.
 	PS1='
 '
+	PS1="${PS1}"'┌ '
 	# Add the user if this is not localhost.
 	if [ -n "${SSH_CONNECTION}" ]; then
 		case ${USER} in
@@ -128,7 +127,7 @@ X)
 	# Append a final prompt symbol.
 	# NOTE: This should not contain any escape codes or else command-line
 	#       editing may break.
-	PS1="${PS1}${shrc_prompt_symbol} "
+	PS1="${PS1}"'└ '
 
 	unset esc_blue esc_cyan esc_gray
 	unset esc_green esc_purple esc_red
