@@ -100,7 +100,7 @@ X)
 	PS1='
 '
 	# Add the user if this is not localhost.
-	if [ -n "${SSH_CLIENT}" ]; then
+	if [ -n "${SSH_CONNECTION}" ]; then
 		case ${USER} in
 		root)	PS1="${PS1}${esc_red}${shrc_prompt_user}${esc_end}" ;;
 		*)		PS1="${PS1}${esc_yellow}${shrc_prompt_user}${esc_end}" ;;
@@ -110,7 +110,7 @@ X)
 	# Add the last component of the current directory.
 	PS1="${PS1}${esc_cyan}${shrc_prompt_pwd}${esc_end}"
 	# Add the hostname if we're in an SSH session.
-	if [ -n "${SSH_CLIENT}" ]; then
+	if [ -n "${SSH_CONNECTION}" ]; then
 		PS1="${PS1} ${esc_white}at${esc_end} ${esc_green}${shrc_prompt_host}${esc_end}"
 	fi
 	if [ -n "${shrc_git_prompt_sourced}" ]; then
