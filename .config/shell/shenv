@@ -87,7 +87,16 @@ X)
 	export PATH
 
 	# Use vi(1) as the main editor.
-	export EDITOR="/usr/bin/vi"
+	EDITOR="/usr/bin/vi"
+
+	# Set TERM to a safe default if it isn't already set.
+	: ${TERM:=vt100}
+
+	# This should be set in the system-wide /etc/profile, but SDF.org
+	# relies on it being properly set up in $HOME/.profile.
+	: ${MAIL:=/mail/${LOGNAME:?}}
+
+	export EDITOR MAIL TERM
 
 	# Check for interactive shell before loading the rc file.
 	case $- in
