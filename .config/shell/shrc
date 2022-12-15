@@ -90,7 +90,8 @@ X)
 		: ${shrc_prompt_pwd:='\W'}
 		: ${shrc_prompt_user:='\u'}
 	fi
-	: ${shrc_prompt_host:='${HOSTNAME}'}
+	: ${shrc_prompt_host:=${HOSTNAME:+'${HOSTNAME}'}}
+	: ${shrc_prompt_host:=${HOST:+'${HOST}'}}
 	: ${shrc_prompt_host:='${SYSTYPE}'}
 	: ${shrc_prompt_pwd:='${PWD##*/}'}
 	: ${shrc_prompt_user:='${USER}'}
