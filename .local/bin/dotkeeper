@@ -9,6 +9,7 @@ case "${1}" in
 help)
 	echo "Usage: ${script} help"
 	echo "       ${script} init"
+	echo "       ${script} clone <remote-git-repo-url>"
 	echo "       ${script} vcs subcommand [option ...]"
 	exit 0
 	;;
@@ -19,6 +20,22 @@ init)
 		exit 2
 	fi
 	${git} init --bare="${repo_path}"
+	;;
+
+clone)
+	if [ -d "${repo_path}" ]; then
+		echo 1>&2 "${script}: path already exists \`${repo_path}'"
+		exit 2
+	fi
+	shift
+	if [ $# -eq 0 ]; then
+		echo 1>&2 "${script}: missing repository URL"
+		echo 1>&2 "Usage: ${script} clone <remote-git-repo-url>"
+		exit 3
+	fi
+	${git} clone --bare "${1}" "${repo_path}" &&
+	${dotkeeper} config --local status.showUntrackedFiles no &&
+	${dotkeeper} checkout
 	;;
 
 vcs)
