@@ -89,12 +89,18 @@ X)
 		: ${shrc_prompt_host:='\h'}
 		: ${shrc_prompt_pwd:='\W'}
 		: ${shrc_prompt_user:='\u'}
+	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
+		: ${shrc_prompt_host:=${HOSTNAME:+'${HOSTNAME}'}}
+		: ${shrc_prompt_host:=${HOST:+'${HOST}'}}
+		: ${shrc_prompt_host:='${SYSTYPE}'}
+		: ${shrc_prompt_pwd:='${PWD##*/}'}
+		: ${shrc_prompt_user:='${USER}'}
 	fi
-	: ${shrc_prompt_host:=${HOSTNAME:+'${HOSTNAME}'}}
-	: ${shrc_prompt_host:=${HOST:+'${HOST}'}}
-	: ${shrc_prompt_host:='${SYSTYPE}'}
-	: ${shrc_prompt_pwd:='${PWD##*/}'}
-	: ${shrc_prompt_user:='${USER}'}
+	: ${shrc_prompt_host:=${HOSTNAME}}
+	: ${shrc_prompt_host:=${HOST}}
+	: ${shrc_prompt_host:=${SYSTYPE}}
+	: ${shrc_prompt_pwd:=}
+	: ${shrc_prompt_user:=${USER}}
 
 	# Start with a new line.
 	PS1='
@@ -106,10 +112,14 @@ X)
 		root)	PS1="${PS1}${esc_red}${shrc_prompt_user}${esc_end}" ;;
 		*)		PS1="${PS1}${esc_yellow}${shrc_prompt_user}${esc_end}" ;;
 		esac
-		PS1="${PS1} ${esc_white}in${esc_end} "
 	fi
 	# Add the last component of the current directory.
-	PS1="${PS1}${esc_cyan}${shrc_prompt_pwd}${esc_end}"
+	if [ -n "${shrc_prompt_pwd}" ]; then
+		if [ -n "${SSH_CONNECTION}" ]; then
+			PS1="${PS1} ${esc_white}in${esc_end} "
+		fi
+		PS1="${PS1}${esc_cyan}${shrc_prompt_pwd}${esc_end}"
+	fi
 	# Add the hostname if we're in an SSH session.
 	if [ -n "${SSH_CONNECTION}" ]; then
 		PS1="${PS1} ${esc_white}at${esc_end} ${esc_green}${shrc_prompt_host}${esc_end}"
