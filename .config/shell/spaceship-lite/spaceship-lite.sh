@@ -26,67 +26,51 @@ else
 	SS_ESC_END=
 fi
 
-# Prompt section definitions
-if [ -n "${BASH_VERSION}" ]; then
-	: ${ss_prompt_host:='\h'}
-	: ${ss_prompt_pwd:='\W'}
-	: ${ss_prompt_user:='\u'}
-elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-	: ${ss_prompt_host:=${HOSTNAME:+'${HOSTNAME}'}}
-	: ${ss_prompt_host:=${HOST:+'${HOST}'}}
-	: ${ss_prompt_host:='${SYSTYPE}'}
-	: ${ss_prompt_pwd:='${PWD##*/}'}
-	: ${ss_prompt_user:='${USER}'}
-fi
-: ${ss_prompt_host:=${HOSTNAME}}
-: ${ss_prompt_host:=${HOST}}
-: ${ss_prompt_host:=${SYSTYPE}}
-: ${ss_prompt_pwd:=}
-: ${ss_prompt_user:=${USER}}
+SPACESHIP_LITE_PROMPT_CONTAINER=
+SPACESHIP_LITE_PROMPT_DIR=
+SPACESHIP_LITE_PROMPT_GIT=
+SPACESHIP_LITE_PROMPT_HOST=
+SPACESHIP_LITE_PROMPT_USER=
 
-# Start with a new line.
-PS1='
-'
-PS1="${PS1}"'┌ '
-# Add the user if this is not localhost.
-if [ -n "${SSH_CONNECTION}" ]; then
-	case ${USER} in
-	root)	PS1="${PS1}${SS_ESC_RED}${ss_prompt_user}${SS_ESC_END}" ;;
-	*)		PS1="${PS1}${SS_ESC_YELLOW}${ss_prompt_user}${SS_ESC_END}" ;;
-	esac
+if [ -f "${SPACESHIP_LITE_DIR}/container.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/container.sh"
 fi
-# Add the last component of the current directory.
-if [ -n "${ss_prompt_pwd}" ]; then
-	if [ -n "${SSH_CONNECTION}" ]; then
-		PS1="${PS1} ${SS_ESC_WHITE}in${SS_ESC_END} "
-	fi
-	PS1="${PS1}${SS_ESC_CYAN}${ss_prompt_pwd}${SS_ESC_END}"
+if [ -f "${SPACESHIP_LITE_DIR}/dir.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/dir.sh"
 fi
-# Add the hostname if we're in an SSH session.
-if [ -n "${SSH_CONNECTION}" ]; then
-	PS1="${PS1} ${SS_ESC_WHITE}at${SS_ESC_END}"
-	PS1="${PS1} ${SS_ESC_GREEN}${ss_prompt_host}${SS_ESC_END}"
-fi
-# Append Git status.
 if [ -f "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh" ]; then
 	. "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh"
-	PS1="${PS1}${SPACESHIP_LITE_PROMPT_GIT}"
 fi
-# Add container name if we're in a container.
-if [ -f /run/.containerenv ]; then
-	ss_container_name=$(. /run/.containerenv && printf ${name})
-	if [ -n "${ss_container_name}" ]; then
-		PS1="${PS1} ${SS_ESC_WHITE}on${SS_ESC_END}"
-		PS1="${PS1} ${SS_ESC_CYAN}⬢ (${ss_container_name})${SS_ESC_END}"
-	fi
-	unset ss_container_name
+if [ -f "${SPACESHIP_LITE_DIR}/host.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/host.sh"
 fi
-# Append a new line.
-PS1="${PS1}"'
-'
-# Append a final prompt symbol.
-# NOTE: This should not contain any escape codes or else command-line
-#       editing may break.
-PS1="${PS1}"'└ '
+if [ -f "${SPACESHIP_LITE_DIR}/user.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/user.sh"
+fi
 
-unset ss_prompt_host ss_prompt_pwd ss_prompt_user
+spaceship_lite_prompt() {
+	# Start with a new line.
+	sslp_prompt='
+'
+	sslp_prompt="${sslp_prompt}"'┌'
+
+	sslp_prompt="${sslp_prompt}${SPACESHIP_LITE_PROMPT_USER}"
+	sslp_prompt="${sslp_prompt}${SPACESHIP_LITE_PROMPT_DIR}"
+	sslp_prompt="${sslp_prompt}${SPACESHIP_LITE_PROMPT_HOST}"
+	sslp_prompt="${sslp_prompt}${SPACESHIP_LITE_PROMPT_GIT}"
+	sslp_prompt="${sslp_prompt}${SPACESHIP_LITE_PROMPT_CONTAINER}"
+
+	# Append a new line.
+	sslp_prompt="${sslp_prompt}"'
+'
+	# Append a final prompt symbol.
+	# NOTE: This should not contain any escape codes or else command-line
+	#       editing may break.
+	sslp_prompt="${sslp_prompt}"'└ '
+
+	echo "${sslp_prompt}"
+	unset sslp_prompt
+}
+
+SPACESHIP_LITE_PROMPT=$(spaceship_lite_prompt)
+PS1="${SPACESHIP_LITE_PROMPT}"
