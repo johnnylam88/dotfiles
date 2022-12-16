@@ -12,6 +12,7 @@ X)
 
 	if [ -f "${HOME}/.config/shell/spaceship-lite/spaceship-lite.sh" ]; then
 		. "${HOME}/.config/shell/spaceship-lite/spaceship-lite.sh"
+		PS1="${SPACESHIP_LITE_PROMPT}"
 	else
 		: ${PS1:="$ "}
 	fi

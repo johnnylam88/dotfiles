@@ -73,4 +73,3 @@ spaceship_lite_prompt() {
 }
 
 SPACESHIP_LITE_PROMPT=$(spaceship_lite_prompt)
-PS1="${SPACESHIP_LITE_PROMPT}"
