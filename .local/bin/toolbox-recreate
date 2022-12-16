@@ -86,4 +86,11 @@ if [ -n "${default}" ]; then
 	: "Packages for the default toolbox container."
 else
 	: "Packages for non-default containers, matched by name."
+	case ${toolbox_name} in
+	dotfiles)
+		${xargs} -rt ${doit} ${run} sudo dnf install -y << EOF
+		ksh
+EOF
+		;;
+	esac
 fi
