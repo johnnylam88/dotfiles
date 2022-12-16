@@ -8,22 +8,6 @@ X)
 	# Shell functions and aliases
 
 	########################################
-	# Shell options
-
-	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-		set -o emacs			# emacs command-line editing mode
-		set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
-		set -o notify			# Asynchronous reports on children
-		#ulimit -c unlimited	# core dump size limit
-		if [ -n "${KSH_VERSION}" ]; then
-			set -o nohup		# Don't send jobs HUP on logout
-		fi
-		if [ -n "${BASH_VERSION}" ]; then
-			shopt -s checkwinsize	# check window size after each command
-		fi
-	fi
-
-	########################################
 	# Command prompt
 
 	shrc_container_name=
@@ -202,5 +186,21 @@ X)
 		alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
 		;;
 	esac
+
+	########################################
+	# Shell options
+
+	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+		set -o emacs			# emacs command-line editing mode
+		set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
+		set -o notify			# Asynchronous reports on children
+		#ulimit -c unlimited	# core dump size limit
+		if [ -n "${KSH_VERSION}" ]; then
+			set -o nohup		# Don't send jobs HUP on logout
+		fi
+		if [ -n "${BASH_VERSION}" ]; then
+			shopt -s checkwinsize	# check window size after each command
+		fi
+	fi
 	;;
 esac
