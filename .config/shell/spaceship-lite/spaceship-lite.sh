@@ -1,5 +1,8 @@
 # spaceship-lite.sh
 
+# Path to Spaceship Lite main directory.
+: ${SPACESHIP_LITE_DIR:=${HOME}/.config/shell/spaceship-lite}
+
 # Global color variables to be used by Spaceship Lite modules.
 if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
 	SS_ESC_BLUE='[1;34m'
@@ -21,37 +24,6 @@ else
 	SS_ESC_WHITE=
 	SS_ESC_YELLOW=
 	SS_ESC_END=
-fi
-
-ss_git_prompt_sourced=
-case ${SYSTYPE} in
-git-sdk-*)
-	# Git For Windows automatically sources git-prompt.sh.
-	ss_git_prompt_sourced=yes
-	;;
-esac
-if [ -z "${ss_git_prompt_sourced}" ]; then
-	if [ -n "${BASH_VERSION}${ZSH_VERSION}" ]; then
-		# git-prompt.sh is designed for bash(1) and zsh(1).
-		for ss_git_prompt_path in \
-			"${HOME}"/.config/shell \
-			/usr/share/git-core/contrib/completion
-		do
-			if [ -f "${ss_git_prompt_path}/git-prompt.sh" ]; then
-				ss_git_prompt_sourced=yes
-			    . "${ss_git_prompt_path}/git-prompt.sh"
-				break
-			fi
-		done
-		unset ss_git_prompt_path
-	fi
-fi
-if [ -n "${ss_git_prompt_sourced}" ]; then
-	# Configure __git_ps1 to show the state of working directory
-	# relative to the branch.
-	GIT_PS1_SHOWDIRTYSTATE=yes
-	GIT_PS1_SHOWSTATESTATE=yes
-	GIT_PS1_SHOWUNTRACKEDFILES=yes
 fi
 
 # Prompt section definitions
@@ -95,10 +67,10 @@ if [ -n "${SSH_CONNECTION}" ]; then
 	PS1="${PS1} ${SS_ESC_WHITE}at${SS_ESC_END}"
 	PS1="${PS1} ${SS_ESC_GREEN}${ss_prompt_host}${SS_ESC_END}"
 fi
-if [ -n "${ss_git_prompt_sourced}" ]; then
-	# Append Git status.
-	ss_git_status_fmt=" ${SS_ESC_WHITE}on${SS_ESC_END} ${SS_ESC_PURPLE} %s${SS_ESC_END}"
-	PS1="${PS1}"'$(__git_ps1 "${ss_git_status_fmt}")'
+# Append Git status.
+if [ -f "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh"
+	PS1="${PS1}${SPACESHIP_LITE_PROMPT_GIT}"
 fi
 # Add container name if we're in a container.
 if [ -f /run/.containerenv ]; then
