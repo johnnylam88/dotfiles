@@ -1,17 +1,16 @@
 #!/bin/sh
 
 script=${0##*/}
-podman=podman
-toolbox=toolbox
-xargs=xargs
+podman="command podman"
+toolbox="command toolbox"
+xargs="command xargs"
 
 default=
 doit=
-exists=
 
 while getopts "n" opt "$@"; do
 	case ${opt} in
-	n)	doit=echo ;;
+	n)	doit=echo ">>>";;
 	*)	echo 1>&2 "Usage: ${script} [-n] [name]"
 		exit 1 ;;
 	esac
@@ -19,57 +18,56 @@ done
 shift $((OPTIND - 1))
 
 toolbox_name="$1"
-container_name=
-name_cmd='source /run/.containerenv && printf "${name}"'
+name_cmd='. /run/.containerenv && printf "${name}"'
 
 if [ -f /run/.containerenv ]; then
-	container_name=$(/bin/bash -c "${name_cmd}")
+	container_name=$(eval ${name_cmd})
 	echo 1>&2 "${script}: cannot be inside container \`${container_name}'"
 	exit 2
 fi
 
 if [ -n "${toolbox_name}" ]; then
-	run="${toolbox}"' run -c '"${toolbox_name}"
+	run="${toolbox} run -c ${toolbox_name}"
 else
 	default=yes
 	run="${toolbox} run"
 fi
 
-# Test if the container exists.
-if ${run} true 2>/dev/null; then
-	exists=yes
+# Stop toolbox and remove it if it exists.
+if ${run} /bin/sh -c true 2>/dev/null; then
 	if [ -n "${default}" ]; then
-		toolbox_name=$(${run} /bin/bash -c "${name_cmd}")
-		echo "toolbox: ${toolbox_name}"
+		toolbox_name=$(${run} /bin/sh -c "eval ${name_cmd}")
 	fi
-fi
-
-# Stop container and remove it if it exists.
-if [ -n "${exists}" ]; then
-	${doit} ${podman} stop "${toolbox_name}"
+	echo "Toolbox exists: ${toolbox_name}"
+	echo "Stopping: ${toolbox_name}"
+	${doit} ${podman} stop ${toolbox_name}
 	if [ $? -gt 0 ]; then
 		echo 1>&2 "${script}: container \`${toolbox_name}' is busy; close other sessions"
 		exit 3
 	fi
-	${doit} ${toolbox} rm "${toolbox_name}"
+	echo "Removing: ${toolbox_name}"
+	${doit} ${toolbox} rm ${toolbox_name}
 	if [ $? -gt 0 ]; then
 		echo 1>&2 "${script}: container \`${toolbox_name}' could not be removed"
 		exit 4
 	fi
 fi
 
-# Create a new toolbox container with the latest Fedora release.
-# Specific containers can be matched by name to use custom create options,
-# e.g., different distro, image, or release.
-#
+# Create the new toolbox.
 if [ -n "${default}" ]; then
+	# Create a new default toolbox with the latest Fedora release.
 	${doit} ${toolbox} create
 	if [ $? -gt 0 ]; then
 		echo 1>&2 "${script}: error creating default toolbox"
 		exit 5
 	fi
 else
-	${doit} ${toolbox} create "${toolbox_name}"
+	case ${toolbox_name} in
+	*)
+		# Create a new toolbox using default distro, image, and release.
+		${doit} ${toolbox} create ${toolbox_name}
+		;;
+	esac
 	if [ $? -gt 0 ]; then
 		echo 1>&2 "${script}: error creating toolbox \`${toolbox_name}'"
 		exit 5
@@ -77,9 +75,9 @@ else
 fi
 
 # Common packages to all containers.
-${xargs} -rt ${doit} ${run} sudo dnf install -y << EOF
-tmux
-vim
+${xargs} -rt ${doit} ${run} sudo dnf install -y <<- EOF
+	tmux
+	vim
 EOF
 
 if [ -n "${default}" ]; then
@@ -88,9 +86,9 @@ else
 	: "Packages for non-default containers, matched by name."
 	case ${toolbox_name} in
 	dotfiles)
-		${xargs} -rt ${doit} ${run} sudo dnf install -y << EOF
-		ksh
-EOF
+		${xargs} -rt ${doit} ${run} sudo dnf install -y <<- EOF
+			ksh
+		EOF
 		;;
 	esac
 fi
