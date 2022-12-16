@@ -90,20 +90,20 @@ ss_git_branch_state() {
 	unset ssgbs_output ssgbs_state
 }
 
-ss_git_prompt() {
-	ssgp_prompt=
-	ssgp_branch=$(ss_git_branch_name)
-	if [ -n "${ssgp_branch}" ]; then
-		ssgp_prompt="${ssgp_prompt} ${SS_ESC_WHITE}on${SS_ESC_END}"
-		ssgp_prompt="${ssgp_prompt} ${SS_ESC_PURPLE} ${ssgp_branch}${SS_ESC_END}"
-		ssgp_state=$(ss_git_branch_state)
-		if [ -n "${ssgp_state}" ]; then
-			ssgp_prompt="${ssgp_prompt} ${SS_ESC_RED}[${ssgp_state}]${SS_ESC_END}"
+spaceship_lite_prompt_git() {
+	sslpg_prompt=
+	sslpg_branch=$(ss_git_branch_name)
+	if [ -n "${sslpg_branch}" ]; then
+		sslpg_prompt="${sslpg_prompt} ${SS_ESC_WHITE}on${SS_ESC_END}"
+		sslpg_prompt="${sslpg_prompt} ${SS_ESC_PURPLE} ${sslpg_branch}${SS_ESC_END}"
+		sslpg_state=$(ss_git_branch_state)
+		if [ -n "${sslpg_state}" ]; then
+			sslpg_prompt="${sslpg_prompt} ${SS_ESC_RED}[${sslpg_state}]${SS_ESC_END}"
 		fi
-		unset ssgp_state
+		unset sslpg_state
 	fi
-	echo "${ssgp_prompt}"
-	unset ssgp_prompt unset ssgp_branch
+	echo "${sslpg_prompt}"
+	unset sslpg_prompt sslpg_branch
 }
 
-SPACESHIP_LITE_PROMPT_GIT='$(ss_git_prompt)'
+SPACESHIP_LITE_PROMPT_GIT='$(spaceship_lite_prompt_git)'
