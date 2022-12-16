@@ -38,8 +38,8 @@ fi
 if [ -f "${SPACESHIP_LITE_DIR}/dir.sh" ]; then
 	. "${SPACESHIP_LITE_DIR}/dir.sh"
 fi
-if [ -f "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/spaceship-lite-git.sh"
+if [ -f "${SPACESHIP_LITE_DIR}/git.sh" ]; then
+	. "${SPACESHIP_LITE_DIR}/git.sh"
 fi
 if [ -f "${SPACESHIP_LITE_DIR}/host.sh" ]; then
 	. "${SPACESHIP_LITE_DIR}/host.sh"
