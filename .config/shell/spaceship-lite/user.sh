@@ -30,13 +30,13 @@ spaceship_lite_prompt_user() {
 	then
 		case ${USER} in
 		root)
-			sslpu_prompt="${sslpu_prompt} ${SS_ESC_RED}${sslpu_user}${SS_ESC_END}"
+			sslpu_prompt="${sslpu_prompt} ${SS_ESC_RED}${sslpu_user}${SS_ESC_NORMAL}"
 			;;
 		*)
-			sslpu_prompt="${sslpu_prompt} ${SS_ESC_YELLOW}${sslpu_user}${SS_ESC_END}"
+			sslpu_prompt="${sslpu_prompt} ${SS_ESC_YELLOW}${sslpu_user}${SS_ESC_NORMAL}"
 			;;
 		esac
-		sslpu_prompt="${sslpu_prompt} ${SS_ESC_WHITE}in${SS_ESC_END}"
+		sslpu_prompt="${sslpu_prompt} ${SS_ESC_WHITE}in${SS_ESC_NORMAL}"
 	fi
 	echo "${sslpu_prompt}"
 	unset sslpu_user sslpu_prompt

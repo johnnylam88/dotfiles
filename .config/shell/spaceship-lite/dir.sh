@@ -9,7 +9,7 @@ spaceship_lite_prompt_dir() {
 	: ${sslpd_pwd:=here}
 
 	# Add the last component of the current directory.
-	echo " ${SS_ESC_CYAN}${sslpd_pwd}${SS_ESC_END}"
+	echo " ${SS_ESC_CYAN}${sslpd_pwd}${SS_ESC_NORMAL}"
 	unset sslpd_pwd
 }
 

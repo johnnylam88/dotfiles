@@ -6,8 +6,8 @@ spaceship_lite_prompt_container() {
 		sslpc_name=$(. /run/.containerenv && command printf ${name})
 		sslpc_prompt=
 		if [ -n "${sslpc_name}" ]; then
-			sslpc_prompt="${sslpc_prompt} ${SS_ESC_WHITE}on${SS_ESC_END}"
-			sslpc_prompt="${sslpc_prompt} ${SS_ESC_CYAN}⬢ (${sslpc_name})${SS_ESC_END}"
+			sslpc_prompt="${sslpc_prompt} ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
+			sslpc_prompt="${sslpc_prompt} ${SS_ESC_CYAN}⬢ (${sslpc_name})${SS_ESC_NORMAL}"
 		fi
 		echo "${sslpc_prompt}"
 		unset sslpc_name sslpc_prompt

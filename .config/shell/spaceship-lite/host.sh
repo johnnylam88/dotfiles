@@ -29,11 +29,11 @@ spaceship_lite_prompt_host() {
 	if	[ "${SPACESHIP_HOST_SHOW}" = "always" ] || \
 		[ -n "${SSH_CONNECTION}" ]
 	then
-		sslph_prompt="${sslph_prompt} ${SS_ESC_WHITE}at${SS_ESC_END}"
+		sslph_prompt="${sslph_prompt} ${SS_ESC_WHITE}at${SS_ESC_NORMAL}"
 		if [ -n "${SSH_CONNECTION}" ]; then
-			sslph_prompt="${sslph_prompt} ${SS_ESC_GREEN}${sslph_host}${SS_ESC_END}"
+			sslph_prompt="${sslph_prompt} ${SS_ESC_GREEN}${sslph_host}${SS_ESC_NORMAL}"
 		else
-			sslph_prompt="${sslph_prompt} ${SS_ESC_BLUE}${sslph_host}${SS_ESC_END}"
+			sslph_prompt="${sslph_prompt} ${SS_ESC_BLUE}${sslph_host}${SS_ESC_NORMAL}"
 		fi
 	fi
 	echo "${sslph_prompt}"

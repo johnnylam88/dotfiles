@@ -94,11 +94,11 @@ spaceship_lite_prompt_git() {
 	sslpg_prompt=
 	sslpg_branch=$(ss_git_branch_name)
 	if [ -n "${sslpg_branch}" ]; then
-		sslpg_prompt="${sslpg_prompt} ${SS_ESC_WHITE}on${SS_ESC_END}"
-		sslpg_prompt="${sslpg_prompt} ${SS_ESC_PURPLE} ${sslpg_branch}${SS_ESC_END}"
+		sslpg_prompt="${sslpg_prompt} ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
+		sslpg_prompt="${sslpg_prompt} ${SS_ESC_PURPLE} ${sslpg_branch}${SS_ESC_NORMAL}"
 		sslpg_state=$(ss_git_branch_state)
 		if [ -n "${sslpg_state}" ]; then
-			sslpg_prompt="${sslpg_prompt} ${SS_ESC_RED}[${sslpg_state}]${SS_ESC_END}"
+			sslpg_prompt="${sslpg_prompt} ${SS_ESC_RED}[${sslpg_state}]${SS_ESC_NORMAL}"
 		fi
 		unset sslpg_state
 	fi

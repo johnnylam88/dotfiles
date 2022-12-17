@@ -9,7 +9,7 @@ SS_ESC_PURPLE=
 SS_ESC_RED=
 SS_ESC_WHITE=
 SS_ESC_YELLOW=
-SS_ESC_END=
+SS_ESC_NORMAL=
 
 if [ -t 1 ]; then
 	ss_esc_bold=$(tput bold)
@@ -24,7 +24,7 @@ if [ -t 1 ]; then
 			SS_ESC_RED=${ss_esc_bold}$(tput setaf 1)
 			SS_ESC_WHITE=${ss_esc_bold}$(tput setaf 7)
 			SS_ESC_YELLOW=${ss_esc_bold}$(tput setaf 3)
-			SS_ESC_END=$(tput sgr0)
+			SS_ESC_NORMAL=$(tput sgr0)
 		else
 			SS_ESC_BLUE=${ss_esc_bold}
 			SS_ESC_CYAN=${ss_esc_bold}
@@ -34,7 +34,7 @@ if [ -t 1 ]; then
 			SS_ESC_RED=${ss_esc_bold}
 			SS_ESC_WHITE=${ss_esc_bold}
 			SS_ESC_YELLOW=${ss_esc_bold}
-			SS_ESC_END=$(tput sgr0)
+			SS_ESC_NORMAL=$(tput sgr0)
 		fi
 		unset ss_ncolors
 	fi
