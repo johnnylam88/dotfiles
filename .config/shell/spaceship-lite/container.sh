@@ -1,6 +1,10 @@
 # spaceship-lite-container.sh
 
+: ${SPACESHIP_DOCKER_SHOW:=true}
+
 spaceship_lite_prompt_container() {
+	[ "${SPACESHIP_DOCKER_SHOW}" = false ] && return
+
 	# Add container name if we're in a container.
 	sslpc_name=
 	sslpc_status=

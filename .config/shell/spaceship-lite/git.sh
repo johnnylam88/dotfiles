@@ -1,5 +1,7 @@
 # spaceship-lite-git.sh
 
+: ${SPACESHIP_GIT_SHOW:=true}
+
 ss_git_branch_name() {
 	command git branch --show-current 2>/dev/null
 }
@@ -111,6 +113,8 @@ ss_prompt_git_status() {
 }
 
 spaceship_lite_prompt_git() {
+	[ "${SPACESHIP_GIT_SHOW}" = false ] && return
+
 	# Only some shells support command substitution in the shell prompt.
 	[ -z "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ] && return
 

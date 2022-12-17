@@ -1,6 +1,10 @@
 # spaceship-lite-dir.sh
 
+: ${SPACESHIP_DIR_SHOW:=true}
+
 spaceship_lite_prompt_dir() {
+	[ "${SPACESHIP_DIR_SHOW}" = false ] && return
+
 	sslpd_pwd=
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${sslpd_pwd:='\W'}
