@@ -106,4 +106,9 @@ spaceship_lite_prompt_git() {
 	unset sslpg_prompt sslpg_branch
 }
 
-SPACESHIP_LITE_PROMPT_GIT='$(spaceship_lite_prompt_git)'
+# Only some shells support command substitution in the shell prompt.
+if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+	SPACESHIP_LITE_PROMPT_GIT='$(spaceship_lite_prompt_git)'
+else
+	SPACESHIP_LITE_PROMPT_GIT=
+fi
