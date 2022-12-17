@@ -14,32 +14,48 @@
 spaceship_lite_prompt_user() {
 	[ "${SPACESHIP_USER_SHOW}" = "false" ] && return
 
+	sslpu_user=
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${sslpu_user:='\u'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
 		: ${sslpu_user:='${USER}'}
+	else
+		: ${sslpu_user:=${USER}}
 	fi
-	: ${sslpu_user:=${USER}}
 
 	# Add the user if this is not localhost.
-	sslpu_prompt=
-	if	[ "${SPACESHIP_USER_SHOW}" = "always" ] || \
-		[ "${LOGNAME}" != "${USER}" ] || \
-		[ "${UID}" = "0" ] || \
-		[ "${SPACESHIP_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
-	then
-		case ${USER} in
-		root)
-			sslpu_prompt="${sslpu_prompt} ${SS_ESC_RED}${sslpu_user}${SS_ESC_NORMAL}"
-			;;
-		*)
-			sslpu_prompt="${sslpu_prompt} ${SS_ESC_YELLOW}${sslpu_user}${SS_ESC_NORMAL}"
-			;;
-		esac
-		sslpu_prompt="${sslpu_prompt} ${SS_ESC_WHITE}in${SS_ESC_NORMAL}"
+	sslpu_prefix=
+	sslpu_status=
+	if [ -n "${sslpu_user}" ]; then
+		if	[ "${SPACESHIP_USER_SHOW}" = "always" ] || \
+			[ "${LOGNAME}" != "${USER}" ] || \
+			[ "${UID}" = "0" ] || \
+			[ "${SPACESHIP_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
+		then
+			sslpu_prefix=" ${SS_ESC_WHITE}with${SS_ESC_NORMAL}"
+			case ${USER} in
+			root)
+				sslpu_status=" ${SS_ESC_RED}${sslpu_user}${SS_ESC_NORMAL}"
+				;;
+			*)
+				sslpu_status=" ${SS_ESC_YELLOW}${sslpu_user}${SS_ESC_NORMAL}"
+				;;
+			esac
+		fi
 	fi
-	echo "${sslpu_prompt}"
-	unset sslpu_user sslpu_prompt
+
+	# Append status to ${SPACESHIP_LITE_PROMPT}.
+	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
+		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslpu_prefix}${sslpu_status}"
+	else
+		SPACESHIP_LITE_PROMPT="${sslpu_status}"
+	fi
+	unset sslpu_user sslpu_prefix sslpu_status
 }
 
-SPACESHIP_LITE_PROMPT_USER=$(spaceship_lite_prompt_user)
+case " ${SPACESHIP_LITE_DEBUG} " in
+*" user "*)
+	spaceship_lite_prompt_user
+	echo "${SPACESHIP_LITE_PROMPT}"
+	;;
+esac

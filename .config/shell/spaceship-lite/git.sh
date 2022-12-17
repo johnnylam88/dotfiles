@@ -90,25 +90,42 @@ ss_git_branch_state() {
 	unset ssgbs_output ssgbs_state
 }
 
-spaceship_lite_prompt_git() {
-	sslpg_prompt=
-	sslpg_branch=$(ss_git_branch_name)
-	if [ -n "${sslpg_branch}" ]; then
-		sslpg_prompt="${sslpg_prompt} ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
-		sslpg_prompt="${sslpg_prompt} ${SS_ESC_MAGENTA} ${sslpg_branch}${SS_ESC_NORMAL}"
-		sslpg_state=$(ss_git_branch_state)
-		if [ -n "${sslpg_state}" ]; then
-			sslpg_prompt="${sslpg_prompt} ${SS_ESC_RED}[${sslpg_state}]${SS_ESC_NORMAL}"
+ss_prompt_git_status() {
+	sspgs_branch=$(ss_git_branch_name)
+	sspgs_state=
+	sspgs_prefix=
+	sspgs_status=
+	if [ -n "${sspgs_branch}" ]; then
+		if [ "${1}" == "-p" ]; then
+			# Add prefix if requested with '-p'.
+			sspgs_prefix=" ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
 		fi
-		unset sslpg_state
+		sspgs_status=" ${SS_ESC_MAGENTA} ${sspgs_branch}${SS_ESC_NORMAL}"
+		sspgs_state=$(ss_git_branch_state)
+		if [ -n "${sspgs_state}" ]; then
+			sspgs_status="${sspgs_status} ${SS_ESC_RED}[${sspgs_state}]${SS_ESC_NORMAL}"
+		fi
 	fi
-	echo "${sslpg_prompt}"
-	unset sslpg_prompt sslpg_branch
+	echo "${sspgs_prefix}${sspgs_status}"
+	unset sspgs_branch sspgs_state sspgs_prefix sspgs_status
 }
 
-# Only some shells support command substitution in the shell prompt.
-if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-	SPACESHIP_LITE_PROMPT_GIT='$(spaceship_lite_prompt_git)'
-else
-	SPACESHIP_LITE_PROMPT_GIT=
-fi
+spaceship_lite_prompt_git() {
+	# Only some shells support command substitution in the shell prompt.
+	[ -z "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ] && return
+
+	# Append status to ${SPACESHIP_LITE_PROMPT}.
+	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
+		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}"'$(ss_prompt_git_status -p)'
+	else
+		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}"'$(ss_prompt_git_status)'
+	fi
+}
+
+case " ${SPACESHIP_LITE_DEBUG} " in
+*" git "*)
+	spaceship_lite_prompt_git
+	ss_prompt_git_status
+	echo "${SPACESHIP_LITE_PROMPT}"
+	;;
+esac

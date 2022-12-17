@@ -2,16 +2,29 @@
 
 spaceship_lite_prompt_container() {
 	# Add container name if we're in a container.
+	sslpc_name=
+	sslpc_status=
+	sslpc_prefix=
 	if [ -f /run/.containerenv ]; then
 		sslpc_name=$(. /run/.containerenv && command printf ${name})
-		sslpc_prompt=
 		if [ -n "${sslpc_name}" ]; then
-			sslpc_prompt="${sslpc_prompt} ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
-			sslpc_prompt="${sslpc_prompt} ${SS_ESC_CYAN}⬢ (${sslpc_name})${SS_ESC_NORMAL}"
+			sslpc_prefix=" ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
+			sslpc_status=" ${SS_ESC_CYAN}⬢ (${sslpc_name})${SS_ESC_NORMAL}"
 		fi
-		echo "${sslpc_prompt}"
-		unset sslpc_name sslpc_prompt
 	fi
+
+	# Append status to ${SPACESHIP_LITE_PROMPT}.
+	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
+		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslpc_prefix}${sslpc_status}"
+	else
+		SPACESHIP_LITE_PROMPT="${sslpc_status}"
+	fi
+	unset sslpc_name sslpc_status sslpc_prefix
 }
 
-SPACESHIP_LITE_PROMPT_CONTAINER=$(spaceship_lite_prompt_container)
+case " ${SPACESHIP_LITE_DEBUG} " in
+*" container "*)
+	spaceship_lite_prompt_container
+	echo "${SPACESHIP_LITE_PROMPT}"
+	;;
+esac
