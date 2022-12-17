@@ -5,7 +5,7 @@ SS_ESC_BLUE=
 SS_ESC_CYAN=
 SS_ESC_GRAY=
 SS_ESC_GREEN=
-SS_ESC_PURPLE=
+SS_ESC_MAGENTA=
 SS_ESC_RED=
 SS_ESC_WHITE=
 SS_ESC_YELLOW=
@@ -20,7 +20,7 @@ if [ -t 1 ]; then
 			SS_ESC_CYAN=${ss_esc_bold}$(tput setaf 6)
 			SS_ESC_GRAY=${ss_esc_bold}$(tput setaf 0)
 			SS_ESC_GREEN=${ss_esc_bold}$(tput setaf 2)
-			SS_ESC_PURPLE=${ss_esc_bold}$(tput setaf 5)
+			SS_ESC_MAGENTA=${ss_esc_bold}$(tput setaf 5)
 			SS_ESC_RED=${ss_esc_bold}$(tput setaf 1)
 			SS_ESC_WHITE=${ss_esc_bold}$(tput setaf 7)
 			SS_ESC_YELLOW=${ss_esc_bold}$(tput setaf 3)
@@ -30,7 +30,7 @@ if [ -t 1 ]; then
 			SS_ESC_CYAN=${ss_esc_bold}
 			SS_ESC_GRAY=${ss_esc_bold}
 			SS_ESC_GREEN=${ss_esc_bold}
-			SS_ESC_PURPLE=${ss_esc_bold}
+			SS_ESC_MAGENTA=${ss_esc_bold}
 			SS_ESC_RED=${ss_esc_bold}
 			SS_ESC_WHITE=${ss_esc_bold}
 			SS_ESC_YELLOW=${ss_esc_bold}
