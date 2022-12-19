@@ -21,6 +21,9 @@ fi
 if [ -f "${STARFIGHTER_ROOT}/host.sh" ]; then
 	. "${STARFIGHTER_ROOT}/host.sh"
 fi
+if [ -f "${STARFIGHTER_ROOT}/prefix.sh" ]; then
+	. "${STARFIGHTER_ROOT}/prefix.sh"
+fi
 if [ -f "${STARFIGHTER_ROOT}/user.sh" ]; then
 	. "${STARFIGHTER_ROOT}/user.sh"
 fi
@@ -34,10 +37,13 @@ starfighter_main() {
 	starfighter_git
 	starfighter_container
 
+	# Prepend the special prefix module to the prompt.
+	starfighter_prefix
+
 	# Add the header and footer to the prompt.
 	STARFIGHTER_PROMPT='
-┌'"${STARFIGHTER_PROMPT}"'
-└ '
+'"${STARFIGHTER_PROMPT}"'
+$ '
 }
 
 starfighter_main
