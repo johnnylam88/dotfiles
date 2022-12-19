@@ -1,42 +1,42 @@
-# spaceship-lite-colors.sh
+# starfighter/colors.sh
 
-# Global color variables to be used by Spaceship Lite modules.
-SS_ESC_BLUE=
-SS_ESC_CYAN=
-SS_ESC_GRAY=
-SS_ESC_GREEN=
-SS_ESC_MAGENTA=
-SS_ESC_RED=
-SS_ESC_WHITE=
-SS_ESC_YELLOW=
-SS_ESC_NORMAL=
+# Global color variables to be used by starfighter modules.
+STARFIGHTER_BLUE=
+STARFIGHTER_CYAN=
+STARFIGHTER_GRAY=
+STARFIGHTER_GREEN=
+STARFIGHTER_MAGENTA=
+STARFIGHTER_RED=
+STARFIGHTER_WHITE=
+STARFIGHTER_YELLOW=
+STARFIGHTER_NORMAL=
 
 if [ -t 1 ]; then
-	ss_esc_bold=$(tput bold)
-	if [ -n "${ss_esc_bold}" ]; then
-		ss_ncolors=$(tput colors)
-		if [ -n "${ss_ncolors}" ] && [ ${ss_ncolors} -ge 8 ]; then
-			SS_ESC_BLUE=${ss_esc_bold}$(tput setaf 4)
-			SS_ESC_CYAN=${ss_esc_bold}$(tput setaf 6)
-			SS_ESC_GRAY=${ss_esc_bold}$(tput setaf 0)
-			SS_ESC_GREEN=${ss_esc_bold}$(tput setaf 2)
-			SS_ESC_MAGENTA=${ss_esc_bold}$(tput setaf 5)
-			SS_ESC_RED=${ss_esc_bold}$(tput setaf 1)
-			SS_ESC_WHITE=${ss_esc_bold}$(tput setaf 7)
-			SS_ESC_YELLOW=${ss_esc_bold}$(tput setaf 3)
-			SS_ESC_NORMAL=$(tput sgr0)
+	sf_bold=$(tput bold)
+	if [ -n "${sf_bold}" ]; then
+		sf_ncolors=$(tput colors)
+		if [ -n "${sf_ncolors}" ] && [ ${sf_ncolors} -ge 8 ]; then
+			STARFIGHTER_BLUE=${sf_bold}$(tput setaf 4)
+			STARFIGHTER_CYAN=${sf_bold}$(tput setaf 6)
+			STARFIGHTER_GRAY=${sf_bold}$(tput setaf 0)
+			STARFIGHTER_GREEN=${sf_bold}$(tput setaf 2)
+			STARFIGHTER_MAGENTA=${sf_bold}$(tput setaf 5)
+			STARFIGHTER_RED=${sf_bold}$(tput setaf 1)
+			STARFIGHTER_WHITE=${sf_bold}$(tput setaf 7)
+			STARFIGHTER_YELLOW=${sf_bold}$(tput setaf 3)
+			STARFIGHTER_NORMAL=$(tput sgr0)
 		else
-			SS_ESC_BLUE=${ss_esc_bold}
-			SS_ESC_CYAN=${ss_esc_bold}
-			SS_ESC_GRAY=${ss_esc_bold}
-			SS_ESC_GREEN=${ss_esc_bold}
-			SS_ESC_MAGENTA=${ss_esc_bold}
-			SS_ESC_RED=${ss_esc_bold}
-			SS_ESC_WHITE=${ss_esc_bold}
-			SS_ESC_YELLOW=${ss_esc_bold}
-			SS_ESC_NORMAL=$(tput sgr0)
+			STARFIGHTER_BLUE=${sf_bold}
+			STARFIGHTER_CYAN=${sf_bold}
+			STARFIGHTER_GRAY=${sf_bold}
+			STARFIGHTER_GREEN=${sf_bold}
+			STARFIGHTER_MAGENTA=${sf_bold}
+			STARFIGHTER_RED=${sf_bold}
+			STARFIGHTER_WHITE=${sf_bold}
+			STARFIGHTER_YELLOW=${sf_bold}
+			STARFIGHTER_NORMAL=$(tput sgr0)
 		fi
-		unset ss_ncolors
+		unset sf_ncolors
 	fi
-	unset ss_esc_bold
+	unset sf_bold
 fi

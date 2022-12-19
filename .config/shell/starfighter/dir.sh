@@ -1,37 +1,37 @@
-# spaceship-lite-dir.sh
+# starfighter/dir.sh
 
-: ${SPACESHIP_DIR_SHOW:=true}
+: ${STARFIGHTER_DIR_SHOW:=true}
 
-spaceship_lite_prompt_dir() {
-	[ "${SPACESHIP_DIR_SHOW}" = false ] && return
+starfighter_dir() {
+	[ "${STARFIGHTER_DIR_SHOW}" = false ] && return
 
-	sslpd_pwd=
+	sfd_pwd=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sslpd_pwd:='\W'}
+		: ${sfd_pwd:='\W'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${sslpd_pwd:='${PWD##*/}'}
+		: ${sfd_pwd:='${PWD##*/}'}
 	fi
 
 	# Add the last component of the current directory.
-	sslpd_prefix=
-	sslpd_status=
-	if [ -n "${sslpd_pwd}" ]; then
-		sslpd_prefix=" ${SS_ESC_WHITE}in${SS_ESC_NORMAL}"
-		sslpd_status=" ${SS_ESC_CYAN}${sslpd_pwd}${SS_ESC_NORMAL}"
+	sfd_prefix=
+	sfd_status=
+	if [ -n "${sfd_pwd}" ]; then
+		sfd_prefix=" ${STARFIGHTER_WHITE}in${STARFIGHTER_NORMAL}"
+		sfd_status=" ${STARFIGHTER_CYAN}${sfd_pwd}${STARFIGHTER_NORMAL}"
 	fi
 
-	# Append status to ${SPACESHIP_LITE_PROMPT}.
-	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
-		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslpd_prefix}${sslpd_status}"
+	# Append status to ${STARFIGHTER_PROMPT}.
+	if [ -n "${STARFIGHTER_PROMPT}" ]; then
+		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfd_prefix}${sfd_status}"
 	else
-		SPACESHIP_LITE_PROMPT="${sslpd_status}"
+		STARFIGHTER_PROMPT="${sfd_status}"
 	fi
-	unset sslpd_pwd sslpd_prefix sslpd_status
+	unset sfd_pwd sfd_prefix sfd_status
 }
 
-case " ${SPACESHIP_LITE_DEBUG} " in
+case " ${STARFIGHTER_DEBUG} " in
 *" dir "*)
-	spaceship_lite_prompt_dir
-	echo "${SPACESHIP_LITE_PROMPT}"
+	starfighter_dir
+	echo "${STARFIGHTER_PROMPT}"
 	;;
 esac

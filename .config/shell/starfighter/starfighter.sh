@@ -1,43 +1,43 @@
-# spaceship-lite.sh
+# starfighter.sh
 
-# Path to Spaceship Lite main directory.
-: ${SPACESHIP_LITE_DIR:=${HOME}/.config/shell/spaceship-lite}
+# Path to starfighter main directory.
+: ${STARFIGHTER_DIR:=${HOME}/.config/shell/starfighter}
 
-if [ -f "${SPACESHIP_LITE_DIR}/colors.sh" ]; then
+if [ -f "${STARFIGHTER_DIR}/colors.sh" ]; then
 	# colors.sh needs to be loaded first as it defines variables
 	# used by the other modules.
-	. "${SPACESHIP_LITE_DIR}/colors.sh"
+	. "${STARFIGHTER_DIR}/colors.sh"
 fi
 
-if [ -f "${SPACESHIP_LITE_DIR}/container.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/container.sh"
+if [ -f "${STARFIGHTER_DIR}/container.sh" ]; then
+	. "${STARFIGHTER_DIR}/container.sh"
 fi
-if [ -f "${SPACESHIP_LITE_DIR}/dir.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/dir.sh"
+if [ -f "${STARFIGHTER_DIR}/dir.sh" ]; then
+	. "${STARFIGHTER_DIR}/dir.sh"
 fi
-if [ -f "${SPACESHIP_LITE_DIR}/git.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/git.sh"
+if [ -f "${STARFIGHTER_DIR}/git.sh" ]; then
+	. "${STARFIGHTER_DIR}/git.sh"
 fi
-if [ -f "${SPACESHIP_LITE_DIR}/host.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/host.sh"
+if [ -f "${STARFIGHTER_DIR}/host.sh" ]; then
+	. "${STARFIGHTER_DIR}/host.sh"
 fi
-if [ -f "${SPACESHIP_LITE_DIR}/user.sh" ]; then
-	. "${SPACESHIP_LITE_DIR}/user.sh"
+if [ -f "${STARFIGHTER_DIR}/user.sh" ]; then
+	. "${STARFIGHTER_DIR}/user.sh"
 fi
 
-SPACESHIP_LITE_PROMPT=
+STARFIGHTER_PROMPT=
 
-spaceship_lite_main() {
-	spaceship_lite_prompt_user
-	spaceship_lite_prompt_dir
-	spaceship_lite_prompt_host
-	spaceship_lite_prompt_git
-	spaceship_lite_prompt_container
+starfighter_main() {
+	starfighter_user
+	starfighter_dir
+	starfighter_host
+	starfighter_git
+	starfighter_container
 
 	# Add the header and footer to the prompt.
-	SPACESHIP_LITE_PROMPT='
-┌'"${SPACESHIP_LITE_PROMPT}"'
+	STARFIGHTER_PROMPT='
+┌'"${STARFIGHTER_PROMPT}"'
 └ '
 }
 
-spaceship_lite_main
+starfighter_main

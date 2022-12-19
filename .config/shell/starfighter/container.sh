@@ -1,34 +1,34 @@
-# spaceship-lite-container.sh
+# starfighter/container.sh
 
-: ${SPACESHIP_DOCKER_SHOW:=true}
+: ${STARFIGHTER_CONTAINER_SHOW:=true}
 
-spaceship_lite_prompt_container() {
-	[ "${SPACESHIP_DOCKER_SHOW}" = false ] && return
+starfighter_container() {
+	[ "${STARFIGHTER_CONTAINER_SHOW}" = false ] && return
 
 	# Add container name if we're in a container.
-	sslpc_name=
-	sslpc_status=
-	sslpc_prefix=
+	sfc_name=
+	sfc_status=
+	sfc_prefix=
 	if [ -f /run/.containerenv ]; then
-		sslpc_name=$(. /run/.containerenv && command printf ${name})
-		if [ -n "${sslpc_name}" ]; then
-			sslpc_prefix=" ${SS_ESC_WHITE}on${SS_ESC_NORMAL}"
-			sslpc_status=" ${SS_ESC_CYAN}⬢ (${sslpc_name})${SS_ESC_NORMAL}"
+		sfc_name=$(. /run/.containerenv && command printf ${name})
+		if [ -n "${sfc_name}" ]; then
+			sfc_prefix=" ${STARFIGHTER_WHITE}on${STARFIGHTER_NORMAL}"
+			sfc_status=" ${STARFIGHTER_CYAN}⬢ (${sfc_name})${STARFIGHTER_NORMAL}"
 		fi
 	fi
 
-	# Append status to ${SPACESHIP_LITE_PROMPT}.
-	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
-		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslpc_prefix}${sslpc_status}"
+	# Append status to ${STARFIGHTER_PROMPT}.
+	if [ -n "${STARFIGHTER_PROMPT}" ]; then
+		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfc_prefix}${sfc_status}"
 	else
-		SPACESHIP_LITE_PROMPT="${sslpc_status}"
+		STARFIGHTER_PROMPT="${sfc_status}"
 	fi
-	unset sslpc_name sslpc_status sslpc_prefix
+	unset sfc_name sfc_status sfc_prefix
 }
 
-case " ${SPACESHIP_LITE_DEBUG} " in
+case " ${STARFIGHTER_DEBUG} " in
 *" container "*)
-	spaceship_lite_prompt_container
-	echo "${SPACESHIP_LITE_PROMPT}"
+	starfighter_container
+	echo "${STARFIGHTER_PROMPT}"
 	;;
 esac

@@ -1,59 +1,59 @@
-# spaceship-lite-host.sh
+# starfighter/host.sh
 
-# --------------------------------------------------------------------------
-# | SPACESHIP_HOST_SHOW | show hostname on local | show hostname on remote |
-# |---------------------+------------------------+-------------------------|
-# | false               | never                  | never                   |
-# | always              | always                 | always                  |
-# | true                | never                  | always                  |
-# --------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# | STARFIGHTER_HOST_SHOW | show hostname on local | show hostname on remote |
+# |-----------------------+------------------------+-------------------------|
+# | false                 | never                  | never                   |
+# | always                | always                 | always                  |
+# | true                  | never                  | always                  |
+# ----------------------------------------------------------------------------
 
-: ${SPACESHIP_HOST_SHOW:=true}
+: ${STARFIGHTER_HOST_SHOW:=true}
 
-spaceship_lite_prompt_host() {
-	[ "${SPACESHIP_HOST_SHOW}" = "false" ] && return
+starfighter_host() {
+	[ "${STARFIGHTER_HOST_SHOW}" = "false" ] && return
 
-	sslph_host=
+	sfh_host=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sslph_host:='\h'}
+		: ${sfh_host:='\h'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${sslph_host:=${HOSTNAME:+'${HOSTNAME}'}}
-		: ${sslph_host:=${HOST:+'${HOST}'}}
-		: ${sslph_host:='${SYSTYPE}'}
+		: ${sfh_host:=${HOSTNAME:+'${HOSTNAME}'}}
+		: ${sfh_host:=${HOST:+'${HOST}'}}
+		: ${sfh_host:='${SYSTYPE}'}
 	else
-		: ${sslph_host:=${HOSTNAME}}
-		: ${sslph_host:=${HOST}}
-		: ${sslph_host:=${SYSTYPE}}
+		: ${sfh_host:=${HOSTNAME}}
+		: ${sfh_host:=${HOST}}
+		: ${sfh_host:=${SYSTYPE}}
 	fi
 
 	# Add the hostname if we're in an SSH session.
-	sslph_prefix=
-	sslph_status=
-	if [ -n "${sslph_host}" ]; then
-		if	[ "${SPACESHIP_HOST_SHOW}" = "always" ] || \
+	sfh_prefix=
+	sfh_status=
+	if [ -n "${sfh_host}" ]; then
+		if	[ "${STARFIGHTER_HOST_SHOW}" = "always" ] || \
 			[ -n "${SSH_CONNECTION}" ]
 		then
-			sslph_prefix=" ${SS_ESC_WHITE}at${SS_ESC_NORMAL}"
+			sfh_prefix=" ${STARFIGHTER_WHITE}at${STARFIGHTER_NORMAL}"
 			if [ -n "${SSH_CONNECTION}" ]; then
-				sslph_status=" ${SS_ESC_GREEN}${sslph_host}${SS_ESC_NORMAL}"
+				sfh_status=" ${STARFIGHTER_GREEN}${sfh_host}${STARFIGHTER_NORMAL}"
 			else
-				sslph_status=" ${SS_ESC_BLUE}${sslph_host}${SS_ESC_NORMAL}"
+				sfh_status=" ${STARFIGHTER_BLUE}${sfh_host}${STARFIGHTER_NORMAL}"
 			fi
 		fi
 	fi
 
-	# Append status to ${SPACESHIP_LITE_PROMPT}.
-	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
-		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslph_prefix}${sslph_status}"
+	# Append status to ${STARFIGHTER_PROMPT}.
+	if [ -n "${STARFIGHTER_PROMPT}" ]; then
+		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfh_prefix}${sfh_status}"
 	else
-		SPACESHIP_LITE_PROMPT="${sslph_status}"
+		STARFIGHTER_PROMPT="${sfh_status}"
 	fi
-	unset sslph_host sslph_prefix sslph_status
+	unset sfh_host sfh_prefix sfh_status
 }
 
-case " ${SPACESHIP_LITE_DEBUG} " in
+case " ${STARFIGHTER_DEBUG} " in
 *" host "*)
-	spaceship_lite_prompt_host
-	echo "${SPACESHIP_LITE_PROMPT}"
+	starfighter_host
+	echo "${STARFIGHTER_PROMPT}"
 	;;
 esac

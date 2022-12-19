@@ -1,61 +1,61 @@
-# spaceship-lite-user.sh
+# starfighter/user.sh
 
-# --------------------------------------------------------------------------
-# | SPACESHIP_USER_SHOW | show username on local | show username on remote |
-# |---------------------+------------------------+-------------------------|
-# | false               | never                  | never                   |
-# | always              | always                 | always                  |
-# | true                | if needed              | always                  |
-# | needed              | if needed              | if needed               |
-# --------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# | STARFIGHTER_USER_SHOW | show username on local | show username on remote |
+# |-----------------------+------------------------+-------------------------|
+# | false                 | never                  | never                   |
+# | always                | always                 | always                  |
+# | true                  | if needed              | always                  |
+# | needed                | if needed              | if needed               |
+# ----------------------------------------------------------------------------
 
-: ${SPACESHIP_USER_SHOW:=true}
+: ${STARFIGHTER_USER_SHOW:=true}
 
-spaceship_lite_prompt_user() {
-	[ "${SPACESHIP_USER_SHOW}" = "false" ] && return
+starfighter_user() {
+	[ "${STARFIGHTER_USER_SHOW}" = "false" ] && return
 
-	sslpu_user=
+	sfu_user=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sslpu_user:='\u'}
+		: ${sfu_user:='\u'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${sslpu_user:='${USER}'}
+		: ${sfu_user:='${USER}'}
 	else
-		: ${sslpu_user:=${USER}}
+		: ${sfu_user:=${USER}}
 	fi
 
 	# Add the user if this is not localhost.
-	sslpu_prefix=
-	sslpu_status=
-	if [ -n "${sslpu_user}" ]; then
-		if	[ "${SPACESHIP_USER_SHOW}" = "always" ] || \
+	sfu_prefix=
+	sfu_status=
+	if [ -n "${sfu_user}" ]; then
+		if	[ "${STARFIGHTER_USER_SHOW}" = "always" ] || \
 			[ "${LOGNAME}" != "${USER}" ] || \
 			[ "${UID}" = "0" ] || \
-			[ "${SPACESHIP_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
+			[ "${STARFIGHTER_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
 		then
-			sslpu_prefix=" ${SS_ESC_WHITE}with${SS_ESC_NORMAL}"
+			sfu_prefix=" ${STARFIGHTER_WHITE}with${STARFIGHTER_NORMAL}"
 			case ${USER} in
 			root)
-				sslpu_status=" ${SS_ESC_RED}${sslpu_user}${SS_ESC_NORMAL}"
+				sfu_status=" ${STARFIGHTER_RED}${sfu_user}${STARFIGHTER_NORMAL}"
 				;;
 			*)
-				sslpu_status=" ${SS_ESC_YELLOW}${sslpu_user}${SS_ESC_NORMAL}"
+				sfu_status=" ${STARFIGHTER_YELLOW}${sfu_user}${STARFIGHTER_NORMAL}"
 				;;
 			esac
 		fi
 	fi
 
-	# Append status to ${SPACESHIP_LITE_PROMPT}.
-	if [ -n "${SPACESHIP_LITE_PROMPT}" ]; then
-		SPACESHIP_LITE_PROMPT="${SPACESHIP_LITE_PROMPT}${sslpu_prefix}${sslpu_status}"
+	# Append status to ${STARFIGHTER_PROMPT}.
+	if [ -n "${STARFIGHTER_PROMPT}" ]; then
+		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfu_prefix}${sfu_status}"
 	else
-		SPACESHIP_LITE_PROMPT="${sslpu_status}"
+		STARFIGHTER_PROMPT="${sfu_status}"
 	fi
-	unset sslpu_user sslpu_prefix sslpu_status
+	unset sfu_user sfu_prefix sfu_status
 }
 
-case " ${SPACESHIP_LITE_DEBUG} " in
+case " ${STARFIGHTER_DEBUG} " in
 *" user "*)
-	spaceship_lite_prompt_user
-	echo "${SPACESHIP_LITE_PROMPT}"
+	starfighter_user
+	echo "${STARFIGHTER_PROMPT}"
 	;;
 esac
