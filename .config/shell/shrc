@@ -8,11 +8,12 @@ X)
 	# Shell functions and aliases
 
 	########################################
-	# Spaceship Lite prompt
+	# Starfighter prompt
 
-	if [ -f "${HOME}/.config/shell/spaceship-lite/spaceship-lite.sh" ]; then
-		. "${HOME}/.config/shell/spaceship-lite/spaceship-lite.sh"
-		PS1="${SPACESHIP_LITE_PROMPT}"
+	STARFIGHTER_ROOT="${HOME}/.config/shell/starfighter"
+	if [ -f "${STARFIGHTER_ROOT}/starfighter.sh" ]; then
+		. "${STARFIGHTER_ROOT}/starfighter.sh"
+		PS1="${STARFIGHTER_PROMPT}"
 	else
 		: ${PS1:="$ "}
 	fi
