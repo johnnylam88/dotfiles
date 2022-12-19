@@ -9,6 +9,9 @@ if [ -f "${STARFIGHTER_ROOT}/colors.sh" ]; then
 	. "${STARFIGHTER_ROOT}/colors.sh"
 fi
 
+if [ -f "${STARFIGHTER_ROOT}/character.sh" ]; then
+	. "${STARFIGHTER_ROOT}/character.sh"
+fi
 if [ -f "${STARFIGHTER_ROOT}/container.sh" ]; then
 	. "${STARFIGHTER_ROOT}/container.sh"
 fi
@@ -40,10 +43,8 @@ starfighter_main() {
 	# Prepend the special prefix module to the prompt.
 	starfighter_prefix
 
-	# Add the header and footer to the prompt.
-	STARFIGHTER_PROMPT='
-'"${STARFIGHTER_PROMPT}"'
-$ '
+	# Append the special character module to the prompt.
+	starfighter_character
 }
 
 starfighter_main
