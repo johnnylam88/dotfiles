@@ -33,14 +33,11 @@ starfighter_user() {
 			[ "${STARFIGHTER_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
 		then
 			sfu_prefix=" ${STARFIGHTER_WHITE}with${STARFIGHTER_NORMAL}"
-			case ${USER} in
-			root)
+			if [ "${USER}" = "root" -o "${UID}" = "0" ]; then
 				sfu_status=" ${STARFIGHTER_RED}${sfu_user}${STARFIGHTER_NORMAL}"
-				;;
-			*)
+			else
 				sfu_status=" ${STARFIGHTER_YELLOW}${sfu_user}${STARFIGHTER_NORMAL}"
-				;;
-			esac
+			fi
 		fi
 	fi
 
