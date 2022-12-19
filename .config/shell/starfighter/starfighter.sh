@@ -1,28 +1,28 @@
 # starfighter.sh
 
 # Path to starfighter main directory.
-: ${STARFIGHTER_DIR:=${HOME}/.config/shell/starfighter}
+: ${STARFIGHTER_ROOT:=${HOME}/.config/shell/starfighter}
 
-if [ -f "${STARFIGHTER_DIR}/colors.sh" ]; then
+if [ -f "${STARFIGHTER_ROOT}/colors.sh" ]; then
 	# colors.sh needs to be loaded first as it defines variables
 	# used by the other modules.
-	. "${STARFIGHTER_DIR}/colors.sh"
+	. "${STARFIGHTER_ROOT}/colors.sh"
 fi
 
-if [ -f "${STARFIGHTER_DIR}/container.sh" ]; then
-	. "${STARFIGHTER_DIR}/container.sh"
+if [ -f "${STARFIGHTER_ROOT}/container.sh" ]; then
+	. "${STARFIGHTER_ROOT}/container.sh"
 fi
-if [ -f "${STARFIGHTER_DIR}/dir.sh" ]; then
-	. "${STARFIGHTER_DIR}/dir.sh"
+if [ -f "${STARFIGHTER_ROOT}/dir.sh" ]; then
+	. "${STARFIGHTER_ROOT}/dir.sh"
 fi
-if [ -f "${STARFIGHTER_DIR}/git.sh" ]; then
-	. "${STARFIGHTER_DIR}/git.sh"
+if [ -f "${STARFIGHTER_ROOT}/git.sh" ]; then
+	. "${STARFIGHTER_ROOT}/git.sh"
 fi
-if [ -f "${STARFIGHTER_DIR}/host.sh" ]; then
-	. "${STARFIGHTER_DIR}/host.sh"
+if [ -f "${STARFIGHTER_ROOT}/host.sh" ]; then
+	. "${STARFIGHTER_ROOT}/host.sh"
 fi
-if [ -f "${STARFIGHTER_DIR}/user.sh" ]; then
-	. "${STARFIGHTER_DIR}/user.sh"
+if [ -f "${STARFIGHTER_ROOT}/user.sh" ]; then
+	. "${STARFIGHTER_ROOT}/user.sh"
 fi
 
 STARFIGHTER_PROMPT=
