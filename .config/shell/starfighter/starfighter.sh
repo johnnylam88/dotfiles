@@ -3,8 +3,13 @@
 # Path to starfighter main directory.
 : ${STARFIGHTER_ROOT:=${HOME}/.config/shell/starfighter}
 
+if [ -f "${STARFIGHTER_ROOT}/nonprintable.sh" ]; then
+	# nonprintable.sh needs to be loaded first as it defines
+	# variables used by colors.sh.
+	. "${STARFIGHTER_ROOT}/nonprintable.sh"
+fi
 if [ -f "${STARFIGHTER_ROOT}/colors.sh" ]; then
-	# colors.sh needs to be loaded first as it defines variables
+	# colors.sh needs to be loaded second as it defines variables
 	# used by the other modules.
 	. "${STARFIGHTER_ROOT}/colors.sh"
 fi
@@ -45,6 +50,9 @@ starfighter_main() {
 
 	# Append the special character module to the prompt.
 	starfighter_character
+
+	# Final fix-ups for non-printable characters.
+	starfighter_nonprintable
 }
 
 starfighter_main
