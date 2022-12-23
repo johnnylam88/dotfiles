@@ -19,7 +19,7 @@ starfighter_character() {
 
 	# Append status to ${STARFIGHTER_PROMPT}.
 	STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfc_status}"
-	unset sfc_status
+	unset sfc_symbol sfc_status
 }
 
 case " ${STARFIGHTER_DEBUG} " in
