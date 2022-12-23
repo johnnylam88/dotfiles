@@ -11,6 +11,12 @@
 
 : ${STARFIGHTER_USER_SHOW:=true}
 
+# Global function to be used by other modules.
+starfighter_user_is_root() {
+	# Returns true if the user is root, or false otherwise.
+	[ "${UID}" = "0" ]
+}
+
 starfighter_user() {
 	[ "${STARFIGHTER_USER_SHOW}" = "false" ] && return
 
@@ -29,11 +35,11 @@ starfighter_user() {
 	if [ -n "${sfu_user}" ]; then
 		if	[ "${STARFIGHTER_USER_SHOW}" = "always" ] || \
 			[ "${LOGNAME}" != "${USER}" ] || \
-			[ "${UID}" = "0" ] || \
+			starfighter_user_is_root || \
 			[ "${STARFIGHTER_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
 		then
 			sfu_prefix=" ${STARFIGHTER_WHITE}with${STARFIGHTER_NORMAL}"
-			if [ "${USER}" = "root" -o "${UID}" = "0" ]; then
+			if starfighter_user_is_root; then
 				sfu_status=" ${STARFIGHTER_RED}${sfu_user}${STARFIGHTER_NORMAL}"
 			else
 				sfu_status=" ${STARFIGHTER_YELLOW}${sfu_user}${STARFIGHTER_NORMAL}"

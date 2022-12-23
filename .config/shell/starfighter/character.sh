@@ -8,7 +8,7 @@ starfighter_character() {
 	sfc_symbol=
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${sfc_symbol:='\$'}
-	elif [ "${USER}" = "root" -o "${UID}" = "0" ]; then
+	elif starfighter_user_is_root; then
 		: ${sfc_symbol:='#'}
 	else
 		: ${sfc_symbol:='$'}
