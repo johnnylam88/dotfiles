@@ -36,9 +36,10 @@ if [ -f "${STARFIGHTER_ROOT}/user.sh" ]; then
 	. "${STARFIGHTER_ROOT}/user.sh"
 fi
 
+# Global variable to be used by other modules.
 STARFIGHTER_PROMPT=
 
-starfighter_main() {
+starfighter_init() {
 	starfighter_user
 	starfighter_dir
 	starfighter_host
@@ -55,4 +56,16 @@ starfighter_main() {
 	starfighter_nonprintable
 }
 
-starfighter_main
+starfighter() {
+	case ${1} in
+	init)
+		echo 'PS1=${STARFIGHTER_PROMPT}'
+		;;
+	*)
+		echo 1>&2 "starfighter: unknown command \`${1}'"
+		return 1
+		;;
+	esac
+}
+
+starfighter_init
