@@ -1,64 +1,64 @@
-# starfighter/user.sh
+# steamship/user.sh
 
-# ----------------------------------------------------------------------------
-# | STARFIGHTER_USER_SHOW | show username on local | show username on remote |
-# |-----------------------+------------------------+-------------------------|
-# | false                 | never                  | never                   |
-# | always                | always                 | always                  |
-# | true                  | if needed              | always                  |
-# | needed                | if needed              | if needed               |
-# ----------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+# | STEAMSHIP_USER_SHOW | show username on local | show username on remote |
+# |---------------------+------------------------+-------------------------|
+# | false               | never                  | never                   |
+# | always              | always                 | always                  |
+# | true                | if needed              | always                  |
+# | needed              | if needed              | if needed               |
+# --------------------------------------------------------------------------
 
-: ${STARFIGHTER_USER_SHOW:=true}
+: ${STEAMSHIP_USER_SHOW:=true}
 
 # Global function to be used by other modules.
-starfighter_user_is_root() {
+steamship_user_is_root() {
 	# Returns true if the user is root, or false otherwise.
 	[ "${UID}" = "0" ]
 }
 
-starfighter_user() {
-	[ "${STARFIGHTER_USER_SHOW}" = "false" ] && return
+steamship_user() {
+	[ "${STEAMSHIP_USER_SHOW}" = "false" ] && return
 
-	sfu_user=
+	ssu_user=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sfu_user:='\u'}
+		: ${ssu_user:='\u'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${sfu_user:='${USER}'}
+		: ${ssu_user:='${USER}'}
 	else
-		: ${sfu_user:=${USER}}
+		: ${ssu_user:=${USER}}
 	fi
 
 	# Add the user if this is not localhost.
-	sfu_prefix=
-	sfu_status=
-	if [ -n "${sfu_user}" ]; then
-		if	[ "${STARFIGHTER_USER_SHOW}" = "always" ] || \
+	ssu_prefix=
+	ssu_status=
+	if [ -n "${ssu_user}" ]; then
+		if	[ "${STEAMSHIP_USER_SHOW}" = "always" ] || \
 			[ "${LOGNAME}" != "${USER}" ] || \
-			starfighter_user_is_root || \
-			[ "${STARFIGHTER_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
+			steamship_user_is_root || \
+			[ "${STEAMSHIP_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
 		then
-			sfu_prefix=" ${STARFIGHTER_WHITE}with${STARFIGHTER_NORMAL}"
-			if starfighter_user_is_root; then
-				sfu_status=" ${STARFIGHTER_RED}${sfu_user}${STARFIGHTER_NORMAL}"
+			ssu_prefix=" ${STEAMSHIP_WHITE}with${STEAMSHIP_NORMAL}"
+			if steamship_user_is_root; then
+				ssu_status=" ${STEAMSHIP_RED}${ssu_user}${STEAMSHIP_NORMAL}"
 			else
-				sfu_status=" ${STARFIGHTER_YELLOW}${sfu_user}${STARFIGHTER_NORMAL}"
+				ssu_status=" ${STEAMSHIP_YELLOW}${ssu_user}${STEAMSHIP_NORMAL}"
 			fi
 		fi
 	fi
 
-	# Append status to ${STARFIGHTER_PROMPT}.
-	if [ -n "${STARFIGHTER_PROMPT}" ]; then
-		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfu_prefix}${sfu_status}"
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssu_prefix}${ssu_status}"
 	else
-		STARFIGHTER_PROMPT="${sfu_status}"
+		STEAMSHIP_PROMPT="${ssu_status}"
 	fi
-	unset sfu_user sfu_prefix sfu_status
+	unset ssu_user ssu_prefix ssu_status
 }
 
-case " ${STARFIGHTER_DEBUG} " in
+case " ${STEAMSHIP_DEBUG} " in
 *" user "*)
-	starfighter_user
-	echo "${STARFIGHTER_PROMPT}"
+	steamship_user
+	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

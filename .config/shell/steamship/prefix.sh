@@ -1,27 +1,27 @@
-# starfighter/prefix.sh
+# steamship/prefix.sh
 
-: ${STARFIGHTER_PREFIX_SHOW:=true}
+: ${STEAMSHIP_PREFIX_SHOW:=true}
 
-starfighter_prefix() {
-	[ "${STARFIGHTER_PREFIX_SHOW}" = "false" ] && return
+steamship_prefix() {
+	[ "${STEAMSHIP_PREFIX_SHOW}" = "false" ] && return
 
-	sfp_status='❯'
-	if starfighter_user_is_root; then
-		sfp_status="${STARFIGHTER_RED}${sfp_status}${STARFIGHTER_NORMAL}"
+	ssp_status='❯'
+	if steamship_user_is_root; then
+		ssp_status="${STEAMSHIP_RED}${ssp_status}${STEAMSHIP_NORMAL}"
 	else
-		sfp_status="${STARFIGHTER_YELLOW}${sfp_status}${STARFIGHTER_NORMAL}"
+		ssp_status="${STEAMSHIP_YELLOW}${ssp_status}${STEAMSHIP_NORMAL}"
 	fi
-	sfp_status='
-'"${sfp_status}"
+	ssp_status='
+'"${ssp_status}"
 
-	# Prepend status to ${STARFIGHTER_PROMPT}.
-	STARFIGHTER_PROMPT="${sfp_status}${STARFIGHTER_PROMPT}"
-	unset sfp_status
+	# Prepend status to ${STEAMSHIP_PROMPT}.
+	STEAMSHIP_PROMPT="${ssp_status}${STEAMSHIP_PROMPT}"
+	unset ssp_status
 }
 
-case " ${STARFIGHTER_DEBUG} " in
+case " ${STEAMSHIP_DEBUG} " in
 *" prefix "*)
-	starfighter_prefix
-	echo "${STARFIGHTER_PROMPT}"
+	steamship_prefix
+	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

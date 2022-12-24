@@ -1,34 +1,34 @@
-# starfighter/container.sh
+# steamship/container.sh
 
-: ${STARFIGHTER_CONTAINER_SHOW:=true}
+: ${STEAMSHIP_CONTAINER_SHOW:=true}
 
-starfighter_container() {
-	[ "${STARFIGHTER_CONTAINER_SHOW}" = false ] && return
+steamship_container() {
+	[ "${STEAMSHIP_CONTAINER_SHOW}" = false ] && return
 
 	# Add container name if we're in a container.
-	sfc_name=
-	sfc_status=
-	sfc_prefix=
+	ssc_name=
+	ssc_status=
+	ssc_prefix=
 	if [ -f /run/.containerenv ]; then
-		sfc_name=$(. /run/.containerenv && command printf ${name})
-		if [ -n "${sfc_name}" ]; then
-			sfc_prefix=" ${STARFIGHTER_WHITE}on${STARFIGHTER_NORMAL}"
-			sfc_status=" ${STARFIGHTER_CYAN}⬢ (${sfc_name})${STARFIGHTER_NORMAL}"
+		ssc_name=$(. /run/.containerenv && command printf ${name})
+		if [ -n "${ssc_name}" ]; then
+			ssc_prefix=" ${STEAMSHIP_WHITE}on${STEAMSHIP_NORMAL}"
+			ssc_status=" ${STEAMSHIP_CYAN}⬢ (${ssc_name})${STEAMSHIP_NORMAL}"
 		fi
 	fi
 
-	# Append status to ${STARFIGHTER_PROMPT}.
-	if [ -n "${STARFIGHTER_PROMPT}" ]; then
-		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfc_prefix}${sfc_status}"
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssc_prefix}${ssc_status}"
 	else
-		STARFIGHTER_PROMPT="${sfc_status}"
+		STEAMSHIP_PROMPT="${ssc_status}"
 	fi
-	unset sfc_name sfc_status sfc_prefix
+	unset ssc_name ssc_status ssc_prefix
 }
 
-case " ${STARFIGHTER_DEBUG} " in
+case " ${STEAMSHIP_DEBUG} " in
 *" container "*)
-	starfighter_container
-	echo "${STARFIGHTER_PROMPT}"
+	steamship_container
+	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

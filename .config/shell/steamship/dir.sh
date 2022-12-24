@@ -1,37 +1,37 @@
-# starfighter/dir.sh
+# steamship/dir.sh
 
-: ${STARFIGHTER_DIR_SHOW:=true}
+: ${STEAMSHIP_DIR_SHOW:=true}
 
-starfighter_dir() {
-	[ "${STARFIGHTER_DIR_SHOW}" = false ] && return
+steamship_dir() {
+	[ "${STEAMSHIP_DIR_SHOW}" = false ] && return
 
-	sfd_pwd=
+	ssd_pwd=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sfd_pwd:='\W'}
+		: ${ssd_pwd:='\W'}
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${sfd_pwd:='${PWD##*/}'}
+		: ${ssd_pwd:='${PWD##*/}'}
 	fi
 
 	# Add the last component of the current directory.
-	sfd_prefix=
-	sfd_status=
-	if [ -n "${sfd_pwd}" ]; then
-		sfd_prefix=" ${STARFIGHTER_WHITE}in${STARFIGHTER_NORMAL}"
-		sfd_status=" ${STARFIGHTER_CYAN}${sfd_pwd}${STARFIGHTER_NORMAL}"
+	ssd_prefix=
+	ssd_status=
+	if [ -n "${ssd_pwd}" ]; then
+		ssd_prefix=" ${STEAMSHIP_WHITE}in${STEAMSHIP_NORMAL}"
+		ssd_status=" ${STEAMSHIP_CYAN}${ssd_pwd}${STEAMSHIP_NORMAL}"
 	fi
 
-	# Append status to ${STARFIGHTER_PROMPT}.
-	if [ -n "${STARFIGHTER_PROMPT}" ]; then
-		STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfd_prefix}${sfd_status}"
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssd_prefix}${ssd_status}"
 	else
-		STARFIGHTER_PROMPT="${sfd_status}"
+		STEAMSHIP_PROMPT="${ssd_status}"
 	fi
-	unset sfd_pwd sfd_prefix sfd_status
+	unset ssd_pwd ssd_prefix ssd_status
 }
 
-case " ${STARFIGHTER_DEBUG} " in
+case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)
-	starfighter_dir
-	echo "${STARFIGHTER_PROMPT}"
+	steamship_dir
+	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

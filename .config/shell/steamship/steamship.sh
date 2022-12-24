@@ -1,71 +1,71 @@
-# starfighter.sh
+# steamship/steamship.sh
 
-# Path to starfighter main directory.
-: ${STARFIGHTER_ROOT:=${HOME}/.config/shell/starfighter}
+# Path to steamship main directory.
+: ${STEAMSHIP_ROOT:=${HOME}/.config/shell/steamship}
 
-if [ -f "${STARFIGHTER_ROOT}/nonprintable.sh" ]; then
+if [ -f "${STEAMSHIP_ROOT}/nonprintable.sh" ]; then
 	# nonprintable.sh needs to be loaded first as it defines
 	# variables used by colors.sh.
-	. "${STARFIGHTER_ROOT}/nonprintable.sh"
+	. "${STEAMSHIP_ROOT}/nonprintable.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/colors.sh" ]; then
+if [ -f "${STEAMSHIP_ROOT}/colors.sh" ]; then
 	# colors.sh needs to be loaded second as it defines variables
 	# used by the other modules.
-	. "${STARFIGHTER_ROOT}/colors.sh"
+	. "${STEAMSHIP_ROOT}/colors.sh"
 fi
 
-if [ -f "${STARFIGHTER_ROOT}/character.sh" ]; then
-	. "${STARFIGHTER_ROOT}/character.sh"
+if [ -f "${STEAMSHIP_ROOT}/character.sh" ]; then
+	. "${STEAMSHIP_ROOT}/character.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/container.sh" ]; then
-	. "${STARFIGHTER_ROOT}/container.sh"
+if [ -f "${STEAMSHIP_ROOT}/container.sh" ]; then
+	. "${STEAMSHIP_ROOT}/container.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/dir.sh" ]; then
-	. "${STARFIGHTER_ROOT}/dir.sh"
+if [ -f "${STEAMSHIP_ROOT}/dir.sh" ]; then
+	. "${STEAMSHIP_ROOT}/dir.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/git.sh" ]; then
-	. "${STARFIGHTER_ROOT}/git.sh"
+if [ -f "${STEAMSHIP_ROOT}/git.sh" ]; then
+	. "${STEAMSHIP_ROOT}/git.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/host.sh" ]; then
-	. "${STARFIGHTER_ROOT}/host.sh"
+if [ -f "${STEAMSHIP_ROOT}/host.sh" ]; then
+	. "${STEAMSHIP_ROOT}/host.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/prefix.sh" ]; then
-	. "${STARFIGHTER_ROOT}/prefix.sh"
+if [ -f "${STEAMSHIP_ROOT}/prefix.sh" ]; then
+	. "${STEAMSHIP_ROOT}/prefix.sh"
 fi
-if [ -f "${STARFIGHTER_ROOT}/user.sh" ]; then
-	. "${STARFIGHTER_ROOT}/user.sh"
+if [ -f "${STEAMSHIP_ROOT}/user.sh" ]; then
+	. "${STEAMSHIP_ROOT}/user.sh"
 fi
 
 # Global variable to be used by other modules.
-STARFIGHTER_PROMPT=
+STEAMSHIP_PROMPT=
 
-starfighter_init() {
-	starfighter_user
-	starfighter_dir
-	starfighter_host
-	starfighter_git
-	starfighter_container
+steamship_init() {
+	steamship_user
+	steamship_dir
+	steamship_host
+	steamship_git
+	steamship_container
 
 	# Prepend the special prefix module to the prompt.
-	starfighter_prefix
+	steamship_prefix
 
 	# Append the special character module to the prompt.
-	starfighter_character
+	steamship_character
 
 	# Final fix-ups for non-printable characters.
-	starfighter_nonprintable
+	steamship_nonprintable
 }
 
-starfighter() {
+steamship() {
 	case ${1} in
 	init)
-		echo 'PS1=${STARFIGHTER_PROMPT}'
+		echo 'PS1=${STEAMSHIP_PROMPT}'
 		;;
 	*)
-		echo 1>&2 "starfighter: unknown command \`${1}'"
+		echo 1>&2 "steamship: unknown command \`${1}'"
 		return 1
 		;;
 	esac
 }
 
-starfighter_init
+steamship_init

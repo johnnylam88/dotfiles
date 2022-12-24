@@ -1,30 +1,30 @@
-# starfighter/character.sh
+# steamship/character.sh
 
-: ${STARFIGHTER_CHARACTER_SHOW:=true}
+: ${STEAMSHIP_CHARACTER_SHOW:=true}
 
-starfighter_character() {
-	[ "${STARFIGHTER_CHARACTER_SHOW}" = "false" ] && return
+steamship_character() {
+	[ "${STEAMSHIP_CHARACTER_SHOW}" = "false" ] && return
 
-	sfc_symbol=
+	ssc_symbol=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${sfc_symbol:='\$'}
-	elif starfighter_user_is_root; then
-		: ${sfc_symbol:='#'}
+		: ${ssc_symbol:='\$'}
+	elif steamship_user_is_root; then
+		: ${ssc_symbol:='#'}
 	else
-		: ${sfc_symbol:='$'}
+		: ${ssc_symbol:='$'}
 	fi
 
-	sfc_status='
-'"${sfc_symbol} "
+	ssc_status='
+'"${ssc_symbol} "
 
-	# Append status to ${STARFIGHTER_PROMPT}.
-	STARFIGHTER_PROMPT="${STARFIGHTER_PROMPT}${sfc_status}"
-	unset sfc_symbol sfc_status
+	# Append status to ${STEAMSHIP_PROMPT}.
+	STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssc_status}"
+	unset ssc_symbol ssc_status
 }
 
-case " ${STARFIGHTER_DEBUG} " in
+case " ${STEAMSHIP_DEBUG} " in
 *" character "*)
-	starfighter_character
-	echo "${STARFIGHTER_PROMPT}"
+	steamship_character
+	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac
