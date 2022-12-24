@@ -9,21 +9,44 @@
 # --------------------------------------------------------------------------
 
 : ${STEAMSHIP_HOST_SHOW:=true}
+: ${STEAMSHIP_HOST_SHOW_FULL:=false}
+
+steamship_host_init() {
+	# Set a default ${HOST} to the hostname of the system.
+	: ${HOST:=$(command hostname 2>/dev/null)}
+	: ${HOST:=$(command uname -n 2>/dev/null)}
+}
 
 steamship_host() {
 	[ "${STEAMSHIP_HOST_SHOW}" = "false" ] && return
 
 	ssh_host=
 	if [ -n "${BASH_VERSION}" ]; then
-		: ${ssh_host:='\h'}
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
+			: ${ssh_host:='\h'}
+		else
+			: ${ssh_host:='\H'}
+		fi
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		: ${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}
-		: ${ssh_host:=${HOST:+'${HOST}'}}
-		: ${ssh_host:='${SYSTYPE}'}
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
+			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}
+			: ${ssh_host:=${HOST:+'${HOST%%.*}'}}
+			: ${ssh_host:='${SYSTYPE%%.*}'}
+		else
+			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}
+			: ${ssh_host:=${HOST:+'${HOST}'}}
+			: ${ssh_host:='${SYSTYPE}'}
+		fi
 	else
-		: ${ssh_host:=${HOSTNAME}}
-		: ${ssh_host:=${HOST}}
-		: ${ssh_host:=${SYSTYPE}}
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
+			: ${ssh_host:=${HOSTNAME%%.*}}
+			: ${ssh_host:=${HOST%%.*}}
+			: ${ssh_host:=${SYSTYPE%%.*}}
+		else
+			: ${ssh_host:=${HOSTNAME}}
+			: ${ssh_host:=${HOST}}
+			: ${ssh_host:=${SYSTYPE}}
+		fi
 	fi
 
 	# Add the hostname if we're in an SSH session.
@@ -50,6 +73,8 @@ steamship_host() {
 	fi
 	unset ssh_host ssh_prefix ssh_status
 }
+
+steamship_host_init
 
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
