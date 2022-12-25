@@ -39,12 +39,21 @@ fi
 # Global variable to be used by other modules.
 STEAMSHIP_PROMPT=
 
+# Order of sections show in the shell prompt.
+STEAMSHIP_PROMPT_ORDER='
+	user
+	dir
+	host
+	git
+	container
+'
+
 steamship_init() {
-	steamship_user
-	steamship_dir
-	steamship_host
-	steamship_git
-	steamship_container
+	for ssi_section in ${STEAMSHIP_PROMPT_ORDER}; do
+		ssi_section_fn="steamship_${ssi_section}"
+		eval ${ssi_section_fn} 2>/dev/null
+	done
+	unset ssi_section ssi_section_fn
 
 	# Prepend the special prefix module to the prompt.
 	steamship_prefix
