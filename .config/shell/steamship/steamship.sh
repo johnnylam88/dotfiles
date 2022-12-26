@@ -16,6 +16,7 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 STEAMSHIP_NEWLINE='
 '
 STEAMSHIP_PROMPT=
+STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=
 
 : ${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}
 : ${STEAMSHIP_PREFIX_DEFAULT='via '}
@@ -23,7 +24,15 @@ STEAMSHIP_PROMPT=
 
 #######################################
 # Initialization
-#
+
+steamship_init() {
+	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+		STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	fi
+}
+
+steamship_init
+
 # Load modules in the correct order. `nonprintable` needs to be loaded
 # first as it defines variables used by `colors`, which needs to be
 # loaded next as it defines the color variables used by the other

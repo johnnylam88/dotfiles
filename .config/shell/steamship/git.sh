@@ -36,7 +36,7 @@ steamship_git_prompt() {
 	[ "${STEAMSHIP_GIT_SHOW}" = false ] && return
 
 	# Only some shells support command substitution in the shell prompt.
-	[ -z "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ] && return
+	[ -z "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then
@@ -48,7 +48,7 @@ steamship_git_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git "*)
-	echo "$(steamship_git)"
+	echo "$(steamship_git -p)"
 	steamship_git_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
