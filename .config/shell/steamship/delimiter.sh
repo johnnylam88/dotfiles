@@ -1,9 +1,9 @@
-# steamship/prefix.sh
+# steamship/delimiter.sh
 
-: ${STEAMSHIP_PREFIX_SHOW:=true}
+: ${STEAMSHIP_DELIMITER_SHOW:=true}
 
-steamship_prefix() {
-	[ "${STEAMSHIP_PREFIX_SHOW}" = "false" ] && return
+steamship_delimiter() {
+	[ "${STEAMSHIP_DELIMITER_SHOW}" = "false" ] && return
 
 	ssp_status='❯'
 	if steamship_user_is_root; then
@@ -19,8 +19,8 @@ steamship_prefix() {
 }
 
 case " ${STEAMSHIP_DEBUG} " in
-*" prefix "*)
-	steamship_prefix
+*" delimiter "*)
+	steamship_delimiter
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

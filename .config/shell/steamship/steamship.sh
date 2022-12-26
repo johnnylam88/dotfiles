@@ -34,8 +34,8 @@ fi
 if [ -f "${STEAMSHIP_ROOT}/host.sh" ]; then
 	. "${STEAMSHIP_ROOT}/host.sh"
 fi
-if [ -f "${STEAMSHIP_ROOT}/prefix.sh" ]; then
-	. "${STEAMSHIP_ROOT}/prefix.sh"
+if [ -f "${STEAMSHIP_ROOT}/delimiter.sh" ]; then
+	. "${STEAMSHIP_ROOT}/delimiter.sh"
 fi
 if [ -f "${STEAMSHIP_ROOT}/user.sh" ]; then
 	. "${STEAMSHIP_ROOT}/user.sh"
@@ -57,8 +57,8 @@ steamship_init() {
 	done
 	unset ssi_section ssi_section_fn
 
-	# Prepend the special prefix module to the prompt.
-	steamship_prefix
+	# Prepend the special delimiter module to the prompt.
+	steamship_delimiter
 
 	# Append the special character module to the prompt.
 	steamship_character
