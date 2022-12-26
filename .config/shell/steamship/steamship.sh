@@ -46,6 +46,7 @@ STEAMSHIP_MODULE_ORDER='
 	dir
 	git
 	host
+	precmd
 	user
 '
 
@@ -68,6 +69,9 @@ steamship_prompt() {
 	# Append the special character module to the prompt.
 	ssi_order="${ssi_order} character"
 
+	# Call the special precmd module to wrap the prompt in a command.
+	ssi_order="${ssi_order} precmd"
+
 	# Final fix-ups for non-printable characters.
 	ssi_order="${ssi_order} nonprintable"
 
@@ -81,7 +85,11 @@ steamship_prompt() {
 steamship() {
 	case ${1} in
 	init)
-		echo 'PS1=${STEAMSHIP_PROMPT}'
+		if [ -n "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ]; then
+			echo "PS1='${STEAMSHIP_PROMPT}'"
+		else
+			echo 'PS1=${STEAMSHIP_PROMPT}'
+		fi
 		;;
 	*)
 		echo 1>&2 "steamship: unknown command \`${1}'"
