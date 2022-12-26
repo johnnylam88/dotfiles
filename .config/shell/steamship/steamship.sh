@@ -21,38 +21,33 @@ STEAMSHIP_PROMPT=
 : ${STEAMSHIP_PREFIX_DEFAULT='via '}
 : ${STEAMSHIP_SUFFIX_DEFAULT=' '}
 
+#######################################
+# Initialization
+#
+# Load modules in the correct order. `nonprintable` needs to be loaded
+# first as it defines variables used by `colors`, which needs to be
+# loaded next as it defines the color variables used by the other
+# modules.
+STEAMSHIP_MODULE_ORDER='
+	nonprintable
+	colors
+	character
+	container
+	delimiter
+	dir
+	git
+	host
+	user
+'
 
-if [ -f "${STEAMSHIP_ROOT}/nonprintable.sh" ]; then
-	# nonprintable.sh needs to be loaded first as it defines
-	# variables used by colors.sh.
-	. "${STEAMSHIP_ROOT}/nonprintable.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/colors.sh" ]; then
-	# colors.sh needs to be loaded second as it defines variables
-	# used by the other modules.
-	. "${STEAMSHIP_ROOT}/colors.sh"
-fi
-
-if [ -f "${STEAMSHIP_ROOT}/character.sh" ]; then
-	. "${STEAMSHIP_ROOT}/character.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/container.sh" ]; then
-	. "${STEAMSHIP_ROOT}/container.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/dir.sh" ]; then
-	. "${STEAMSHIP_ROOT}/dir.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/git.sh" ]; then
-	. "${STEAMSHIP_ROOT}/git.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/host.sh" ]; then
-	. "${STEAMSHIP_ROOT}/host.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/delimiter.sh" ]; then
-	. "${STEAMSHIP_ROOT}/delimiter.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/user.sh" ]; then
-	. "${STEAMSHIP_ROOT}/user.sh"
+if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
+	for steamship_module in ${STEAMSHIP_MODULE_ORDER}; do
+		steamship_module_file="${STEAMSHIP_ROOT}/${steamship_module}.sh"
+		if [ -f "${steamship_module_file}" ]; then
+			. "${steamship_module_file}"
+		fi
+	done
+	unset steamship_module steamship_module_file
 fi
 
 steamship_prompt() {
