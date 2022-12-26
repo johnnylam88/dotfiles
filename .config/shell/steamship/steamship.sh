@@ -3,6 +3,11 @@
 # Path to steamship main directory.
 : ${STEAMSHIP_ROOT:=${HOME}/.config/shell/steamship}
 
+# Global variables to be used by other modules.
+STEAMSHIP_NEWLINE='
+'
+STEAMSHIP_PROMPT=
+
 if [ -f "${STEAMSHIP_ROOT}/nonprintable.sh" ]; then
 	# nonprintable.sh needs to be loaded first as it defines
 	# variables used by colors.sh.
@@ -35,9 +40,6 @@ fi
 if [ -f "${STEAMSHIP_ROOT}/user.sh" ]; then
 	. "${STEAMSHIP_ROOT}/user.sh"
 fi
-
-# Global variable to be used by other modules.
-STEAMSHIP_PROMPT=
 
 # Order of sections show in the shell prompt.
 STEAMSHIP_PROMPT_ORDER='

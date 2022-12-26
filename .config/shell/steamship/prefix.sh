@@ -11,8 +11,7 @@ steamship_prefix() {
 	else
 		ssp_status="${STEAMSHIP_YELLOW}${ssp_status}${STEAMSHIP_NORMAL}"
 	fi
-	ssp_status='
-'"${ssp_status}"
+	ssp_status="${STEAMSHIP_NEWLINE}${ssp_status}"
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
 	STEAMSHIP_PROMPT="${ssp_status}${STEAMSHIP_PROMPT}"

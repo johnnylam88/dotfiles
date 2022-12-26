@@ -14,8 +14,7 @@ steamship_character() {
 		: ${ssc_symbol:='$'}
 	fi
 
-	ssc_status='
-'"${ssc_symbol} "
+	ssc_status="${STEAMSHIP_NEWLINE}${ssc_symbol} "
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssc_status}"
