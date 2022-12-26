@@ -27,8 +27,7 @@ steamship_dir() {
 	fi
 	if [ -n "${ssd_status}" ]; then
 		ssd_status="${ssd_color}${ssd_status}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssd_status="${STEAMSHIP_DIR_PREFIX}${ssd_status}"
 		fi
 		ssd_status="${ssd_status}${STEAMSHIP_DIR_SUFFIX}"

@@ -26,8 +26,7 @@ steamship_container() {
 
 	if [ -n "${ssc_status}" ]; then
 		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssc_status="${STEAMSHIP_CONTAINER_PREFIX}${ssc_status}"
 		fi
 		ssc_status="${ssc_status}${STEAMSHIP_CONTAINER_SUFFIX}"

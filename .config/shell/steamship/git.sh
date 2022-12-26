@@ -22,8 +22,7 @@ steamship_git() {
 
 	ssg_status="${ssg_git_branch}${ssg_git_status}"
 	if [ -n "${ssg_status}" ]; then
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssg_status="${STEAMSHIP_GIT_PREFIX}${ssg_status}"
 		fi
 		ssg_status="${ssg_status}${STEAMSHIP_GIT_SUFFIX}"
@@ -33,10 +32,8 @@ steamship_git() {
 }
 
 steamship_git_prompt() {
-	[ "${STEAMSHIP_GIT_SHOW}" = false ] && return
-
-	# Only some shells support command substitution in the shell prompt.
 	[ -z "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ] && return
+	[ "${STEAMSHIP_GIT_SHOW}" = false ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

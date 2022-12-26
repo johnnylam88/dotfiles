@@ -14,7 +14,7 @@ steamship_character() {
 	ssc_char=
 	ssc_color=
 	if [ -z "${STEAMSHIP_RETVAL}" ]; then
-		ssc_colorvar="STEAMSHIP_WHITE"
+		ssc_colorvar='STEAMSHIP_WHITE'
 		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL:='$'}
 	elif [ "${STEAMSHIP_RETVAL}" = 0 ]; then
 		ssc_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_SUCCESS}"
@@ -41,8 +41,7 @@ steamship_character() {
 	if [ -n "${ssc_status}" ]; then
 		# Reset color to *normal* for user text.
 		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_NORMAL}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssc_status="${STEAMSHIP_CHARACTER_PREFIX}${ssc_status}"
 		fi
 		ssc_status="${ssc_status}${STEAMSHIP_CHARACTER_SUFFIX}"
@@ -52,7 +51,7 @@ steamship_character() {
 }
 
 steamship_character_prompt() {
-	[ "${STEAMSHIP_CHARACTER_SHOW}" = "false" ] && return
+	[ "${STEAMSHIP_CHARACTER_SHOW}" = false ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ]; then

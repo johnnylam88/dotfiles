@@ -21,8 +21,7 @@ steamship_delimiter() {
 	ssd_status=
 	if [ -n "${STEAMSHIP_DELIMITER_SYMBOL}" ]; then
 		ssd_status="${ssd_color}${STEAMSHIP_DELIMITER_SYMBOL}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssd_status="${STEAMSHIP_DELIMITER_PREFIX}${ssd_status}"
 		fi
 		ssd_status="${ssd_status}${STEAMSHIP_DELIMITER_SUFFIX}"
@@ -32,7 +31,7 @@ steamship_delimiter() {
 }
 
 steamship_delimiter_prompt() {
-	[ "${STEAMSHIP_DELIMITER_SHOW}" = "false" ] && return
+	[ "${STEAMSHIP_DELIMITER_SHOW}" = false ] && return
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
 	STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"

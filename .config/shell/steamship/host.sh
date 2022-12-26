@@ -31,24 +31,24 @@ steamship_host() {
 			: ${ssh_host:='\H'}
 		fi
 	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
-		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
-			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}
-			: ${ssh_host:=${HOST:+'${HOST%%.*}'}}
-			: ${ssh_host:='${SYSTYPE%%.*}'}
-		else
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
 			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}
 			: ${ssh_host:=${HOST:+'${HOST}'}}
 			: ${ssh_host:='${SYSTYPE}'}
+		else
+			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}
+			: ${ssh_host:=${HOST:+'${HOST%%.*}'}}
+			: ${ssh_host:='${SYSTYPE%%.*}'}
 		fi
 	else
-		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
-			: ${ssh_host:=${HOSTNAME%%.*}}
-			: ${ssh_host:=${HOST%%.*}}
-			: ${ssh_host:=${SYSTYPE%%.*}}
-		else
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
 			: ${ssh_host:=${HOSTNAME}}
 			: ${ssh_host:=${HOST}}
 			: ${ssh_host:=${SYSTYPE}}
+		else
+			: ${ssh_host:=${HOSTNAME%%.*}}
+			: ${ssh_host:=${HOST%%.*}}
+			: ${ssh_host:=${SYSTYPE%%.*}}
 		fi
 	fi
 
@@ -62,7 +62,7 @@ steamship_host() {
 
 	ssh_status=
 	if [ -n "${ssh_host}" ]; then
-		if	[ "${STEAMSHIP_HOST_SHOW}" = "always" ] ||
+		if	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
 			[ -n "${SSH_CONNECTION}" ]
 		then
 			if [ -n "${STEAMSHIP_HOST_SYMBOL}" ]; then
@@ -74,8 +74,7 @@ steamship_host() {
 
 	if [ -n "${ssh_status}" ]; then
 		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssh_status="${STEAMSHIP_HOST_PREFIX}${ssh_status}"
 		fi
 		ssh_status="${ssh_status}${STEAMSHIP_HOST_SUFFIX}"
@@ -85,7 +84,7 @@ steamship_host() {
 }
 
 steamship_host_prompt() {
-	[ "${STEAMSHIP_HOST_SHOW}" = "false" ] && return
+	[ "${STEAMSHIP_HOST_SHOW}" = false ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

@@ -22,8 +22,7 @@ steamship_exit_code() {
 	fi
 	if [ -n "${ssec_status}" ]; then
 		ssec_status="${ssec_color}${ssec_status}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
-			# Add prefix if requested with '-p'.
+		if [ "${1}" = '-p' ]; then
 			ssec_status="${STEAMSHIP_EXIT_CODE_PREFIX}${ssec_status}"
 		fi
 		ssec_status="${ssec_status}${STEAMSHIP_EXIT_CODE_SUFFIX}"

@@ -19,7 +19,7 @@
 # Global function to be used by other modules.
 steamship_user_is_root() {
 	# Returns true if the user is root, or false otherwise.
-	[ "${UID}" = "0" ]
+	[ "${UID}" = 0 ]
 }
 
 steamship_user() {
@@ -42,10 +42,10 @@ steamship_user() {
 
 	ssu_status=
 	if [ -n "${ssu_user}" ]; then
-		if	[ "${STEAMSHIP_USER_SHOW}" = "always" ] || \
+		if	[ "${STEAMSHIP_USER_SHOW}" = always ] || \
 			[ "${LOGNAME}" != "${USER}" ] || \
 			steamship_user_is_root || \
-			[ "${STEAMSHIP_USER_SHOW}" = "true" -a -n "${SSH_CONNECTION}" ]
+			[ "${STEAMSHIP_USER_SHOW}" = true -a -n "${SSH_CONNECTION}" ]
 		then
 			if [ -n "${STEAMSHIP_USER_SYMBOL}" ]; then
 				ssu_status="${STEAMSHIP_USER_SYMBOL} "
@@ -56,7 +56,7 @@ steamship_user() {
 
 	if [ -n "${ssu_status}" ]; then
 		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_WHITE}"
-		if [ "${1}" = "-p" ]; then
+		if [ "${1}" = '-p' ]; then
 			ssu_status="${STEAMSHIP_USER_PREFIX}${ssu_status}"
 		fi
 		ssu_status="${ssu_status}${STEAMSHIP_USER_SUFFIX}"
@@ -66,7 +66,7 @@ steamship_user() {
 }
 
 steamship_user_prompt() {
-	[ "${STEAMSHIP_USER_SHOW}" = "false" ] && return
+	[ "${STEAMSHIP_USER_SHOW}" = false ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then
