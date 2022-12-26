@@ -36,7 +36,7 @@ steamship_container() {
 }
 
 steamship_container_prompt() {
-	[ "${STEAMSHIP_CONTAINER_SHOW}" = false ] && return
+	[ "${STEAMSHIP_CONTAINER_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

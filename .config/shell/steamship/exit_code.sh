@@ -32,8 +32,8 @@ steamship_exit_code() {
 }
 
 steamship_exit_code_prompt() {
-	[ -z "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ] && return
-	[ "${STEAMSHIP_EXIT_CODE_SHOW}" = false ] && return
+	[ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ] || return
+	[ "${STEAMSHIP_EXIT_CODE_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

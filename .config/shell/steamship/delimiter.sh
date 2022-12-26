@@ -31,7 +31,7 @@ steamship_delimiter() {
 }
 
 steamship_delimiter_prompt() {
-	[ "${STEAMSHIP_DELIMITER_SHOW}" = false ] && return
+	[ "${STEAMSHIP_DELIMITER_SHOW}" = true ] || return
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
 	STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"

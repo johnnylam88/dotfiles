@@ -37,7 +37,7 @@ steamship_dir() {
 }
 
 steamship_dir_prompt() {
-	[ "${STEAMSHIP_DIR_SHOW}" = false ] && return
+	[ "${STEAMSHIP_DIR_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

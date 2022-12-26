@@ -51,10 +51,10 @@ steamship_character() {
 }
 
 steamship_character_prompt() {
-	[ "${STEAMSHIP_CHARACTER_SHOW}" = false ] && return
+	[ "${STEAMSHIP_CHARACTER_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ]; then
+	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
 			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_character -p)'
 		else

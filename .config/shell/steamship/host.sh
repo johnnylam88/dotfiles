@@ -84,7 +84,8 @@ steamship_host() {
 }
 
 steamship_host_prompt() {
-	[ "${STEAMSHIP_HOST_SHOW}" = false ] && return
+	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
+	[ "${STEAMSHIP_HOST_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

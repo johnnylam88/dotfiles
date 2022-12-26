@@ -66,7 +66,9 @@ steamship_user() {
 }
 
 steamship_user_prompt() {
-	[ "${STEAMSHIP_USER_SHOW}" = false ] && return
+	[ "${STEAMSHIP_USER_SHOW}" = always ] ||
+	[ "${STEAMSHIP_USER_SHOW}" = true ] ||
+	[ "${STEAMSHIP_USER_SHOW}" = needed ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then

@@ -16,7 +16,7 @@
 : ${STEAMSHIP_GIT_STATUS_DIVERGED:='⇕'}
 
 steamship_git_status() {
-	[ "${STEAMSHIP_GIT_STATUS_SHOW}" = false ] && return
+	[ "${STEAMSHIP_GIT_STATUS_SHOW}" = true ] || return
 
 	# Get the branch state by parsing the output from `git status --porcelain`.
 	# This is mostly just copied from git_status.zsh from spaceship-prompt.

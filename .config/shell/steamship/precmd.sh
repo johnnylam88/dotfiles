@@ -1,7 +1,7 @@
 # steamship/precmd.sh
 
 steamship_precmd_prompt() {
-	[ -z "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ] && return
+	[ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ] || return
 
 	sspp_prefix='$(STEAMSHIP_RETVAL=$? && echo "'
 	sspp_suffix='")'

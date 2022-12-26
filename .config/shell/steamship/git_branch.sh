@@ -10,7 +10,7 @@ steamship_git_branch_name() {
 }
 
 steamship_git_branch() {
-	[ "${STEAMSHIP_GIT_BRANCH_SHOW}" = false ] && return
+	[ "${STEAMSHIP_GIT_BRANCH_SHOW}" = true ] || return
 
 	ssgb_branch=$(steamship_git_branch_name)
 
