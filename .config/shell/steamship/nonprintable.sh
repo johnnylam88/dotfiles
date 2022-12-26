@@ -37,7 +37,7 @@ steamship_nonprintable_init() {
 	fi
 }
 
-steamship_nonprintable() {
+steamship_nonprintable_prompt() {
 	# Prepend the preamble to ${STEAMSHIP_PROMPT}.
 	if [ -n "${steamship_preamble}" ]; then
 		STEAMSHIP_PROMPT="${steamship_preamble}${STEAMSHIP_PROMPT}"
@@ -48,7 +48,7 @@ steamship_nonprintable_init
 
 case " ${STEAMSHIP_DEBUG} " in
 *" nonprintable "*)
-	steamship_nonprintable
+	steamship_nonprintable_prompt
 	echo "start: ${STEAMSHIP_ESC_START}"
 	echo "end: ${STEAMSHIP_ESC_END}"
 	echo "exist: ${STEAMSHIP_NONPRINTABLE:-no}"

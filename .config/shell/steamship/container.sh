@@ -7,16 +7,14 @@
 : ${STEAMSHIP_CONTAINER_COLOR:='CYAN'}
 
 steamship_container() {
-	[ "${STEAMSHIP_CONTAINER_SHOW}" = false ] && return
-
-	ssc_colorvar="STEAMSHIP_${STEAMSHIP_CONTAINER_COLOR}"
-	eval 'ssc_color=${'${ssc_colorvar}'}'
-	unset ssc_colorvar
-
 	ssc_name=
 	if [ -f /run/.containerenv ]; then
 		ssc_name=$(. /run/.containerenv && printf ${name})
 	fi
+
+	ssc_colorvar="STEAMSHIP_${STEAMSHIP_CONTAINER_COLOR}"
+	eval 'ssc_color=${'${ssc_colorvar}'}'
+	unset ssc_colorvar
 
 	ssc_status=
 	if [ -n "${ssc_name}" ]; then
@@ -28,19 +26,31 @@ steamship_container() {
 
 	if [ -n "${ssc_status}" ]; then
 		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_WHITE}"
-		# Append status to ${STEAMSHIP_PROMPT}.
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_CONTAINER_PREFIX}"
+		if [ "${1}" = "-p" ]; then
+			# Add prefix if requested with '-p'.
+			ssc_status="${STEAMSHIP_CONTAINER_PREFIX}${ssc_status}"
 		fi
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssc_status}"
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_CONTAINER_SUFFIX}"
+		ssc_status="${ssc_status}${STEAMSHIP_CONTAINER_SUFFIX}"
 	fi
+	echo "${ssc_status}"
 	unset ssc_name ssc_status ssc_color
+}
+
+steamship_container_prompt() {
+	[ "${STEAMSHIP_CONTAINER_SHOW}" = false ] && return
+
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_container -p)"
+	else
+		STEAMSHIP_PROMPT=$(steamship_container)
+	fi
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" container "*)
-	steamship_container
+	echo "$(steamship_container -p)"
+	steamship_container_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

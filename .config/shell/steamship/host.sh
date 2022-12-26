@@ -23,8 +23,6 @@ steamship_host_init() {
 }
 
 steamship_host() {
-	[ "${STEAMSHIP_HOST_SHOW}" = "false" ] && return
-
 	ssh_host=
 	if [ -n "${BASH_VERSION}" ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
@@ -76,21 +74,33 @@ steamship_host() {
 
 	if [ -n "${ssh_status}" ]; then
 		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_WHITE}"
-		# Append status to ${STEAMSHIP_PROMPT}.
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_HOST_PREFIX}"
+		if [ "${1}" = "-p" ]; then
+			# Add prefix if requested with '-p'.
+			ssh_status="${STEAMSHIP_HOST_PREFIX}${ssh_status}"
 		fi
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssh_status}"
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_HOST_SUFFIX}"
+		ssh_status="${ssh_status}${STEAMSHIP_HOST_SUFFIX}"
 	fi
+	echo "${ssh_status}"
 	unset ssh_host ssh_status ssh_color
+}
+
+steamship_host_prompt() {
+	[ "${STEAMSHIP_HOST_SHOW}" = "false" ] && return
+
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_host -p)"
+	else
+		STEAMSHIP_PROMPT=$(steamship_host)
+	fi
 }
 
 steamship_host_init
 
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
-	steamship_host
+	echo "$(steamship_host -p)"
+	steamship_host_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

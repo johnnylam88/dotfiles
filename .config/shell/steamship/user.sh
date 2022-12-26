@@ -23,8 +23,6 @@ steamship_user_is_root() {
 }
 
 steamship_user() {
-	[ "${STEAMSHIP_USER_SHOW}" = "false" ] && return
-
 	ssu_user=
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${ssu_user:='\u'}
@@ -58,19 +56,30 @@ steamship_user() {
 
 	if [ -n "${ssu_status}" ]; then
 		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_WHITE}"
-		# Append status to ${STEAMSHIP_PROMPT}.
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_USER_PREFIX}"
+		if [ "${1}" = "-p" ]; then
+			ssu_status="${STEAMSHIP_USER_PREFIX}${ssu_status}"
 		fi
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${ssu_status}"
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_USER_SUFFIX}"
+		ssu_status="${ssu_status}${STEAMSHIP_USER_SUFFIX}"
 	fi
+	echo "${ssu_status}"
 	unset ssu_user ssu_status ssu_color
+}
+
+steamship_user_prompt() {
+	[ "${STEAMSHIP_USER_SHOW}" = "false" ] && return
+
+	# Append status to ${STEAMSHIP_PROMPT}.
+	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_user -p)"
+	else
+		STEAMSHIP_PROMPT=$(steamship_user)
+	fi
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" user "*)
-	steamship_user
+	echo "$(steamship_user -p)"
+	steamship_user_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

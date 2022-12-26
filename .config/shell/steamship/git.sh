@@ -13,26 +13,26 @@ if [ -f "${STEAMSHIP_ROOT}/git_status.sh" ]; then
 	. "${STEAMSHIP_ROOT}/git_status.sh"
 fi
 
-steamship_git_helper() {
-	ssgh_git_branch=$(steamship_git_branch)
-	ssgh_git_status=
-	if [ -n "${ssgh_git_branch}" ]; then
-		ssgh_git_status=$(steamship_git_status ${ssgh_git_branch})
+steamship_git() {
+	ssg_git_branch=$(steamship_git_branch)
+	ssg_git_status=
+	if [ -n "${ssg_git_branch}" ]; then
+		ssg_git_status=$(steamship_git_status ${ssg_git_branch})
 	fi
 
-	ssgh_status="${ssgh_git_branch}${ssgh_git_status}"
-	if [ -n "${ssgh_status}" ]; then
+	ssg_status="${ssg_git_branch}${ssg_git_status}"
+	if [ -n "${ssg_status}" ]; then
 		if [ "${1}" = "-p" ]; then
 			# Add prefix if requested with '-p'.
-			ssgh_status="${STEAMSHIP_GIT_PREFIX}${ssgh_status}"
+			ssg_status="${STEAMSHIP_GIT_PREFIX}${ssg_status}"
 		fi
-		ssgh_status="${ssgh_status}${STEAMSHIP_GIT_SUFFIX}"
+		ssg_status="${ssg_status}${STEAMSHIP_GIT_SUFFIX}"
 	fi
-	echo "${ssgh_status}"
-	unset ssgh_git_branch ssgh_git_status ssgh_status
+	echo "${ssg_status}"
+	unset ssg_git_branch ssg_git_status ssg_status
 }
 
-steamship_git() {
+steamship_git_prompt() {
 	[ "${STEAMSHIP_GIT_SHOW}" = false ] && return
 
 	# Only some shells support command substitution in the shell prompt.
@@ -40,16 +40,16 @@ steamship_git() {
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_git_helper -p)'
+		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_git -p)'
 	else
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_git_helper)'
+		STEAMSHIP_PROMPT='$(steamship_git)'
 	fi
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git "*)
-	steamship_git
-	steamship_git_helper
+	echo "$(steamship_git)"
+	steamship_git_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac
