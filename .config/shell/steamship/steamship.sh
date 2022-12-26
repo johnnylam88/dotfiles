@@ -10,6 +10,7 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	host
 	git
 	container
+	exit_code
 '
 
 # Global variables to be used by other modules.
@@ -44,6 +45,7 @@ STEAMSHIP_MODULE_ORDER='
 	container
 	delimiter
 	dir
+	exit_code
 	git
 	host
 	precmd
