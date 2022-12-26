@@ -1,21 +1,35 @@
 # steamship/delimiter.sh
 
-: ${STEAMSHIP_DELIMITER_SHOW:=true}
+: ${STEAMSHIP_DELIMITER_SHOW:='true'}
+: ${STEAMSHIP_DELIMITER_PREFIX:=${STEAMSHIP_NEWLINE}}
+: ${STEAMSHIP_DELIMITER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
+: ${STEAMSHIP_DELIMITER_SYMBOL:='❯'}
+: ${STEAMSHIP_DELIMITER_COLOR:='YELLOW'}
+: ${STEAMSHIP_DELIMITER_COLOR_ROOT:='RED'}
 
 steamship_delimiter() {
 	[ "${STEAMSHIP_DELIMITER_SHOW}" = "false" ] && return
 
-	ssp_status='❯'
 	if steamship_user_is_root; then
-		ssp_status="${STEAMSHIP_RED}${ssp_status}${STEAMSHIP_NORMAL}"
+		ssd_colorvar="STEAMSHIP_${STEAMSHIP_DELIMITER_COLOR_ROOT}"
 	else
-		ssp_status="${STEAMSHIP_YELLOW}${ssp_status}${STEAMSHIP_NORMAL}"
+		ssd_colorvar="STEAMSHIP_${STEAMSHIP_DELIMITER_COLOR}"
 	fi
-	ssp_status="${STEAMSHIP_NEWLINE}${ssp_status}"
+	eval 'ssd_color=${'${ssd_colorvar}'}'
+	unset ssd_colorvar
+
+	ssd_status=
+	if	[ "${STEAMSHIP_DELIMITER_SHOW}" = "true" ] &&
+		[ -n "${STEAMSHIP_DELIMITER_SYMBOL}" ]
+	then
+		ssd_status="${ssd_color}${STEAMSHIP_DELIMITER_SYMBOL}${STEAMSHIP_WHITE}"
+		ssd_status="${ssd_status}${STEAMSHIP_DELIMITER_SUFFIX}"
+	fi
+	ssd_status="${STEAMSHIP_DELIMITER_PREFIX}${ssd_status}"
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
-	STEAMSHIP_PROMPT="${ssp_status}${STEAMSHIP_PROMPT}"
-	unset ssp_status
+	STEAMSHIP_PROMPT="${ssd_status}${STEAMSHIP_PROMPT}"
+	unset ssd_status ssd_color
 }
 
 case " ${STEAMSHIP_DEBUG} " in

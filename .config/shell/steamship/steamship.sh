@@ -8,6 +8,10 @@ STEAMSHIP_NEWLINE='
 '
 STEAMSHIP_PROMPT=
 
+: ${STEAMSHIP_PREFIX_DEFAULT='via '}
+: ${STEAMSHIP_SUFFIX_DEFAULT=' '}
+
+
 if [ -f "${STEAMSHIP_ROOT}/nonprintable.sh" ]; then
 	# nonprintable.sh needs to be loaded first as it defines
 	# variables used by colors.sh.

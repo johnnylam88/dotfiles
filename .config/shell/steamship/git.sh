@@ -100,12 +100,12 @@ steamship_git_helper() {
 	if [ -n "${ssgh_branch}" ]; then
 		if [ "${1}" == "-p" ]; then
 			# Add prefix if requested with '-p'.
-			ssgh_prefix=" ${STEAMSHIP_WHITE}on${STEAMSHIP_NORMAL}"
+			ssgh_prefix="on "
 		fi
-		ssgh_status=" ${STEAMSHIP_MAGENTA} ${ssgh_branch}${STEAMSHIP_NORMAL}"
+		ssgh_status="${STEAMSHIP_MAGENTA} ${ssgh_branch}${STEAMSHIP_WHITE} "
 		ssgh_state=$(ss_git_branch_state)
 		if [ -n "${ssgh_state}" ]; then
-			ssgh_status="${ssgh_status} ${STEAMSHIP_RED}[${ssgh_state}]${STEAMSHIP_NORMAL}"
+			ssgh_status="${ssgh_status}${STEAMSHIP_RED}[${ssgh_state}]${STEAMSHIP_WHITE} "
 		fi
 	fi
 	echo "${ssgh_prefix}${ssgh_status}"
