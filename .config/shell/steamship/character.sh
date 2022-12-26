@@ -5,15 +5,31 @@
 : ${STEAMSHIP_CHARACTER_SUFFIX:=' '}
 : ${STEAMSHIP_CHARACTER_SYMBOL:='$'}
 : ${STEAMSHIP_CHARACTER_SYMBOL_ROOT:='#'}
+: ${STEAMSHIP_CHARACTER_SYMBOL_SUCCESS:=${STEAMSHIP_CHARACTER_SYMBOL}}
+: ${STEAMSHIP_CHARACTER_SYMBOL_FAILURE:=${STEAMSHIP_CHARACTER_SYMBOL}}
+: ${STEAMSHIP_CHARACTER_COLOR_SUCCESS:='GREEN'}
+: ${STEAMSHIP_CHARACTER_COLOR_FAILURE:='RED'}
 
 steamship_character() {
 	ssc_char=
+	ssc_color=
+	if [ -z "${STEAMSHIP_RETVAL}" ]; then
+		ssc_colorvar="STEAMSHIP_WHITE"
+		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL:='$'}
+	elif [ "${STEAMSHIP_RETVAL}" = 0 ]; then
+		ssc_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_SUCCESS}"
+		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL_SUCCESS:='$'}
+	else
+		ssc_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_FAILURE}"
+		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL_FAILURE:='$'}
+	fi
+	eval 'ssc_color=${'${ssc_colorvar}'}'
+	unset ssc_colorvar
+
 	if	[ -n "${STEAMSHIP_DEBUG}" ] ||
 		steamship_user_is_root
 	then
 		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL_ROOT:='#'}
-	else
-		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL:='$'}
 	fi
 	# ${ssc_char} is always set and non-null.
 
@@ -23,7 +39,8 @@ steamship_character() {
 	fi
 
 	if [ -n "${ssc_status}" ]; then
-		ssc_status="${STEAMSHIP_NORMAL}${ssc_status}"
+		# Reset color to *normal* for user text.
+		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_NORMAL}"
 		if [ "${1}" = "-p" ]; then
 			# Add prefix if requested with '-p'.
 			ssc_status="${STEAMSHIP_CHARACTER_PREFIX}${ssc_status}"
@@ -38,15 +55,25 @@ steamship_character_prompt() {
 	[ "${STEAMSHIP_CHARACTER_SHOW}" = "false" ] && return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_character -p)"
+	if [ -n "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ]; then
+		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_character -p)'
+		else
+			STEAMSHIP_PROMPT='$(steamship_character)'
+		fi
 	else
-		STEAMSHIP_PROMPT=$(steamship_character)
+		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_character -p)"
+		else
+			STEAMSHIP_PROMPT=$(steamship_character)
+		fi
 	fi
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" character "*)
+	export STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	export STEAMSHIP_RETVAL=1
 	echo "$(steamship_character -p)"
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT}"
