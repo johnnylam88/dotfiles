@@ -10,5 +10,6 @@ steamship_prompt_newline_prompt() {
 	[ "${STEAMSHIP_PROMPT_NEWLINE_SHOW}" = true ] || return
 
 	# Prepend a newline to ${STEAMSHIP_PROMPT}.
-	STEAMSHIP_PROMPT="${STEAMSHIP_NEWLINE}${STEAMSHIP_PROMPT}"
+	STEAMSHIP_PROMPT='
+'"${STEAMSHIP_PROMPT}"
 }

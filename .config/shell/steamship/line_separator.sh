@@ -10,5 +10,6 @@ steamship_line_separator_prompt() {
 	[ "${STEAMSHIP_LINE_SEPARATOR_SHOW}" = true ] || return
 
 	# Append a newline to ${STEAMSHIP_PROMPT}.
-	STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}${STEAMSHIP_NEWLINE}"
+	STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'
+'
 }
