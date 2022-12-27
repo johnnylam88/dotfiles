@@ -4,14 +4,14 @@
 : ${STEAMSHIP_EXIT_CODE_PREFIX:=''}
 : ${STEAMSHIP_EXIT_CODE_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
 : ${STEAMSHIP_EXIT_CODE_SYMBOL:='✘'}
-: ${STEAMSHIP_EXIT_CODE_COLOR:='RED'}
+: ${STEAMSHIP_EXIT_CODE_COLOR:=${STEAMSHIP_COLOR_FAILURE}}
 
 steamship_exit_code() {
 	[ "${STEAMSHIP_RETVAL}" = 0 ] && return
 
+	ssec_color=
 	ssec_colorvar="STEAMSHIP_${STEAMSHIP_EXIT_CODE_COLOR}"
 	eval 'ssec_color=${'${ssec_colorvar}'}'
-	unset ssec_colorvar
 
 	ssec_status=
 	if [ -n "${STEAMSHIP_RETVAL}" ]; then
@@ -27,8 +27,9 @@ steamship_exit_code() {
 		fi
 		ssec_status="${ssec_status}${STEAMSHIP_EXIT_CODE_SUFFIX}"
 	fi
+
 	echo "${ssec_status}"
-	unset ssec_status ssec_color
+	unset ssec_color ssec_colorvar ssec_status
 }
 
 steamship_exit_code_prompt() {

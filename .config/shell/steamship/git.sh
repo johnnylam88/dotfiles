@@ -27,6 +27,7 @@ steamship_git() {
 		fi
 		ssg_status="${ssg_status}${STEAMSHIP_GIT_SUFFIX}"
 	fi
+
 	echo "${ssg_status}"
 	unset ssg_git_branch ssg_git_status ssg_status
 }

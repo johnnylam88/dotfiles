@@ -83,7 +83,7 @@ steamship_prompt() {
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
 		eval ${ssi_section_prompt_fn} 2>/dev/null
 	done
-	unset ssi_section ssi_section_prompt_fn
+	unset ssi_order ssi_section ssi_section_prompt_fn
 }
 
 steamship() {

@@ -52,13 +52,14 @@ steamship_host() {
 		fi
 	fi
 
+	ssh_color=
+	ssh_colorvar=
 	if [ -n "${SSH_CONNECTION}" ]; then
 		ssh_colorvar="STEAMSHIP_${STEAMSHIP_HOST_COLOR_SSH}"
 	else
 		ssh_colorvar="STEAMSHIP_${STEAMSHIP_HOST_COLOR}"
 	fi
 	eval 'ssh_color=${'${ssh_colorvar}'}'
-	unset ssh_colorvar
 
 	ssh_status=
 	if [ -n "${ssh_host}" ]; then
@@ -71,7 +72,6 @@ steamship_host() {
 			ssh_status="${ssh_status}${ssh_host}"
 		fi
 	fi
-
 	if [ -n "${ssh_status}" ]; then
 		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_WHITE}"
 		if [ "${1}" = '-p' ]; then
@@ -79,8 +79,9 @@ steamship_host() {
 		fi
 		ssh_status="${ssh_status}${STEAMSHIP_HOST_SUFFIX}"
 	fi
+
 	echo "${ssh_status}"
-	unset ssh_host ssh_status ssh_color
+	unset ssh_host ssh_color ssh_colorvar ssh_status
 }
 
 steamship_host_prompt() {

@@ -86,9 +86,9 @@ steamship_dir() {
 		ssd_dir='${PWD}'
 	fi
 
+	ssd_color=
 	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIR_COLOR}"
 	eval 'ssd_color=${'${ssd_colorvar}'}'
-	unset ssd_colorvar
 
 	ssd_status=
 	if [ -n "${ssd_dir}" ]; then
@@ -104,8 +104,9 @@ steamship_dir() {
 		fi
 		ssd_status="${ssd_status}${STEAMSHIP_DIR_SUFFIX}"
 	fi
+
 	echo "${ssd_status}"
-	unset ssd_dir ssd_status ssd_color
+	unset ssd_dir ssd_color ssd_colorvar ssd_status
 }
 
 steamship_dir_prompt() {

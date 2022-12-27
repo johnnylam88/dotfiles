@@ -32,13 +32,14 @@ steamship_user() {
 		: ${ssu_user:=${USER}}
 	fi
 
+	ssu_color=
+	ssu_colorvar=
 	if steamship_user_is_root; then
 		ssu_colorvar="STEAMSHIP_${STEAMSHIP_USER_COLOR_ROOT}"
 	else
 		ssu_colorvar="STEAMSHIP_${STEAMSHIP_USER_COLOR}"
 	fi
 	eval 'ssu_color=${'${ssu_colorvar}'}'
-	unset ssu_colorvar
 
 	ssu_status=
 	if [ -n "${ssu_user}" ]; then
@@ -53,7 +54,6 @@ steamship_user() {
 			ssu_status="${ssu_status}${ssu_user}"
 		fi
 	fi
-
 	if [ -n "${ssu_status}" ]; then
 		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_WHITE}"
 		if [ "${1}" = '-p' ]; then
@@ -61,8 +61,9 @@ steamship_user() {
 		fi
 		ssu_status="${ssu_status}${STEAMSHIP_USER_SUFFIX}"
 	fi
+
 	echo "${ssu_status}"
-	unset ssu_user ssu_status ssu_color
+	unset ssu_user ssu_color ssu_colorvar ssu_status
 }
 
 steamship_user_prompt() {

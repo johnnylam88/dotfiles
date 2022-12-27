@@ -87,6 +87,7 @@ steamship_git_status() {
 		unset ssgs_branch ssgs_ahead ssgs_behind
 	fi
 
+	ssgs_color=
 	ssgs_colorvar="STEAMSHIP_${STEAMSHIP_GIT_STATUS_COLOR}"
 	eval 'ssgs_color=${'${ssgs_colorvar}'}'
 	unset ssgs_colorvar
@@ -99,12 +100,13 @@ steamship_git_status() {
 		# Colorize the entire status.
 		ssgs_status="${ssgs_color}${ssgs_status}${STEAMSHIP_WHITE}"
 	fi
+
 	echo "${ssgs_status}"
-	unset ssgs_state ssgs_status ssgs_color
+	unset ssgs_state ssgs_color ssgs_colorvar ssgs_status
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_status "*)
-	echo "$(steamship_git_status $(command git branch --show-current 2>/dev/null))"
+	echo "$(steamship_git_status)"
 	;;
 esac

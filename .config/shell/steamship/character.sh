@@ -45,6 +45,7 @@ steamship_character() {
 		fi
 		ssc_status="${ssc_status}${STEAMSHIP_CHARACTER_SUFFIX}"
 	fi
+
 	echo "${ssc_status}"
 	unset ssc_char ssc_color ssc_colorvar ssc_status
 }

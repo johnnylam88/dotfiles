@@ -7,6 +7,7 @@ steamship_precmd_prompt() {
 	sspp_suffix='")'
 	sspp_prompt="${sspp_prefix}${STEAMSHIP_PROMPT}${sspp_suffix}"
 	STEAMSHIP_PROMPT=${sspp_prompt}
+
 	unset sspp_prefix sspp_suffix sspp_prompt
 }
 

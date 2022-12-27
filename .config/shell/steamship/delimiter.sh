@@ -44,6 +44,7 @@ steamship_delimiter() {
 		fi
 		ssd_status="${ssd_status}${STEAMSHIP_DELIMITER_SUFFIX}"
 	fi
+
 	echo "${ssd_status}"
 	unset ssd_char ssd_color ssd_colorvar ssd_status
 }

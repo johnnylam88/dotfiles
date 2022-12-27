@@ -14,6 +14,7 @@ steamship_git_branch() {
 
 	ssgb_branch=$(steamship_git_branch_name)
 
+	ssgb_color=
 	ssgb_colorvar="STEAMSHIP_${STEAMSHIP_GIT_BRANCH_COLOR}"
 	eval 'ssgb_color=${'${ssgb_colorvar}'}'
 	unset ssgb_colorvar
@@ -26,8 +27,9 @@ steamship_git_branch() {
 		# Colorize the entire status.
 		ssgb_status="${ssgb_color}${ssgb_status}${STEAMSHIP_WHITE}"
 	fi
+
 	echo "${ssgb_status}"
-	unset ssgb_branch ssgb_status ssgb_color
+	unset ssgb_branch ssgb_color ssgb_colorvar ssgb_status
 }
 
 case " ${STEAMSHIP_DEBUG} " in

@@ -11,10 +11,9 @@ steamship_container() {
 	if [ -f /run/.containerenv ]; then
 		ssc_name=$(. /run/.containerenv && printf ${name})
 	fi
-
+	ssc_color=
 	ssc_colorvar="STEAMSHIP_${STEAMSHIP_CONTAINER_COLOR}"
 	eval 'ssc_color=${'${ssc_colorvar}'}'
-	unset ssc_colorvar
 
 	ssc_status=
 	if [ -n "${ssc_name}" ]; then
@@ -23,7 +22,6 @@ steamship_container() {
 		fi
 		ssc_status="${ssc_status}${ssc_name}"
 	fi
-
 	if [ -n "${ssc_status}" ]; then
 		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_WHITE}"
 		if [ "${1}" = '-p' ]; then
@@ -31,8 +29,9 @@ steamship_container() {
 		fi
 		ssc_status="${ssc_status}${STEAMSHIP_CONTAINER_SUFFIX}"
 	fi
+
 	echo "${ssc_status}"
-	unset ssc_name ssc_status ssc_color
+	unset ssc_name ssc_color ssc_colorvar ssc_status
 }
 
 steamship_container_prompt() {
