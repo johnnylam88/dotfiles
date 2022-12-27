@@ -15,7 +15,7 @@ steamship_delimiter() {
 	ssd_color=
 	ssd_colorvar=
 	if [ -z "${STEAMSHIP_RETVAL}" ]; then
-		ssd_colorvar='STEAMSHIP_WHITE'
+		ssd_colorvar='STEAMSHIP_BASE_COLOR'
 		ssd_char=${STEAMSHIP_DELIMITER_SYMBOL}
 	elif [ "${STEAMSHIP_RETVAL}" = 0 ]; then
 		ssd_colorvar="STEAMSHIP_${STEAMSHIP_DELIMITER_COLOR_SUCCESS}"
@@ -38,7 +38,7 @@ steamship_delimiter() {
 		ssd_status=${ssd_char}
 	fi
 	if [ -n "${ssd_status}" ]; then
-		ssd_status="${ssd_color}${ssd_status}${STEAMSHIP_WHITE}"
+		ssd_status="${ssd_color}${ssd_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then
 			ssd_status="${STEAMSHIP_DELIMITER_PREFIX}${ssd_status}"
 		fi

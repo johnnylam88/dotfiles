@@ -73,7 +73,7 @@ steamship_host() {
 		fi
 	fi
 	if [ -n "${ssh_status}" ]; then
-		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_WHITE}"
+		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then
 			ssh_status="${STEAMSHIP_HOST_PREFIX}${ssh_status}"
 		fi

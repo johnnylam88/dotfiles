@@ -55,7 +55,7 @@ steamship_user() {
 		fi
 	fi
 	if [ -n "${ssu_status}" ]; then
-		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_WHITE}"
+		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then
 			ssu_status="${STEAMSHIP_USER_PREFIX}${ssu_status}"
 		fi

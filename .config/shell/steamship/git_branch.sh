@@ -25,7 +25,7 @@ steamship_git_branch() {
 		ssgb_status="${STEAMSHIP_GIT_BRANCH_PREFIX}${ssgb_status}"
 		ssgb_status="${ssgb_status}${STEAMSHIP_GIT_BRANCH_SUFFIX}"
 		# Colorize the entire status.
-		ssgb_status="${ssgb_color}${ssgb_status}${STEAMSHIP_WHITE}"
+		ssgb_status="${ssgb_color}${ssgb_status}${STEAMSHIP_BASE_COLOR}"
 	fi
 
 	echo "${ssgb_status}"

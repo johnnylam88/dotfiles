@@ -98,7 +98,7 @@ steamship_git_status() {
 		ssgs_status="${STEAMSHIP_GIT_STATUS_PREFIX}${ssgs_status}"
 		ssgs_status="${ssgs_status}${STEAMSHIP_GIT_STATUS_SUFFIX}"
 		# Colorize the entire status.
-		ssgs_status="${ssgs_color}${ssgs_status}${STEAMSHIP_WHITE}"
+		ssgs_status="${ssgs_color}${ssgs_status}${STEAMSHIP_BASE_COLOR}"
 	fi
 
 	echo "${ssgs_status}"

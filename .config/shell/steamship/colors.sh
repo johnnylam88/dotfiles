@@ -1,5 +1,7 @@
 # steamship/colors.sh
 
+: ${STEAMSHIP_PROMPT_COLOR:='WHITE'}
+
 # Global color variables to be used by other modules.
 STEAMSHIP_BLUE=
 STEAMSHIP_CYAN=
@@ -10,6 +12,7 @@ STEAMSHIP_RED=
 STEAMSHIP_WHITE=
 STEAMSHIP_YELLOW=
 STEAMSHIP_NORMAL=
+STEAMSHIP_BASE_COLOR=
 
 steamship_colors_init() {
 	if [ -t 1 ]; then
@@ -41,7 +44,11 @@ steamship_colors_init() {
 			fi
 			unset ssci_ncolors
 		fi
-		unset ssci_start ssci_end ssci_bold
+
+		ssci_colorvar="STEAMSHIP_${STEAMSHIP_PROMPT_COLOR}"
+		eval 'STEAMSHIP_BASE_COLOR=${'${ssci_colorvar}'}'
+
+		unset ssci_start ssci_end ssci_bold ssci_colorvar
 	fi
 }
 

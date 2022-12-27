@@ -23,7 +23,7 @@ steamship_container() {
 		ssc_status="${ssc_status}${ssc_name}"
 	fi
 	if [ -n "${ssc_status}" ]; then
-		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_WHITE}"
+		ssc_status="${ssc_color}${ssc_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then
 			ssc_status="${STEAMSHIP_CONTAINER_PREFIX}${ssc_status}"
 		fi

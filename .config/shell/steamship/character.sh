@@ -15,7 +15,7 @@ steamship_character() {
 	ssc_color=
 	ssc_colorvar=
 	if [ -z "${STEAMSHIP_RETVAL}" ]; then
-		ssc_colorvar='STEAMSHIP_WHITE'
+		ssc_colorvar='STEAMSHIP_BASE_COLOR'
 		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL}
 	elif [ "${STEAMSHIP_RETVAL}" = 0 ]; then
 		ssc_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_SUCCESS}"

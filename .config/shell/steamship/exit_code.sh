@@ -21,7 +21,7 @@ steamship_exit_code() {
 		ssec_status="${ssec_status}${STEAMSHIP_RETVAL}"
 	fi
 	if [ -n "${ssec_status}" ]; then
-		ssec_status="${ssec_color}${ssec_status}${STEAMSHIP_WHITE}"
+		ssec_status="${ssec_color}${ssec_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then
 			ssec_status="${STEAMSHIP_EXIT_CODE_PREFIX}${ssec_status}"
 		fi
