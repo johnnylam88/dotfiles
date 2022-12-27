@@ -25,6 +25,13 @@ steamship_theme_spaceship() {
 	STEAMSHIP_DELIMITER_SHOW='false'
 }
 
+STEAMSHIP_THEMES="${STEAMSHIP_THEMES} starship"
+steamship_theme_starship() {
+	STEAMSHIP_CHARACTER_SYMBOL='❯'
+	STEAMSHIP_DELIMITER_SHOW='false'
+	STEAMSHIP_PROMPT_COLOR='NORMAL'
+}
+
 STEAMSHIP_THEMES="${STEAMSHIP_THEMES} steamship"
 steamship_theme_steamship() {
 	STEAMSHIP_CHARACTER_SYMBOL='$'
