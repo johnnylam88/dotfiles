@@ -4,6 +4,7 @@
 : ${STEAMSHIP_DIR_PREFIX:='in '}
 : ${STEAMSHIP_DIR_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
 : ${STEAMSHIP_DIR_TRUNCATE:=3}
+: ${STEAMSHIP_DIR_TRUNCATE_PREFIX:=''}
 : ${STEAMSHIP_DIR_TRUNCATE_REPO:='true'}
 : ${STEAMSHIP_DIR_SYMBOL:=''}
 : ${STEAMSHIP_DIR_COLOR:='CYAN'}
@@ -67,6 +68,12 @@ steamship_dir_truncate_path() {
 	case X${ssdtp_chop} in
 	X/)	;;
 	*)	ssdtp_dir=${ssdtp_dir#${ssdtp_chop}} ;;
+	esac
+	case ${ssdtp_dir} in
+	'~'|'~'/*|/*)
+		;;
+	*)	ssdtp_dir="${STEAMSHIP_DIR_TRUNCATE_PREFIX}${ssdtp_dir}"
+		;;
 	esac
 	echo "${ssdtp_dir}"
 	unset ssdtp_dir ssdtp_chop
