@@ -11,6 +11,8 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	git
 	container
 	exit_code
+	line_separator
+	character
 '
 
 # Global variables to be used by other modules.
@@ -20,8 +22,12 @@ STEAMSHIP_PROMPT=
 STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=
 
 : ${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}
+
+# Default prefix and suffix for sections.
 : ${STEAMSHIP_PREFIX_DEFAULT='via '}
 : ${STEAMSHIP_SUFFIX_DEFAULT=' '}
+
+# Success and failure colors.
 : ${STEAMSHIP_COLOR_SUCCESS:='GREEN'}
 : ${STEAMSHIP_COLOR_FAILURE:='RED'}
 
@@ -51,7 +57,9 @@ STEAMSHIP_MODULE_ORDER='
 	exit_code
 	git
 	host
+	line_separator
 	precmd
+	prompt_newline
 	user
 '
 
@@ -71,8 +79,8 @@ steamship_prompt() {
 	# Prepend the special delimiter module to the prompt.
 	ssi_order="${ssi_order} delimiter"
 
-	# Append the special character module to the prompt.
-	ssi_order="${ssi_order} character"
+	# Prepend the newline module to the prompt.
+	ssi_order="${ssi_order} prompt_newline"
 
 	# Call the special precmd module to wrap the prompt in a command.
 	ssi_order="${ssi_order} precmd"
