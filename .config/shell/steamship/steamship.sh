@@ -45,6 +45,7 @@ steamship_init
 # loaded next as it defines the color variables used by the other
 # modules.
 STEAMSHIP_MODULE_ORDER='
+	theme
 	config
 	nonprintable
 	colors
