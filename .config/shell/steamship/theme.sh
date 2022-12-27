@@ -32,21 +32,14 @@ steamship_theme_starship() {
 	STEAMSHIP_PROMPT_COLOR='NORMAL'
 }
 
-STEAMSHIP_THEMES="${STEAMSHIP_THEMES} steamship"
-steamship_theme_steamship() {
-	STEAMSHIP_CHARACTER_SYMBOL='$'
-	STEAMSHIP_CHARACTER_SYMBOL_ROOT='#'
-	STEAMSHIP_DELIMITER_SYMBOL='❯'
-}
-
 steamship_theme() {
-	sst_theme=${1:-'steamship'}
+	sst_theme=${1:-'starship'}
 	case " ${STEAMSHIP_THEMES} " in
 	*" ${sst_theme} "*)
 		;;
 	*)
-		echo 1>&2 "steamship_theme: \`${sst_theme}' theme not found, using \`steamship'."
-		sst_theme='default'
+		echo 1>&2 "steamship_theme: \`${sst_theme}' theme not found, using \`starship'."
+		sst_theme='starship'
 	esac
 	sst_theme_fn="steamship_theme_${sst_theme}"
 	eval "${sst_theme_fn}"
