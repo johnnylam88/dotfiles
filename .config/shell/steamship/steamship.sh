@@ -10,8 +10,8 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	host
 	git
 	container
-	exit_code
 	line_separator
+	exit_code
 	character
 '
 
