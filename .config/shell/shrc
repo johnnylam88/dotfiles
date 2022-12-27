@@ -13,7 +13,6 @@ X)
 	STEAMSHIP_ROOT="${HOME}/.config/shell/steamship"
 	if [ -f "${STEAMSHIP_ROOT}/steamship.sh" ]; then
 		. "${STEAMSHIP_ROOT}/steamship.sh"
-		eval "$(steamship init)"
 	else
 		: ${PS1:="$ "}
 	fi

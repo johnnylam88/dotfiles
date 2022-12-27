@@ -92,22 +92,12 @@ steamship_prompt() {
 		eval ${ssi_section_prompt_fn} 2>/dev/null
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
-}
 
-steamship() {
-	case ${1} in
-	init)
-		if [ -n "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" ]; then
-			echo "PS1='${STEAMSHIP_PROMPT}'"
-		else
-			echo 'PS1=${STEAMSHIP_PROMPT}'
-		fi
-		;;
-	*)
-		echo 1>&2 "steamship: unknown command \`${1}'"
-		return 1
-		;;
-	esac
+	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
+		eval "PS1='${STEAMSHIP_PROMPT}'"
+	else
+		eval "PS1=${STEAMSHIP_PROMPT}"
+	fi
 }
 
 steamship_prompt
