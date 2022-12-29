@@ -71,20 +71,20 @@ steamship_git_status() {
 			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
 		fi
 		# Check wheather branch has diverged.
-		# The branch name is passed into the function as the 1st param.
-		ssgs_branch=${1:-$(command git branch --show-current 2>/dev/null)}
-		ssgs_ahead=$(command git rev-list --count ${ssgs_branch}@{upstream}..HEAD 2>/dev/null)
-		ssgs_behind=$(command git rev-list --count HEAD..${ssgs_branch}@{upstream} 2>/dev/null)
-		: ${ssgs_ahead:=0}
-		: ${ssgs_behind:=0}
-		if [ ${ssgs_ahead} -gt 0 ] && [ ${ssgs_behind} -gt 0 ]; then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_DIVERGED}${ssgs_state}"
-		elif [ ${ssgs_ahead} -gt 0 ]; then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_AHEAD}${ssgs_state}"
-		elif [ ${ssgs_behind} -gt 0 ]; then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_BEHIND}${ssgs_state}"
+		ssgs_count=$(command git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
+		if [ -n "${ssgs_count}" ]; then
+			case ${ssgs_count} in
+			"0	0")	# equal to upstream
+				;;
+			"0	"*)	# ahead of upstream
+				ssgs_state="${STEAMSHIP_GIT_STATUS_AHEAD}${ssgs_state}" ;;
+			*"	0")	# behind upstream
+				ssgs_state="${STEAMSHIP_GIT_STATUS_BEHIND}${ssgs_state}" ;;
+			*)		# diverged from upstream
+				ssgs_state="${STEAMSHIP_GIT_STATUS_DIVERGED}${ssgs_state}" ;;
+			esac
 		fi
-		unset ssgs_branch ssgs_ahead ssgs_behind
+		unset ssgs_count
 	fi
 
 	ssgs_color=

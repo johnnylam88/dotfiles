@@ -17,7 +17,7 @@ steamship_git() {
 	ssg_git_branch=$(steamship_git_branch)
 	ssg_git_status=
 	if [ -n "${ssg_git_branch}" ]; then
-		ssg_git_status=$(steamship_git_status ${ssg_git_branch})
+		ssg_git_status=$(steamship_git_status)
 	fi
 
 	ssg_status="${ssg_git_branch}${ssg_git_status}"
