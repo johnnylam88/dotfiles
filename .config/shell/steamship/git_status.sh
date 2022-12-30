@@ -15,6 +15,62 @@
 : ${STEAMSHIP_GIT_STATUS_BEHIND:='⇣'}
 : ${STEAMSHIP_GIT_STATUS_DIVERGED:='⇕'}
 
+steamship_git_status_helper() {
+	# This helper function reads from standard input and parses each line
+	# to determine the state of the Git work tree relative to the index.
+	# It outputs a string that is meant to be evaluated by the function
+	# "steamship_git_status" and sets some hardcoded variables names to
+	# their correct values.
+
+	ssgsh_eval_str=
+	ssgsh_untracked=
+	ssgsh_added=
+	ssgsh_modified=
+	ssgsh_renamed=
+	ssgsh_deleted=
+	ssgsh_stashed=
+	ssgsh_unmerged=
+
+	while IFS= read ssgsh_line; do
+		case ${ssgsh_line} in
+		'?? '*)
+			ssgsh_untracked='true' ;;
+		esac
+		case ${ssgsh_line} in
+		' 'A' '*|A[' 'MTD]' '*|AU' '*|UA' '*|AA' '*)
+			ssgsh_added='true' ;;
+		esac
+		case ${ssgsh_line} in
+		[MT][' 'MTD]' '*|[' 'MTARC][MT]' '*)
+			ssgsh_modified='true' ;;
+		esac
+		case ${ssgsh_line} in
+		R[' 'MTD]' '*|C[' 'MTD]' '*|' R'*|' C'*)
+			ssgsh_renamed='true' ;;
+		esac
+		case ${ssgsh_line} in
+		D'  '*|[' 'MTARC]D' '*|DD' '*|UD' '*|DU' '*)
+			ssgsh_deleted='true' ;;
+		esac
+		case ${ssgsh_line} in
+		DD' '*|AU' '*|UD' '*|UA' '*|DU' '*|AA' '*|UU' '*)
+			ssgsh_unmerged='true'
+		esac
+	done
+
+	ssgsh_eval_str="ssgs_untracked=${ssgsh_untracked}"
+	ssgsh_eval_str="${ssgsh_eval_str}; ssgs_added=${ssgsh_added}"
+	ssgsh_eval_str="${ssgsh_eval_str}; ssgs_modified=${ssgsh_modified}"
+	ssgsh_eval_str="${ssgsh_eval_str}; ssgs_renamed=${ssgsh_renamed}"
+	ssgsh_eval_str="${ssgsh_eval_str}; ssgs_deleted=${ssgsh_deleted}"
+	ssgsh_eval_str="${ssgsh_eval_str}; ssgs_unmerged=${ssgsh_unmerged}"
+
+	echo "${ssgsh_eval_str}"
+
+	unset ssgsh_eval_str ssgsh_untracked ssgsh_added ssgsh_modified
+	unset ssgsh_renamed ssgsh_deleted ssgsh_stashed ssgsh_unmerged
+}
+
 steamship_git_status() {
 	[ "${STEAMSHIP_GIT_STATUS_SHOW}" = true ] || return
 
@@ -30,47 +86,48 @@ steamship_git_status() {
 	ssgs_output=$(command git status --porcelain -b 2>/dev/null)
 	ssgs_state=
 	if [ -n "${ssgs_output}" ]; then
-		# Check for untracked files.
-		if $(echo "${ssgs_output}" | command grep -E '^\?\? ' &> /dev/null); then
+		# Parse the "Porcelain Format Version 1" output as described in
+		# the git-status(1) man page.
+		#
+		# If a file type changed, then it is treated as a modified file.
+		#
+		# If a file is copied due to the config option "status.renames"
+		# being set to "copies", then it is treated as a renamed file.
+
+		ssgs_untracked=
+		ssgs_added=
+		ssgs_modified=
+		ssgs_renamed=
+		ssgs_deleted=
+		ssgs_stashed=
+		ssgs_unmerged=
+
+		ssgs_eval_str=$(echo "${ssgs_output}" | steamship_git_status_helper)
+		eval "${ssgs_eval_str}"
+		unset ssgs_eval_str
+
+		# Standalone check for stashed files.
+		if command git rev-parse --verify --quiet refs/stash >/dev/null; then
+			ssgs_stashed='true'
+		fi
+
+		# Describe the full state of the work tree.
+		[ "${ssgs_untracked}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_UNTRACKED}${ssgs_state}"
-		fi
-		# Check for staged files.
-		if $(echo "${ssgs_output}" | command grep '^A[ MDAU] ' &> /dev/null); then
+		[ "${ssgs_added}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_ADDED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^M[ MD] ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_ADDED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^UA' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_ADDED}${ssgs_state}"
-		fi
-		# Check for modified files.
-		if $(echo "${ssgs_output}" | command grep '^[ MARC]M ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_MODIFIED}$ssgs_state"
-		fi
-		# Check for renamed files.
-		if $(echo "${ssgs_output}" | command grep '^R[ MD] ' &> /dev/null); then
+		[ "${ssgs_modified}" != true ] ||
+			ssgs_state="${STEAMSHIP_GIT_STATUS_MODIFIED}${ssgs_state}"
+		[ "${ssgs_renamed}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_RENAMED}${ssgs_state}"
-		fi
-		# Check for deleted files.
-		if $(echo "${ssgs_output}" | command grep '^[MARCDU ]D ' &> /dev/null); then
+		[ "${ssgs_deleted}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_DELETED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^D[ UM] ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_DELETED}${ssgs_state}"
-		fi
-		# Check for stashes.
-		if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+		[ "${ssgs_stashed}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_STASHED}${ssgs_state}"
-		fi
-		# Check for unmerged files.
-		if $(echo "${ssgs_output}" | command grep '^U[UDA] ' &> /dev/null); then
+		[ "${ssgs_unmerged}" != true ] ||
 			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^AA ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^DD ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
-		elif $(echo "${ssgs_output}" | command grep '^[DA]U ' &> /dev/null); then
-			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
-		fi
-		# Check wheather branch has diverged.
+
+		# Check whether branch has diverged.
 		ssgs_count=$(command git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
 		if [ -n "${ssgs_count}" ]; then
 			case ${ssgs_count} in
@@ -84,7 +141,8 @@ steamship_git_status() {
 				ssgs_state="${STEAMSHIP_GIT_STATUS_DIVERGED}${ssgs_state}" ;;
 			esac
 		fi
-		unset ssgs_count
+		unset ssgs_untracked ssgs_added ssgs_modified ssgs_renamed
+		unset ssgs_deleted ssgs_stashed ssgs_unmerged ssgs_count
 	fi
 
 	ssgs_color=
