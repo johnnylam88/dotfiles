@@ -8,11 +8,12 @@ X)
 	# shell invocation, regardless of login or interactive status.
 	#
 	if [ -f "${HOME}/.config/shell/shenv" ]; then
+		export ENV="${HOME}/.config/shell/shenv"
 		if [ -n "${BASH_VERSION}" ]; then
-			export BASH_ENV="${HOME}/.config/shell/shenv"
+			# Bash uses ${BASH_ENV} instead of ${ENV}, except if
+			# it's invoked with the --posix option.
+			export BASH_ENV=${ENV}
 			. "${BASH_ENV}"
-		else
-			export ENV="${HOME}/.config/shell/shenv"
 		fi
 	fi
 	;;
