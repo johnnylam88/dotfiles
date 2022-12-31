@@ -76,7 +76,7 @@ steamship_host() {
 			[ -n "${SSH_CONNECTION}" ]
 		then
 			if [ -n "${STEAMSHIP_HOST_SYMBOL}" ]; then
-				ssh_status="${STEAMSHIP_HOST_SYMBOL} "
+				ssh_status=${STEAMSHIP_HOST_SYMBOL}
 			fi
 			ssh_status="${ssh_status}${ssh_host}"
 		fi

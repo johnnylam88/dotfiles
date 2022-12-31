@@ -4,7 +4,7 @@
 : "${STEAMSHIP_CONTAINER_SHOW:="true"}"
 : "${STEAMSHIP_CONTAINER_PREFIX:="on "}"
 : "${STEAMSHIP_CONTAINER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_CONTAINER_SYMBOL:="⬢"}"
+: "${STEAMSHIP_CONTAINER_SYMBOL:="⬢ "}"
 : "${STEAMSHIP_CONTAINER_COLOR:="CYAN"}"
 
 steamship_container() {
@@ -20,7 +20,7 @@ steamship_container() {
 	ssc_status=
 	if [ -n "${ssc_name}" ]; then
 		if [ -n "${STEAMSHIP_CONTAINER_SYMBOL}" ]; then
-			ssc_status="${STEAMSHIP_CONTAINER_SYMBOL} "
+			ssc_status=${STEAMSHIP_CONTAINER_SYMBOL}
 		fi
 		ssc_status="${ssc_status}${ssc_name}"
 	fi

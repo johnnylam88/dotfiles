@@ -4,7 +4,7 @@
 : "${STEAMSHIP_EXIT_CODE_SHOW:="false"}"
 : "${STEAMSHIP_EXIT_CODE_PREFIX:=""}"
 : "${STEAMSHIP_EXIT_CODE_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_EXIT_CODE_SYMBOL:="✘"}"
+: "${STEAMSHIP_EXIT_CODE_SYMBOL:="✘ "}"
 : "${STEAMSHIP_EXIT_CODE_COLOR:=${STEAMSHIP_COLOR_FAILURE}}"
 
 steamship_exit_code() {
@@ -17,7 +17,7 @@ steamship_exit_code() {
 	ssec_status=
 	if [ -n "${STEAMSHIP_RETVAL}" ]; then
 		if [ -n "${STEAMSHIP_EXIT_CODE_SYMBOL}" ]; then
-			ssec_status="${STEAMSHIP_EXIT_CODE_SYMBOL} "
+			ssec_status=${STEAMSHIP_EXIT_CODE_SYMBOL}
 		fi
 		ssec_status="${ssec_status}${STEAMSHIP_RETVAL}"
 	fi

@@ -52,7 +52,7 @@ steamship_user() {
 			{ [ "${STEAMSHIP_USER_SHOW}" = true ] && [ -n "${SSH_CONNECTION}" ]; }
 		then
 			if [ -n "${STEAMSHIP_USER_SYMBOL}" ]; then
-				ssu_status="${STEAMSHIP_USER_SYMBOL} "
+				ssu_status=${STEAMSHIP_USER_SYMBOL}
 			fi
 			ssu_status="${ssu_status}${ssu_user}"
 		fi

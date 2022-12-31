@@ -103,7 +103,7 @@ steamship_dir() {
 	ssd_status=
 	if [ -n "${ssd_dir}" ]; then
 		if [ -n "${STEAMSHIP_DIR_SYMBOL}" ]; then
-			ssd_status="${STEAMSHIP_DIR_SYMBOL} "
+			ssd_status=${STEAMSHIP_DIR_SYMBOL}
 		fi
 		ssd_status="${ssd_status}${ssd_dir}"
 	fi
