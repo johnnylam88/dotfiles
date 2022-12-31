@@ -1,7 +1,8 @@
+# shellcheck shell=sh
 # steamship/steamship.sh
 
 # Path to steamship main directory.
-: ${STEAMSHIP_ROOT:=${HOME}/.config/shell/steamship}
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
 
 # Order of sections show in the shell prompt.
 STEAMSHIP_PROMPT_ORDER_DEFAULT='
@@ -20,15 +21,15 @@ STEAMSHIP_PROMPT=
 STEAMSHIP_PROMPT_PARAM_EXPANSION=
 STEAMSHIP_PROMPT_COMMAND_SUBST=
 
-: ${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}
+: "${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}"
 
 # Default prefix and suffix for sections.
-: ${STEAMSHIP_PREFIX_DEFAULT='via '}
-: ${STEAMSHIP_SUFFIX_DEFAULT=' '}
+: "${STEAMSHIP_PREFIX_DEFAULT="via "}"
+: "${STEAMSHIP_SUFFIX_DEFAULT=" "}"
 
 # Success and failure colors.
-: ${STEAMSHIP_COLOR_SUCCESS:='GREEN'}
-: ${STEAMSHIP_COLOR_FAILURE:='RED'}
+: "${STEAMSHIP_COLOR_SUCCESS:="GREEN"}"
+: "${STEAMSHIP_COLOR_FAILURE:="RED"}"
 
 #######################################
 # Initialization
@@ -43,6 +44,7 @@ steamship_init() {
 		STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 	fi
 
+	# shellcheck disable=SC3044
 	if [ -z "${BASH_VERSION}" ] || shopt -q promptvars; then
 		: "do nothing"
 	else
@@ -57,11 +59,13 @@ steamship_init() {
 		# command substitution in prompt strings.
 		: "do nothing"
 	fi
+	# shellcheck disable=SC3010
 	if [ -z "${ZSH_VERSION}" ] || [[ -o PROMPT_SUBST ]]; then
 		: "do nothing"
 	else
 		# Zsh has "PROMPT_SUBST" option turned off.
 		STEAMSHIP_PROMPT_PARAM_EXPANSION=
+		# shellcheck disable=SC2034
 		STEAMSHIP_PROMPT_COMMAND_SUBST=
 	fi
 }
@@ -94,6 +98,7 @@ if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
 	for steamship_module in ${STEAMSHIP_MODULE_ORDER}; do
 		steamship_module_file="${STEAMSHIP_ROOT}/${steamship_module}.sh"
 		if [ -f "${steamship_module_file}" ]; then
+			# shellcheck disable=SC1090
 			. "${steamship_module_file}"
 		fi
 	done
@@ -121,7 +126,7 @@ steamship_prompt() {
 	STEAMSHIP_PROMPT=
 	for ssi_section in ${ssi_order}; do
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
-		eval ${ssi_section_prompt_fn} 2>/dev/null
+		eval "${ssi_section_prompt_fn}" 2>/dev/null
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
 	# ${STEAMSHIP_PROMPT} contains the prompt string.

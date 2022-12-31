@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 # steamship/nonprintable.sh
 
 # Global delimiter variables to be used by colors.sh.

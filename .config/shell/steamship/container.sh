@@ -1,19 +1,21 @@
+# shellcheck shell=sh
 # steamship/container.sh
 
-: ${STEAMSHIP_CONTAINER_SHOW:='true'}
-: ${STEAMSHIP_CONTAINER_PREFIX:='on '}
-: ${STEAMSHIP_CONTAINER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
-: ${STEAMSHIP_CONTAINER_SYMBOL:='⬢'}
-: ${STEAMSHIP_CONTAINER_COLOR:='CYAN'}
+: "${STEAMSHIP_CONTAINER_SHOW:="true"}"
+: "${STEAMSHIP_CONTAINER_PREFIX:="on "}"
+: "${STEAMSHIP_CONTAINER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
+: "${STEAMSHIP_CONTAINER_SYMBOL:="⬢"}"
+: "${STEAMSHIP_CONTAINER_COLOR:="CYAN"}"
 
 steamship_container() {
 	ssc_name=
 	if [ -f /run/.containerenv ]; then
-		ssc_name=$(. /run/.containerenv && printf ${name})
+		# shellcheck disable=SC1091,SC2154
+		ssc_name=$(. /run/.containerenv && printf '%s' "${name}")
 	fi
 	ssc_color=
 	ssc_colorvar="STEAMSHIP_${STEAMSHIP_CONTAINER_COLOR}"
-	eval 'ssc_color=${'${ssc_colorvar}'}'
+	eval 'ssc_color=${'"${ssc_colorvar}"'}'
 
 	ssc_status=
 	if [ -n "${ssc_name}" ]; then
@@ -47,7 +49,7 @@ steamship_container_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" container "*)
-	echo "$(steamship_container -p)"
+	steamship_container -p
 	steamship_container_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

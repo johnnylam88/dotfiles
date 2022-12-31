@@ -1,13 +1,14 @@
+# shellcheck shell=sh
 # steamship/dir.sh
 
-: ${STEAMSHIP_DIR_SHOW:='true'}
-: ${STEAMSHIP_DIR_PREFIX:='in '}
-: ${STEAMSHIP_DIR_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
-: ${STEAMSHIP_DIR_TRUNCATE:=3}
-: ${STEAMSHIP_DIR_TRUNCATE_PREFIX:='…/'}
-: ${STEAMSHIP_DIR_TRUNCATE_REPO:='true'}
-: ${STEAMSHIP_DIR_SYMBOL:=''}
-: ${STEAMSHIP_DIR_COLOR:='CYAN'}
+: "${STEAMSHIP_DIR_SHOW:="true"}"
+: "${STEAMSHIP_DIR_PREFIX:="in "}"
+: "${STEAMSHIP_DIR_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
+: "${STEAMSHIP_DIR_TRUNCATE:=3}"
+: "${STEAMSHIP_DIR_TRUNCATE_PREFIX:="…/"}"
+: "${STEAMSHIP_DIR_TRUNCATE_REPO:="true"}"
+: "${STEAMSHIP_DIR_SYMBOL:=""}"
+: "${STEAMSHIP_DIR_COLOR:="CYAN"}"
 
 steamship_dir_truncate_repo_path() {
 	ssdrp_dir=${PWD}
@@ -21,7 +22,7 @@ steamship_dir_truncate_repo_path() {
 			ssdrp_dir=${ssdrp_proj}
 		else
 			ssdrp_proj=${ssdrp_toplevel##*/}
-			ssdrp_dir="${ssdrp_proj}${ssdrp_pwd#${ssdrp_toplevel}}"
+			ssdrp_dir="${ssdrp_proj}${ssdrp_pwd#"${ssdrp_toplevel}"}"
 		fi
 	fi
 	echo "${ssdrp_dir}"
@@ -33,11 +34,12 @@ steamship_dir_truncate_path() {
 
 	# Tilde substitution for ${HOME}.
 	case ${ssdtp_dir} in
-	${HOME})
+	"${HOME}")
 		ssdtp_dir='~'
 		;;
-	${HOME}/*)
-		ssdtp_dir="~/${ssdtp_dir#${HOME}/}"
+	"${HOME}"/*)
+		# shellcheck disable=SC2088
+		ssdtp_dir="~/${ssdtp_dir#"${HOME}/"}"
 		;;
 	esac
 
@@ -67,7 +69,7 @@ steamship_dir_truncate_path() {
 	esac
 	case X${ssdtp_chop} in
 	X/)	;;
-	*)	ssdtp_dir=${ssdtp_dir#${ssdtp_chop}} ;;
+	*)	ssdtp_dir=${ssdtp_dir#"${ssdtp_chop}"} ;;
 	esac
 	case ${ssdtp_dir} in
 	'~'|'~'/*|/*)
@@ -90,12 +92,13 @@ steamship_dir() {
 			ssd_dir=$(steamship_dir_truncate_path)
 		fi
 	else
+		# shellcheck disable=SC2016
 		ssd_dir='${PWD}'
 	fi
 
 	ssd_color=
 	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIR_COLOR}"
-	eval 'ssd_color=${'${ssd_colorvar}'}'
+	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
 	ssd_status=
 	if [ -n "${ssd_dir}" ]; then
@@ -123,8 +126,10 @@ steamship_dir_prompt() {
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+			# shellcheck disable=SC2016
 			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_dir -p)'
 		else
+			# shellcheck disable=SC2016
 			STEAMSHIP_PROMPT='$(steamship_dir)'
 		fi
 	else
@@ -140,7 +145,7 @@ case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	echo "$(steamship_dir -p)"
+	steamship_dir -p
 	steamship_dir_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

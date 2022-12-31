@@ -1,14 +1,15 @@
+# shellcheck shell=sh
 # steamship/delimiter.sh
 
-: ${STEAMSHIP_DELIMITER_SHOW:='true'}
-: ${STEAMSHIP_DELIMITER_PREFIX:=''}
-: ${STEAMSHIP_DELIMITER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
-: ${STEAMSHIP_DELIMITER_SYMBOL:='❯'}
-: ${STEAMSHIP_DELIMITER_SYMBOL_ROOT:=${STEAMSHIP_DELIMITER_SYMBOL}}
-: ${STEAMSHIP_DELIMITER_SYMBOL_SUCCESS:=${STEAMSHIP_DELIMITER_SYMBOL}}
-: ${STEAMSHIP_DELIMITER_SYMBOL_FAILURE:=${STEAMSHIP_DELIMITER_SYMBOL}}
-: ${STEAMSHIP_DELIMITER_COLOR_SUCCESS:=${STEAMSHIP_COLOR_SUCCESS}}
-: ${STEAMSHIP_DELIMITER_COLOR_FAILURE:=${STEAMSHIP_COLOR_FAILURE}}
+: "${STEAMSHIP_DELIMITER_SHOW:="true"}"
+: "${STEAMSHIP_DELIMITER_PREFIX:=""}"
+: "${STEAMSHIP_DELIMITER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
+: "${STEAMSHIP_DELIMITER_SYMBOL:="❯"}"
+: "${STEAMSHIP_DELIMITER_SYMBOL_ROOT:=${STEAMSHIP_DELIMITER_SYMBOL}}"
+: "${STEAMSHIP_DELIMITER_SYMBOL_SUCCESS:=${STEAMSHIP_DELIMITER_SYMBOL}}"
+: "${STEAMSHIP_DELIMITER_SYMBOL_FAILURE:=${STEAMSHIP_DELIMITER_SYMBOL}}"
+: "${STEAMSHIP_DELIMITER_COLOR_SUCCESS:=${STEAMSHIP_COLOR_SUCCESS}}"
+: "${STEAMSHIP_DELIMITER_COLOR_FAILURE:=${STEAMSHIP_COLOR_FAILURE}}"
 
 steamship_delimiter() {
 	ssd_char=
@@ -24,7 +25,7 @@ steamship_delimiter() {
 		ssd_colorvar="STEAMSHIP_${STEAMSHIP_DELIMITER_COLOR_FAILURE}"
 		ssd_char=${STEAMSHIP_DELIMITER_SYMBOL_FAILURE}
 	fi
-	eval 'ssd_color=${'${ssd_colorvar}'}'
+	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
 	if	[ -n "${STEAMSHIP_DEBUG}" ] ||
 		steamship_user_is_root
@@ -54,6 +55,7 @@ steamship_delimiter_prompt() {
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
+		# shellcheck disable=SC2016
 		STEAMSHIP_PROMPT='$(steamship_delimiter -p)'"${STEAMSHIP_PROMPT}"
 	else
 		STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"
@@ -62,7 +64,7 @@ steamship_delimiter_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" delimiter "*)
-	echo "$(steamship_delimiter -p)"
+	steamship_delimiter -p
 	steamship_delimiter_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

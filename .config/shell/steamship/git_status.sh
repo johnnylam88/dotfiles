@@ -1,19 +1,20 @@
+# shellcheck shell=sh
 # steamship/git_status.sh
 
-: ${STEAMSHIP_GIT_STATUS_SHOW:='true'}
-: ${STEAMSHIP_GIT_STATUS_PREFIX:=' ['}
-: ${STEAMSHIP_GIT_STATUS_SUFFIX:=']'}
-: ${STEAMSHIP_GIT_STATUS_COLOR:='RED'}
-: ${STEAMSHIP_GIT_STATUS_UNTRACKED:='?'}
-: ${STEAMSHIP_GIT_STATUS_ADDED:='+'}
-: ${STEAMSHIP_GIT_STATUS_MODIFIED:='!'}
-: ${STEAMSHIP_GIT_STATUS_RENAMED:='»'}
-: ${STEAMSHIP_GIT_STATUS_DELETED:='✘'}
-: ${STEAMSHIP_GIT_STATUS_STASHED:='$'}
-: ${STEAMSHIP_GIT_STATUS_UNMERGED:='='}
-: ${STEAMSHIP_GIT_STATUS_AHEAD:='⇡'}
-: ${STEAMSHIP_GIT_STATUS_BEHIND:='⇣'}
-: ${STEAMSHIP_GIT_STATUS_DIVERGED:='⇕'}
+: "${STEAMSHIP_GIT_STATUS_SHOW:="true"}"
+: "${STEAMSHIP_GIT_STATUS_PREFIX:=" ["}"
+: "${STEAMSHIP_GIT_STATUS_SUFFIX:="]"}"
+: "${STEAMSHIP_GIT_STATUS_COLOR:="RED"}"
+: "${STEAMSHIP_GIT_STATUS_UNTRACKED:="?"}"
+: "${STEAMSHIP_GIT_STATUS_ADDED:="+"}"
+: "${STEAMSHIP_GIT_STATUS_MODIFIED:="!"}"
+: "${STEAMSHIP_GIT_STATUS_RENAMED:="»"}"
+: "${STEAMSHIP_GIT_STATUS_DELETED:="✘"}"
+: "${STEAMSHIP_GIT_STATUS_STASHED:="$"}"
+: "${STEAMSHIP_GIT_STATUS_UNMERGED:="="}"
+: "${STEAMSHIP_GIT_STATUS_AHEAD:="⇡"}"
+: "${STEAMSHIP_GIT_STATUS_BEHIND:="⇣"}"
+: "${STEAMSHIP_GIT_STATUS_DIVERGED:="⇕"}"
 
 steamship_git_status_helper() {
 	# This helper function reads from standard input and parses each line
@@ -28,16 +29,15 @@ steamship_git_status_helper() {
 	ssgsh_modified=
 	ssgsh_renamed=
 	ssgsh_deleted=
-	ssgsh_stashed=
 	ssgsh_unmerged=
 
-	while IFS= read ssgsh_line; do
+	while IFS= read -r ssgsh_line; do
 		case ${ssgsh_line} in
 		'?? '*)
 			ssgsh_untracked='true' ;;
 		esac
 		case ${ssgsh_line} in
-		' 'A' '*|A[' 'MTD]' '*|AU' '*|UA' '*|AA' '*)
+		' A '*|A[' 'MTD]' '*|'AU '*|'UA '*|'AA '*)
 			ssgsh_added='true' ;;
 		esac
 		case ${ssgsh_line} in
@@ -45,15 +45,15 @@ steamship_git_status_helper() {
 			ssgsh_modified='true' ;;
 		esac
 		case ${ssgsh_line} in
-		R[' 'MTD]' '*|C[' 'MTD]' '*|' R'*|' C'*)
+		R[' 'MTD]' '*|C[' 'MTD]' '*|' R '*|' C '*)
 			ssgsh_renamed='true' ;;
 		esac
 		case ${ssgsh_line} in
-		D'  '*|[' 'MTARC]D' '*|DD' '*|UD' '*|DU' '*)
+		'D  '*|[' 'MTARC]D' '*|'DD '*|'UD '*|'DU '*)
 			ssgsh_deleted='true' ;;
 		esac
 		case ${ssgsh_line} in
-		DD' '*|AU' '*|UD' '*|UA' '*|DU' '*|AA' '*|UU' '*)
+		'DD '*|'AU '*|'UD '*|'UA '*|'DU '*|'AA '*|'UU '*)
 			ssgsh_unmerged='true'
 		esac
 	done
@@ -68,7 +68,7 @@ steamship_git_status_helper() {
 	echo "${ssgsh_eval_str}"
 
 	unset ssgsh_eval_str ssgsh_untracked ssgsh_added ssgsh_modified
-	unset ssgsh_renamed ssgsh_deleted ssgsh_stashed ssgsh_unmerged
+	unset ssgsh_renamed ssgsh_deleted ssgsh_unmerged
 }
 
 steamship_git_status() {
@@ -128,7 +128,9 @@ steamship_git_status() {
 			ssgs_state="${STEAMSHIP_GIT_STATUS_UNMERGED}${ssgs_state}"
 
 		# Check whether branch has diverged.
-		ssgs_count=$(command git rev-list --count --left-right @{upstream}...HEAD 2>/dev/null)
+		ssgs_count=$(
+			command git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null
+		)
 		if [ -n "${ssgs_count}" ]; then
 			case ${ssgs_count} in
 			"0	0")	# equal to upstream
@@ -147,7 +149,7 @@ steamship_git_status() {
 
 	ssgs_color=
 	ssgs_colorvar="STEAMSHIP_${STEAMSHIP_GIT_STATUS_COLOR}"
-	eval 'ssgs_color=${'${ssgs_colorvar}'}'
+	eval 'ssgs_color=${'"${ssgs_colorvar}"'}'
 	unset ssgs_colorvar
 
 	ssgs_status=${ssgs_state}
@@ -165,6 +167,6 @@ steamship_git_status() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_status "*)
-	echo "$(steamship_git_status)"
+	steamship_git_status
 	;;
 esac

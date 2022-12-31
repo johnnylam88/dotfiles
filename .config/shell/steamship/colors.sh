@@ -1,6 +1,7 @@
+# shellcheck shell=sh
 # steamship/colors.sh
 
-: ${STEAMSHIP_PROMPT_COLOR:='WHITE'}
+: "${STEAMSHIP_PROMPT_COLOR:="WHITE"}"
 
 # Global color variables to be used by other modules.
 STEAMSHIP_BLUE=
@@ -12,6 +13,7 @@ STEAMSHIP_RED=
 STEAMSHIP_WHITE=
 STEAMSHIP_YELLOW=
 STEAMSHIP_NORMAL=
+# shellcheck disable=SC2034
 STEAMSHIP_BASE_COLOR=
 
 steamship_colors_init() {
@@ -21,7 +23,7 @@ steamship_colors_init() {
 		ssci_bold=$(tput bold)
 		if [ -n "${ssci_bold}" ]; then
 			ssci_ncolors=$(tput colors)
-			if [ -n "${ssci_ncolors}" ] && [ ${ssci_ncolors} -ge 8 ]; then
+			if [ -n "${ssci_ncolors}" ] && [ "${ssci_ncolors}" -ge 8 ]; then
 				STEAMSHIP_BLUE=${ssci_start}${ssci_bold}$(tput setaf 4)${ssci_end}
 				STEAMSHIP_CYAN=${ssci_start}${ssci_bold}$(tput setaf 6)${ssci_end}
 				STEAMSHIP_GRAY=${ssci_start}${ssci_bold}$(tput setaf 0)${ssci_end}

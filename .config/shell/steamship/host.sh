@@ -1,3 +1,4 @@
+# shellcheck shell=sh
 # steamship/host.sh
 
 # --------------------------------------------------------------------------
@@ -8,47 +9,55 @@
 # | true                | never                  | always                  |
 # --------------------------------------------------------------------------
 
-: ${STEAMSHIP_HOST_SHOW:='true'}
-: ${STEAMSHIP_HOST_SHOW_FULL:='false'}
-: ${STEAMSHIP_HOST_PREFIX:='at '}
-: ${STEAMSHIP_HOST_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
-: ${STEAMSHIP_HOST_SYMBOL:=''}
-: ${STEAMSHIP_HOST_COLOR:='BLUE'}
-: ${STEAMSHIP_HOST_COLOR_SSH:='GREEN'}
+: "${STEAMSHIP_HOST_SHOW:="true"}"
+: "${STEAMSHIP_HOST_SHOW_FULL:="false"}"
+: "${STEAMSHIP_HOST_PREFIX:="at "}"
+: "${STEAMSHIP_HOST_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
+: "${STEAMSHIP_HOST_SYMBOL:=""}"
+: "${STEAMSHIP_HOST_COLOR:="BLUE"}"
+: "${STEAMSHIP_HOST_COLOR_SSH:="GREEN"}"
 
 steamship_host_init() {
 	# Set a default ${HOST} to the hostname of the system.
-	: ${HOST:=$(command hostname 2>/dev/null)}
-	: ${HOST:=$(command uname -n 2>/dev/null)}
+	: "${HOST:=$(command hostname 2>/dev/null)}"
+	: "${HOST:=$(command uname -n 2>/dev/null)}"
 }
 
 steamship_host() {
 	ssh_host=
 	if [ -n "${BASH_VERSION}" ]; then
-		if [ "${STEAMSHIP_HOST_SHOW_FULL}" != "true" ]; then
-			: ${ssh_host:='\h'}
+		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = "true" ]; then
+			: "${ssh_host:="\\H"}"
 		else
-			: ${ssh_host:='\H'}
+			: "${ssh_host:="\\h"}"
 		fi
 	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}
-			: ${ssh_host:=${HOST:+'${HOST}'}}
-			: ${ssh_host:='${SYSTYPE}'}
+			# shellcheck disable=SC3028,SC2016
+			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}"
+			# shellcheck disable=SC2016
+			: "${ssh_host:=${HOST:+'${HOST}'}}"
+			# shellcheck disable=SC2016
+			: "${ssh_host:='${SYSTYPE}'}"
 		else
-			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}
-			: ${ssh_host:=${HOST:+'${HOST%%.*}'}}
-			: ${ssh_host:='${SYSTYPE%%.*}'}
+			# shellcheck disable=SC3028,SC2016
+			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}"
+			# shellcheck disable=SC2016
+			: "${ssh_host:=${HOST:+'${HOST%%.*}'}}"
+			# shellcheck disable=SC2016
+			: "${ssh_host:='${SYSTYPE%%.*}'}"
 		fi
 	else
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			: ${ssh_host:=${HOSTNAME}}
-			: ${ssh_host:=${HOST}}
-			: ${ssh_host:=${SYSTYPE}}
+			# shellcheck disable=SC3028
+			: "${ssh_host:=${HOSTNAME}}"
+			: "${ssh_host:=${HOST}}"
+			: "${ssh_host:=${SYSTYPE}}"
 		else
-			: ${ssh_host:=${HOSTNAME%%.*}}
-			: ${ssh_host:=${HOST%%.*}}
-			: ${ssh_host:=${SYSTYPE%%.*}}
+			# shellcheck disable=SC3028
+			: "${ssh_host:=${HOSTNAME%%.*}}"
+			: "${ssh_host:=${HOST%%.*}}"
+			: "${ssh_host:=${SYSTYPE%%.*}}"
 		fi
 	fi
 
@@ -59,7 +68,7 @@ steamship_host() {
 	else
 		ssh_colorvar="STEAMSHIP_${STEAMSHIP_HOST_COLOR}"
 	fi
-	eval 'ssh_color=${'${ssh_colorvar}'}'
+	eval 'ssh_color=${'"${ssh_colorvar}"'}'
 
 	ssh_status=
 	if [ -n "${ssh_host}" ]; then
@@ -101,7 +110,7 @@ steamship_host_init
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
-	echo "$(steamship_host -p)"
+	steamship_host -p
 	steamship_host_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

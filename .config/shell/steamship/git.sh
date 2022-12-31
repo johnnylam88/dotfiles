@@ -1,11 +1,12 @@
+# shellcheck shell=sh
 # steamship/git.sh
 
-: ${STEAMSHIP_GIT_SHOW:='true'}
-: ${STEAMSHIP_GIT_PREFIX:='on '}
-: ${STEAMSHIP_GIT_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}
+: "${STEAMSHIP_GIT_SHOW:="true"}"
+: "${STEAMSHIP_GIT_PREFIX:="on "}"
+: "${STEAMSHIP_GIT_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
 
 # Dependencies
-: ${STEAMSHIP_ROOT:=${HOME}/.config/shell/steamship}
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
 if [ -f "${STEAMSHIP_ROOT}/git_branch.sh" ]; then
 	. "${STEAMSHIP_ROOT}/git_branch.sh"
 fi
@@ -38,15 +39,17 @@ steamship_git_prompt() {
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		# shellcheck disable=SC2016
 		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_git -p)'
 	else
+		# shellcheck disable=SC2016
 		STEAMSHIP_PROMPT='$(steamship_git)'
 	fi
 }
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git "*)
-	echo "$(steamship_git -p)"
+	steamship_git -p
 	steamship_git_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

@@ -1,3 +1,5 @@
+# shellcheck shell=sh
+# shellcheck disable=SC2034
 # steamship/theme.sh
 
 STEAMSHIP_THEMES=
@@ -32,6 +34,7 @@ steamship_theme_starship() {
 	STEAMSHIP_PROMPT_COLOR='NORMAL'
 }
 
+# shellcheck disable=SC2120
 steamship_theme() {
 	sst_theme=${1:-'starship'}
 	case " ${STEAMSHIP_THEMES} " in
@@ -47,4 +50,5 @@ steamship_theme() {
 }
 
 # Load default theme when the module is loaded.
+# shellcheck disable=SC2119
 steamship_theme

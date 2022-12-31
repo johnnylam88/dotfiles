@@ -1,14 +1,15 @@
+# shellcheck shell=sh
 # steamship/character.sh
 
-: ${STEAMSHIP_CHARACTER_SHOW:='true'}
-: ${STEAMSHIP_CHARACTER_PREFIX:=''}
-: ${STEAMSHIP_CHARACTER_SUFFIX:=' '}
-: ${STEAMSHIP_CHARACTER_SYMBOL:='$'}
-: ${STEAMSHIP_CHARACTER_SYMBOL_ROOT:='#'}
-: ${STEAMSHIP_CHARACTER_SYMBOL_SUCCESS:=${STEAMSHIP_CHARACTER_SYMBOL}}
-: ${STEAMSHIP_CHARACTER_SYMBOL_FAILURE:=${STEAMSHIP_CHARACTER_SYMBOL}}
-: ${STEAMSHIP_CHARACTER_COLOR_SUCCESS:=${STEAMSHIP_COLOR_SUCCESS}}
-: ${STEAMSHIP_CHARACTER_COLOR_FAILURE:=${STEAMSHIP_COLOR_FAILURE}}
+: "${STEAMSHIP_CHARACTER_SHOW:="true"}"
+: "${STEAMSHIP_CHARACTER_PREFIX:=""}"
+: "${STEAMSHIP_CHARACTER_SUFFIX:=" "}"
+: "${STEAMSHIP_CHARACTER_SYMBOL:="$"}"
+: "${STEAMSHIP_CHARACTER_SYMBOL_ROOT:="#"}"
+: "${STEAMSHIP_CHARACTER_SYMBOL_SUCCESS:=${STEAMSHIP_CHARACTER_SYMBOL}}"
+: "${STEAMSHIP_CHARACTER_SYMBOL_FAILURE:=${STEAMSHIP_CHARACTER_SYMBOL}}"
+: "${STEAMSHIP_CHARACTER_COLOR_SUCCESS:=${STEAMSHIP_COLOR_SUCCESS}}"
+: "${STEAMSHIP_CHARACTER_COLOR_FAILURE:=${STEAMSHIP_COLOR_FAILURE}}"
 
 steamship_character() {
 	ssc_char=
@@ -24,7 +25,7 @@ steamship_character() {
 		ssc_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_FAILURE}"
 		ssc_char=${STEAMSHIP_CHARACTER_SYMBOL_FAILURE}
 	fi
-	eval 'ssc_color=${'${ssc_colorvar}'}'
+	eval 'ssc_color=${'"${ssc_colorvar}"'}'
 
 	if	[ -n "${STEAMSHIP_DEBUG}" ] ||
 		steamship_user_is_root
@@ -56,8 +57,10 @@ steamship_character_prompt() {
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+			# shellcheck disable=SC2016
 			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_character -p)'
 		else
+			# shellcheck disable=SC2016
 			STEAMSHIP_PROMPT='$(steamship_character)'
 		fi
 	else
@@ -73,7 +76,7 @@ case " ${STEAMSHIP_DEBUG} " in
 *" character "*)
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_RETVAL=1
-	echo "$(steamship_character -p)"
+	steamship_character -p
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
