@@ -13,7 +13,6 @@
 : "${STEAMSHIP_USER_SHOW:="true"}"
 : "${STEAMSHIP_USER_PREFIX:="with "}"
 : "${STEAMSHIP_USER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_USER_SYMBOL:=""}"
 : "${STEAMSHIP_USER_COLOR:="YELLOW"}"
 : "${STEAMSHIP_USER_COLOR_ROOT:="RED"}"
 
@@ -45,17 +44,12 @@ steamship_user() {
 	eval 'ssu_color=${'"${ssu_colorvar}"'}'
 
 	ssu_status=
-	if [ -n "${ssu_user}" ]; then
-		if	[ "${STEAMSHIP_USER_SHOW}" = always ] ||
-			[ "${LOGNAME}" != "${USER}" ] ||
-			steamship_user_is_root ||
-			{ [ "${STEAMSHIP_USER_SHOW}" = true ] && [ -n "${SSH_CONNECTION}" ]; }
-		then
-			if [ -n "${STEAMSHIP_USER_SYMBOL}" ]; then
-				ssu_status=${STEAMSHIP_USER_SYMBOL}
-			fi
-			ssu_status="${ssu_status}${ssu_user}"
-		fi
+	if	[ "${STEAMSHIP_USER_SHOW}" = always ] ||
+		[ "${LOGNAME}" != "${USER}" ] ||
+		steamship_user_is_root ||
+		{ [ "${STEAMSHIP_USER_SHOW}" = true ] && [ -n "${SSH_CONNECTION}" ]; }
+	then
+		ssu_status=${ssu_user}
 	fi
 	if [ -n "${ssu_status}" ]; then
 		ssu_status="${ssu_color}${ssu_status}${STEAMSHIP_BASE_COLOR}"

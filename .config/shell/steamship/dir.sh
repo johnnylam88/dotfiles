@@ -7,7 +7,6 @@
 : "${STEAMSHIP_DIR_TRUNCATE:=3}"
 : "${STEAMSHIP_DIR_TRUNCATE_PREFIX:="…/"}"
 : "${STEAMSHIP_DIR_TRUNCATE_REPO:="true"}"
-: "${STEAMSHIP_DIR_SYMBOL:=""}"
 : "${STEAMSHIP_DIR_COLOR:="CYAN"}"
 
 steamship_dir_truncate_repo_path() {
@@ -100,13 +99,7 @@ steamship_dir() {
 	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIR_COLOR}"
 	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
-	ssd_status=
-	if [ -n "${ssd_dir}" ]; then
-		if [ -n "${STEAMSHIP_DIR_SYMBOL}" ]; then
-			ssd_status=${STEAMSHIP_DIR_SYMBOL}
-		fi
-		ssd_status="${ssd_status}${ssd_dir}"
-	fi
+	ssd_status=${ssd_dir}
 	if [ -n "${ssd_status}" ]; then
 		ssd_status="${ssd_color}${ssd_status}${STEAMSHIP_BASE_COLOR}"
 		if [ "${1}" = '-p' ]; then

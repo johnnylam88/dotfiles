@@ -13,7 +13,6 @@
 : "${STEAMSHIP_HOST_SHOW_FULL:="false"}"
 : "${STEAMSHIP_HOST_PREFIX:="at "}"
 : "${STEAMSHIP_HOST_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_HOST_SYMBOL:=""}"
 : "${STEAMSHIP_HOST_COLOR:="BLUE"}"
 : "${STEAMSHIP_HOST_COLOR_SSH:="GREEN"}"
 
@@ -71,15 +70,10 @@ steamship_host() {
 	eval 'ssh_color=${'"${ssh_colorvar}"'}'
 
 	ssh_status=
-	if [ -n "${ssh_host}" ]; then
-		if	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
-			[ -n "${SSH_CONNECTION}" ]
-		then
-			if [ -n "${STEAMSHIP_HOST_SYMBOL}" ]; then
-				ssh_status=${STEAMSHIP_HOST_SYMBOL}
-			fi
-			ssh_status="${ssh_status}${ssh_host}"
-		fi
+	if	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
+		[ -n "${SSH_CONNECTION}" ]
+	then
+		ssh_status=${ssh_host}
 	fi
 	if [ -n "${ssh_status}" ]; then
 		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_BASE_COLOR}"
