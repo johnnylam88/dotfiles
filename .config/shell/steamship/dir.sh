@@ -8,6 +8,8 @@
 : "${STEAMSHIP_DIR_TRUNCATE_PREFIX:="…/"}"
 : "${STEAMSHIP_DIR_TRUNCATE_REPO:="true"}"
 : "${STEAMSHIP_DIR_COLOR:="CYAN"}"
+: "${STEAMSHIP_DIR_LOCK_SYMBOL:="🔒"}"
+: "${STEAMSHIP_DIR_LOCK_COLOR:="RED"}"
 
 steamship_dir_truncate_repo_path() {
 	ssdrp_dir=${PWD}
@@ -99,9 +101,18 @@ steamship_dir() {
 	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIR_COLOR}"
 	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
+	ssd_lock_color=
+	ssd_lock_colorvar="STEAMSHIP_${STEAMSHIP_DIR_LOCK_COLOR}"
+	eval 'ssd_lock_color=${'"${ssd_lock_colorvar}"'}'
+	ssd_lock="${ssd_lock_color}${STEAMSHIP_DIR_LOCK_SYMBOL}${STEAMSHIP_BASE_COLOR}"
+
 	ssd_status=${ssd_dir}
 	if [ -n "${ssd_status}" ]; then
 		ssd_status="${ssd_color}${ssd_status}${STEAMSHIP_BASE_COLOR}"
+		if [ ! -w . ]; then
+			# Add the lock symbol for a non-writable directory.
+			ssd_status="${ssd_status}${ssd_lock}"
+		fi
 		if [ "${1}" = '-p' ]; then
 			ssd_status="${STEAMSHIP_DIR_PREFIX}${ssd_status}"
 		fi
@@ -109,6 +120,7 @@ steamship_dir() {
 	fi
 
 	echo "${ssd_status}"
+	unset ssd_lock ssd_lock_color ssd_lock_colorvar
 	unset ssd_dir ssd_color ssd_colorvar ssd_status
 }
 
