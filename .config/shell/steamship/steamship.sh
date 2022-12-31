@@ -132,15 +132,24 @@ steamship_prompt() {
 	# ${STEAMSHIP_PROMPT} contains the prompt string.
 }
 
+steamship_refresh() {
+	steamship_prompt
+	if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
+		eval "PS1='${STEAMSHIP_PROMPT}'"
+	else
+		eval "PS1=${STEAMSHIP_PROMPT}"
+	fi
+}
+
 steamship() {
 	case ${1} in
 	refresh)
-		steamship_prompt
-		if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
-			eval "PS1='${STEAMSHIP_PROMPT}'"
-		else
-			eval "PS1=${STEAMSHIP_PROMPT}"
-		fi
+		steamship_refresh
+		;;
+	theme)
+		shift
+		steamship_theme "${@}"
+		steamship_refresh
 		;;
 	esac
 }
