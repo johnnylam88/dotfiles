@@ -33,7 +33,7 @@ steamship_git() {
 }
 
 steamship_git_prompt() {
-	[ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ] || return
+	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 	[ "${STEAMSHIP_GIT_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.

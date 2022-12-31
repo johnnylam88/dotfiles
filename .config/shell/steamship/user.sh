@@ -26,7 +26,7 @@ steamship_user() {
 	ssu_user=
 	if [ -n "${BASH_VERSION}" ]; then
 		: ${ssu_user:='\u'}
-	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
+	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		: ${ssu_user:='${USER}'}
 	else
 		: ${ssu_user:=${USER}}
@@ -81,6 +81,7 @@ steamship_user_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" user "*)
+	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
 	echo "$(steamship_user -p)"
 	steamship_user_prompt
 	echo "${STEAMSHIP_PROMPT}"

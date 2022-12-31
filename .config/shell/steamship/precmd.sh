@@ -1,7 +1,7 @@
 # steamship/precmd.sh
 
 steamship_precmd_prompt() {
-	[ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ] || return
+	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 
 	sspp_prefix='$(STEAMSHIP_RETVAL=$? && echo "'
 	sspp_suffix='")'
@@ -13,7 +13,7 @@ steamship_precmd_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" precmd "*)
-	export STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_PROMPT='$ '
 	steamship_precmd_prompt
 	echo "${STEAMSHIP_PROMPT}"

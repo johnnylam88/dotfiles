@@ -81,7 +81,7 @@ steamship_dir_truncate_path() {
 
 steamship_dir() {
 	ssd_dir=
-	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
+	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if	[ "${STEAMSHIP_DIR_TRUNCATE_REPO}" = true ] &&
 			command git rev-parse --is-inside-work-tree >/dev/null 2>&1
 		then
@@ -117,10 +117,11 @@ steamship_dir() {
 }
 
 steamship_dir_prompt() {
+	[ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ] || return
 	[ "${STEAMSHIP_DIR_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
+	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
 			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_dir -p)'
 		else
@@ -137,7 +138,8 @@ steamship_dir_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)
-	export STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
+	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	echo "$(steamship_dir -p)"
 	steamship_dir_prompt
 	echo "${STEAMSHIP_PROMPT}"

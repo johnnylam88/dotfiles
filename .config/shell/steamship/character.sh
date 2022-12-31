@@ -54,7 +54,7 @@ steamship_character_prompt() {
 	[ "${STEAMSHIP_CHARACTER_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
+	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
 			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_character -p)'
 		else
@@ -71,7 +71,7 @@ steamship_character_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" character "*)
-	export STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_RETVAL=1
 	echo "$(steamship_character -p)"
 	steamship_character_prompt

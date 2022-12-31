@@ -30,7 +30,7 @@ steamship_host() {
 		else
 			: ${ssh_host:='\H'}
 		fi
-	elif [ -n "${KSH_VERSION}${ZSH_VERSION}" ]; then
+	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
 			: ${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}
 			: ${ssh_host:=${HOST:+'${HOST}'}}
@@ -100,6 +100,7 @@ steamship_host_init
 
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
+	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
 	echo "$(steamship_host -p)"
 	steamship_host_prompt
 	echo "${STEAMSHIP_PROMPT}"

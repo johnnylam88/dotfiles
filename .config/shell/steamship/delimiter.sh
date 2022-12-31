@@ -53,7 +53,7 @@ steamship_delimiter_prompt() {
 	[ "${STEAMSHIP_DELIMITER_SHOW}" = true ] || return
 
 	# Prepend status to ${STEAMSHIP_PROMPT}.
-	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
+	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		STEAMSHIP_PROMPT='$(steamship_delimiter -p)'"${STEAMSHIP_PROMPT}"
 	else
 		STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"

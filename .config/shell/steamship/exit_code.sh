@@ -33,7 +33,7 @@ steamship_exit_code() {
 }
 
 steamship_exit_code_prompt() {
-	[ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ] || return
+	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 	[ "${STEAMSHIP_EXIT_CODE_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
@@ -46,7 +46,7 @@ steamship_exit_code_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" exit_code "*)
-	export STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_EXIT_CODE_SHOW=true
 	export STEAMSHIP_RETVAL=1
 	echo "$(steamship_exit_code -p)"

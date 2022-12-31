@@ -17,7 +17,8 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 
 # Global variables to be used by other modules.
 STEAMSHIP_PROMPT=
-STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=
+STEAMSHIP_PROMPT_PARAM_EXPANSION=
+STEAMSHIP_PROMPT_COMMAND_SUBST=
 
 : ${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}
 
@@ -33,8 +34,35 @@ STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=
 # Initialization
 
 steamship_init() {
+	# POSIX shells will do variable expansion of prompt strings.
+	STEAMSHIP_PROMPT_PARAM_EXPANSION='true'
+
+	# The bash, ksh, and zsh shells will do command substitution in
+	# prompt strings.
 	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-		STEAMSHIP_PROMPT_HAS_COMMAND_SUBST=true
+		STEAMSHIP_PROMPT_COMMAND_SUBST='true'
+	fi
+
+	if [ -z "${BASH_VERSION}" ] || shopt -q promptvars; then
+		: "do nothing"
+	else
+		# Bash has "promptvars" shell option turned off.
+		STEAMSHIP_PROMPT_PARAM_EXPANSION=
+		STEAMSHIP_PROMPT_COMMAND_SUBST=
+	fi
+	if [ -z "${KSH_VERSION}" ] || true; then
+		: "do nothing"
+	else
+		# UNREACHABLE because ksh always does parameter expansion and
+		# command substitution in prompt strings.
+		: "do nothing"
+	fi
+	if [ -z "${ZSH_VERSION}" ] || [[ -o PROMPT_SUBST ]]; then
+		: "do nothing"
+	else
+		# Zsh has "PROMPT_SUBST" option turned off.
+		STEAMSHIP_PROMPT_PARAM_EXPANSION=
+		STEAMSHIP_PROMPT_COMMAND_SUBST=
 	fi
 }
 
@@ -87,20 +115,32 @@ steamship_prompt() {
 	# Final fix-ups for non-printable characters.
 	ssi_order="${ssi_order} nonprintable"
 
+	# Execute each "*_prompt" function to progressively build
+	# STEAMSHIP_PROMPT as a side-effect.
+
+	STEAMSHIP_PROMPT=
 	for ssi_section in ${ssi_order}; do
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
 		eval ${ssi_section_prompt_fn} 2>/dev/null
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
-
-	if [ "${STEAMSHIP_PROMPT_HAS_COMMAND_SUBST}" = true ]; then
-		eval "PS1='${STEAMSHIP_PROMPT}'"
-	else
-		eval "PS1=${STEAMSHIP_PROMPT}"
-	fi
+	# ${STEAMSHIP_PROMPT} contains the prompt string.
 }
 
-steamship_prompt
+steamship() {
+	case ${1} in
+	refresh)
+		steamship_prompt
+		if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
+			eval "PS1='${STEAMSHIP_PROMPT}'"
+		else
+			eval "PS1=${STEAMSHIP_PROMPT}"
+		fi
+		;;
+	esac
+}
+
+steamship refresh
 
 case " ${STEAMSHIP_DEBUG} " in
 *" steamship "*)
