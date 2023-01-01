@@ -16,6 +16,7 @@ steamship_host_init() {
 	STEAMSHIP_HOST_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
 	STEAMSHIP_HOST_COLOR='BLUE'
 	STEAMSHIP_HOST_COLOR_SSH='GREEN'
+	STEAMSHIP_HOST_SYMBOL_SSH=''
 
 	# Set a default ${HOST} to the hostname of the system.
 	: "${HOST:=$(command hostname 2>/dev/null)}"
@@ -57,8 +58,10 @@ steamship_host() {
 
 	ssh_color=
 	ssh_colorvar=
+	ssh_symbol=
 	if [ -n "${SSH_CONNECTION}" ]; then
 		ssh_colorvar="STEAMSHIP_${STEAMSHIP_HOST_COLOR_SSH}"
+		ssh_symbol=${STEAMSHIP_HOST_SYMBOL_SSH}
 	else
 		ssh_colorvar="STEAMSHIP_${STEAMSHIP_HOST_COLOR}"
 	fi
@@ -68,7 +71,7 @@ steamship_host() {
 	if	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
 		[ -n "${SSH_CONNECTION}" ]
 	then
-		ssh_status=${ssh_host}
+		ssh_status="${ssh_symbol}${ssh_host}"
 	fi
 	if [ -n "${ssh_status}" ]; then
 		ssh_status="${ssh_color}${ssh_status}${STEAMSHIP_BASE_COLOR}"
@@ -79,7 +82,7 @@ steamship_host() {
 	fi
 
 	echo "${ssh_status}"
-	unset ssh_host ssh_color ssh_colorvar ssh_status
+	unset ssh_host ssh_color ssh_colorvar ssh_symbol ssh_status
 }
 
 steamship_host_prompt() {
