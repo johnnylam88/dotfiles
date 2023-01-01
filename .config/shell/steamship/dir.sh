@@ -1,15 +1,17 @@
 # shellcheck shell=sh
 # steamship/dir.sh
 
-: "${STEAMSHIP_DIR_SHOW:="true"}"
-: "${STEAMSHIP_DIR_PREFIX:="in "}"
-: "${STEAMSHIP_DIR_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_DIR_TRUNCATE:=3}"
-: "${STEAMSHIP_DIR_TRUNCATE_PREFIX:="…/"}"
-: "${STEAMSHIP_DIR_TRUNCATE_REPO:="true"}"
-: "${STEAMSHIP_DIR_COLOR:="CYAN"}"
-: "${STEAMSHIP_DIR_LOCK_SYMBOL:="🔒"}"
-: "${STEAMSHIP_DIR_LOCK_COLOR:="RED"}"
+steamship_dir_init() {
+	STEAMSHIP_DIR_SHOW='true'
+	STEAMSHIP_DIR_PREFIX='in '
+	STEAMSHIP_DIR_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_DIR_TRUNCATE='3'
+	STEAMSHIP_DIR_TRUNCATE_PREFIX='…/'
+	STEAMSHIP_DIR_TRUNCATE_REPO='true'
+	STEAMSHIP_DIR_COLOR='CYAN'
+	STEAMSHIP_DIR_LOCK_SYMBOL='🔒'
+	STEAMSHIP_DIR_LOCK_COLOR='RED'
+}
 
 steamship_dir_truncate_repo_path() {
 	ssdrp_dir=${PWD}
@@ -150,6 +152,7 @@ case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
+	steamship_dir_init
 	steamship_dir -p
 	steamship_dir_prompt
 	echo "${STEAMSHIP_PROMPT}"

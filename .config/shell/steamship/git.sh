@@ -1,14 +1,19 @@
 # shellcheck shell=sh
 # steamship/git.sh
 
-: "${STEAMSHIP_GIT_SHOW:="true"}"
-: "${STEAMSHIP_GIT_PREFIX:="on "}"
-: "${STEAMSHIP_GIT_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-
 # Dependencies
 : "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
 . "${STEAMSHIP_ROOT}/git_branch.sh"
 . "${STEAMSHIP_ROOT}/git_status.sh"
+
+steamship_git_init() {
+	STEAMSHIP_GIT_SHOW='true'
+	STEAMSHIP_GIT_PREFIX='on '
+	STEAMSHIP_GIT_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+
+	steamship_git_branch_init
+	steamship_git_status_init
+}
 
 steamship_git() {
 	ssg_git_branch=$(steamship_git_branch)
@@ -45,6 +50,7 @@ steamship_git_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git "*)
+	steamship_git_init
 	steamship_git -p
 	steamship_git_prompt
 	echo "${STEAMSHIP_PROMPT}"

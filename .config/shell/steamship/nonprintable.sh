@@ -45,10 +45,9 @@ steamship_nonprintable_prompt() {
 	fi
 }
 
-steamship_nonprintable_init
-
 case " ${STEAMSHIP_DEBUG} " in
 *" nonprintable "*)
+	steamship_nonprintable_init
 	steamship_nonprintable_prompt
 	echo "start: ${STEAMSHIP_ESC_START}"
 	echo "end: ${STEAMSHIP_ESC_END}"

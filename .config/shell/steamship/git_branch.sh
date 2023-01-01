@@ -1,10 +1,12 @@
 # shellcheck shell=sh
 # steamship/git_branch.sh
 
-: "${STEAMSHIP_GIT_BRANCH_SHOW:="true"}"
-: "${STEAMSHIP_GIT_BRANCH_PREFIX:=" "}}"
-: "${STEAMSHIP_GIT_BRANCH_SUFFIX:=""}"
-: "${STEAMSHIP_GIT_BRANCH_COLOR:="MAGENTA"}"
+steamship_git_branch_init() {
+	STEAMSHIP_GIT_BRANCH_SHOW='true'
+	STEAMSHIP_GIT_BRANCH_PREFIX=' '
+	STEAMSHIP_GIT_BRANCH_SUFFIX=''
+	STEAMSHIP_GIT_BRANCH_COLOR='MAGENTA'
+}
 
 steamship_git_branch_name() {
 	command git branch --show-current 2>/dev/null
@@ -35,6 +37,7 @@ steamship_git_branch() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_branch "*)
+	steamship_git_branch_init
 	steamship_git_branch
 	;;
 esac

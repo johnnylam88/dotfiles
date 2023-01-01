@@ -1,11 +1,13 @@
 # shellcheck shell=sh
 # steamship/exit_code.sh
 
-: "${STEAMSHIP_EXIT_CODE_SHOW:="false"}"
-: "${STEAMSHIP_EXIT_CODE_PREFIX:=""}"
-: "${STEAMSHIP_EXIT_CODE_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_EXIT_CODE_SYMBOL:="✘ "}"
-: "${STEAMSHIP_EXIT_CODE_COLOR:=${STEAMSHIP_COLOR_FAILURE}}"
+steamship_exit_code_init() {
+	STEAMSHIP_EXIT_CODE_SHOW='false'
+	STEAMSHIP_EXIT_CODE_PREFIX=''
+	STEAMSHIP_EXIT_CODE_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_EXIT_CODE_SYMBOL='✘ '
+	STEAMSHIP_EXIT_CODE_COLOR=${STEAMSHIP_COLOR_FAILURE}
+}
 
 steamship_exit_code() {
 	[ "${STEAMSHIP_RETVAL}" = 0 ] && return
@@ -52,6 +54,7 @@ case " ${STEAMSHIP_DEBUG} " in
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_EXIT_CODE_SHOW=true
 	export STEAMSHIP_RETVAL=1
+	steamship_exit_code_init
 	steamship_exit_code -p
 	steamship_exit_code_prompt
 	echo "${STEAMSHIP_PROMPT}"

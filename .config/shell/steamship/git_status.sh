@@ -1,20 +1,22 @@
 # shellcheck shell=sh
 # steamship/git_status.sh
 
-: "${STEAMSHIP_GIT_STATUS_SHOW:="true"}"
-: "${STEAMSHIP_GIT_STATUS_PREFIX:=" ["}"
-: "${STEAMSHIP_GIT_STATUS_SUFFIX:="]"}"
-: "${STEAMSHIP_GIT_STATUS_COLOR:="RED"}"
-: "${STEAMSHIP_GIT_STATUS_UNTRACKED:="?"}"
-: "${STEAMSHIP_GIT_STATUS_ADDED:="+"}"
-: "${STEAMSHIP_GIT_STATUS_MODIFIED:="!"}"
-: "${STEAMSHIP_GIT_STATUS_RENAMED:="»"}"
-: "${STEAMSHIP_GIT_STATUS_DELETED:="✘"}"
-: "${STEAMSHIP_GIT_STATUS_STASHED:="$"}"
-: "${STEAMSHIP_GIT_STATUS_UNMERGED:="="}"
-: "${STEAMSHIP_GIT_STATUS_AHEAD:="⇡"}"
-: "${STEAMSHIP_GIT_STATUS_BEHIND:="⇣"}"
-: "${STEAMSHIP_GIT_STATUS_DIVERGED:="⇕"}"
+steamship_git_status_init() {
+	STEAMSHIP_GIT_STATUS_SHOW='true'
+	STEAMSHIP_GIT_STATUS_PREFIX=' ['
+	STEAMSHIP_GIT_STATUS_SUFFIX=']'
+	STEAMSHIP_GIT_STATUS_COLOR='RED'
+	STEAMSHIP_GIT_STATUS_UNTRACKED='?'
+	STEAMSHIP_GIT_STATUS_ADDED='+'
+	STEAMSHIP_GIT_STATUS_MODIFIED='!'
+	STEAMSHIP_GIT_STATUS_RENAMED='»'
+	STEAMSHIP_GIT_STATUS_DELETED='✘'
+	STEAMSHIP_GIT_STATUS_STASHED='$'
+	STEAMSHIP_GIT_STATUS_UNMERGED='='
+	STEAMSHIP_GIT_STATUS_AHEAD='⇡'
+	STEAMSHIP_GIT_STATUS_BEHIND='⇣'
+	STEAMSHIP_GIT_STATUS_DIVERGED='⇕'
+}
 
 steamship_git_status_helper() {
 	# This helper function reads from standard input and parses each line
@@ -167,6 +169,7 @@ steamship_git_status() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_status "*)
+	steamship_git_status_init
 	steamship_git_status
 	;;
 esac

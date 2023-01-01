@@ -9,14 +9,14 @@
 # | true                | never                  | always                  |
 # --------------------------------------------------------------------------
 
-: "${STEAMSHIP_HOST_SHOW:="true"}"
-: "${STEAMSHIP_HOST_SHOW_FULL:="false"}"
-: "${STEAMSHIP_HOST_PREFIX:="at "}"
-: "${STEAMSHIP_HOST_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_HOST_COLOR:="BLUE"}"
-: "${STEAMSHIP_HOST_COLOR_SSH:="GREEN"}"
-
 steamship_host_init() {
+	STEAMSHIP_HOST_SHOW='true'
+	STEAMSHIP_HOST_SHOW_FULL='false'
+	STEAMSHIP_HOST_PREFIX='at '
+	STEAMSHIP_HOST_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_HOST_COLOR='BLUE'
+	STEAMSHIP_HOST_COLOR_SSH='GREEN'
+
 	# Set a default ${HOST} to the hostname of the system.
 	: "${HOST:=$(command hostname 2>/dev/null)}"
 	: "${HOST:=$(command uname -n 2>/dev/null)}"
@@ -99,11 +99,10 @@ steamship_host_prompt() {
 	fi
 }
 
-steamship_host_init
-
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
+	steamship_host_init
 	steamship_host -p
 	steamship_host_prompt
 	echo "${STEAMSHIP_PROMPT}"

@@ -1,7 +1,9 @@
 # shellcheck shell=sh
 # steamship/prompt_newline.sh
 
-: "${STEAMSHIP_PROMPT_NEWLINE_SHOW:="true"}"
+steamship_prompt_newline_init() {
+	STEAMSHIP_PROMPT_NEWLINE_SHOW='true'
+}
 
 # This module does not have configurable prefix, suffix, or color.
 # Its sole purpose is to add a newline between the previous output

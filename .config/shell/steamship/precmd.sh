@@ -1,6 +1,10 @@
 # shellcheck shell=sh
 # steamship/precmd.sh
 
+steamship_precmd_init() {
+	: "do nothing"
+}
+
 steamship_precmd_prompt() {
 	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 
@@ -18,6 +22,7 @@ case " ${STEAMSHIP_DEBUG} " in
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	# shellcheck disable=SC2090
 	export STEAMSHIP_PROMPT='$ '
+	steamship_precmd_init
 	steamship_precmd_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;

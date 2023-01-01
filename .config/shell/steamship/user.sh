@@ -10,11 +10,13 @@
 # | needed              | if needed              | if needed               |
 # --------------------------------------------------------------------------
 
-: "${STEAMSHIP_USER_SHOW:="true"}"
-: "${STEAMSHIP_USER_PREFIX:="with "}"
-: "${STEAMSHIP_USER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_USER_COLOR:="YELLOW"}"
-: "${STEAMSHIP_USER_COLOR_ROOT:="RED"}"
+steamship_user_init() {
+	STEAMSHIP_USER_SHOW='true'
+	STEAMSHIP_USER_PREFIX='with '
+	STEAMSHIP_USER_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_USER_COLOR='YELLOW'
+	STEAMSHIP_USER_COLOR_ROOT='RED'
+}
 
 # Global function to be used by other modules.
 steamship_user_is_root() {
@@ -79,6 +81,7 @@ steamship_user_prompt() {
 case " ${STEAMSHIP_DEBUG} " in
 *" user "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
+	steamship_user_init
 	steamship_user -p
 	steamship_user_prompt
 	echo "${STEAMSHIP_PROMPT}"

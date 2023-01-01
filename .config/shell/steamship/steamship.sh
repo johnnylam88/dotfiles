@@ -104,8 +104,11 @@ if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
 		steamship_module_file="${STEAMSHIP_ROOT}/${steamship_module}.sh"
 		# shellcheck disable=SC1090
 		. "${steamship_module_file}"
+
+		steamship_module_init_fn="steamship_${steamship_module}_init"
+		eval "${steamship_module_init_fn}"
 	done
-	unset steamship_module steamship_module_file
+	unset steamship_module steamship_module_file steamship_module_init_fn
 fi
 
 steamship_prompt() {
@@ -144,6 +147,18 @@ steamship_refresh() {
 	fi
 }
 
+steamship_reset() {
+	# Invoke every module "init" function to reset the configuration
+	# variables to their defaults.
+	if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
+		for ssr_module in ${STEAMSHIP_MODULE_ORDER}; do
+			ssr_module_init_fn="steamship_${ssr_module}_init"
+			eval "${ssr_module_init_fn}"
+		done
+		unset ssr_module ssr_module_init_fn
+	fi
+}
+
 # Load all available themes.
 STEAMSHIP_THEMES=
 for steamship_theme_file in "${STEAMSHIP_ROOT}"/themes/*.sh; do
@@ -172,6 +187,10 @@ steamship_theme() {
 steamship() {
 	case ${1} in
 	refresh)
+		steamship_refresh
+		;;
+	reset)
+		steamship_reset
 		steamship_refresh
 		;;
 	theme)

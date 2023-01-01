@@ -54,10 +54,9 @@ steamship_colors_init() {
 	fi
 }
 
-steamship_colors_init
-
 case " ${STEAMSHIP_DEBUG} " in
 *" colors "*)
+	steamship_colors_init
 	echo "${STEAMSHIP_BLUE}blue${STEAMSHIP_NORMAL}"
 	echo "${STEAMSHIP_CYAN}cyan${STEAMSHIP_NORMAL}"
 	echo "${STEAMSHIP_GRAY}gray${STEAMSHIP_NORMAL}"

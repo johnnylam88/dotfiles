@@ -1,11 +1,13 @@
 # shellcheck shell=sh
 # steamship/container.sh
 
-: "${STEAMSHIP_CONTAINER_SHOW:="true"}"
-: "${STEAMSHIP_CONTAINER_PREFIX:="on "}"
-: "${STEAMSHIP_CONTAINER_SUFFIX:=${STEAMSHIP_SUFFIX_DEFAULT}}"
-: "${STEAMSHIP_CONTAINER_SYMBOL:="⬢ "}"
-: "${STEAMSHIP_CONTAINER_COLOR:="CYAN"}"
+steamship_container_init() {
+	STEAMSHIP_CONTAINER_SHOW='true'
+	STEAMSHIP_CONTAINER_PREFIX='on '
+	STEAMSHIP_CONTAINER_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_CONTAINER_SYMBOL='⬢ '
+	STEAMSHIP_CONTAINER_COLOR='CYAN'
+}
 
 steamship_container() {
 	ssc_name=
@@ -49,6 +51,7 @@ steamship_container_prompt() {
 
 case " ${STEAMSHIP_DEBUG} " in
 *" container "*)
+	steamship_container_init
 	steamship_container -p
 	steamship_container_prompt
 	echo "${STEAMSHIP_PROMPT}"
