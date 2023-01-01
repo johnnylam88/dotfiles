@@ -72,13 +72,14 @@ steamship_init() {
 
 steamship_init
 
+. "${STEAMSHIP_ROOT}/theme.sh"
+. "${STEAMSHIP_ROOT}/config.sh"
+
 # Load modules in the correct order. `nonprintable` needs to be loaded
 # first as it defines variables used by `colors`, which needs to be
 # loaded next as it defines the color variables used by the other
 # modules.
 STEAMSHIP_MODULE_ORDER='
-	theme
-	config
 	nonprintable
 	colors
 	character
