@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/dir.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" dir "*) return ;; esac
+
 steamship_dir_init() {
 	STEAMSHIP_DIR_SHOW='true'
 	STEAMSHIP_DIR_PREFIX='in '
@@ -147,6 +149,8 @@ steamship_dir_prompt() {
 		fi
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} dir"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)

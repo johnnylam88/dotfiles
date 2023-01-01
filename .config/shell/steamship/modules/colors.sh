@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/colors.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" colors "*) return ;; esac
+
 : "${STEAMSHIP_PROMPT_COLOR:="WHITE"}"
 
 # Global color variables to be used by other modules.
@@ -53,6 +55,8 @@ steamship_colors_init() {
 		unset ssci_start ssci_end ssci_bold ssci_colorvar
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} colors"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" colors "*)

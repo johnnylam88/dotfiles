@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/precmd.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" precmd "*) return ;; esac
+
 steamship_precmd_init() {
 	: "do nothing"
 }
@@ -16,6 +18,8 @@ steamship_precmd_prompt() {
 
 	unset sspp_prefix sspp_suffix sspp_prompt
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} precmd"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" precmd "*)

@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/git.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" git "*) return ;; esac
+
 # Dependencies
 : "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
 . "${STEAMSHIP_ROOT}/modules/git_branch.sh"
@@ -10,9 +12,6 @@ steamship_git_init() {
 	STEAMSHIP_GIT_SHOW='true'
 	STEAMSHIP_GIT_PREFIX='on '
 	STEAMSHIP_GIT_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
-
-	steamship_git_branch_init
-	steamship_git_status_init
 }
 
 steamship_git() {
@@ -47,6 +46,8 @@ steamship_git_prompt() {
 		STEAMSHIP_PROMPT='$(steamship_git)'
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} git"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git "*)

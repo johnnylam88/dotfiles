@@ -79,37 +79,24 @@ if [ -f "${STEAMSHIP_CONFIG}" ]; then
 	. "${STEAMSHIP_CONFIG}"
 fi
 
-# Load modules in the correct order. `nonprintable` needs to be loaded
-# first as it defines variables used by `colors`, which needs to be
-# loaded next as it defines the color variables used by the other
-# modules.
-STEAMSHIP_MODULE_ORDER='
-	nonprintable
-	colors
-	character
-	container
-	delimiter
-	dir
-	exit_code
-	git
-	host
-	line_separator
-	precmd
-	prompt_newline
-	user
-'
+# Track the order in which modules are sourced.
+STEAMSHIP_MODULES_SOURCED=
 
-if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
-	for steamship_module in ${STEAMSHIP_MODULE_ORDER}; do
-		steamship_module_file="${STEAMSHIP_ROOT}/modules/${steamship_module}.sh"
-		# shellcheck disable=SC1090
-		. "${steamship_module_file}"
+# Load `nonprintable` then `colors` as the first two modules as they
+# define variables used by the other modules.
+. "${STEAMSHIP_ROOT}/modules/nonprintable.sh"
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
 
-		steamship_module_init_fn="steamship_${steamship_module}_init"
-		eval "${steamship_module_init_fn}"
-	done
-	unset steamship_module steamship_module_file steamship_module_init_fn
-fi
+# Load all modules in the `modules` directory.
+for steamship_module_file in "${STEAMSHIP_ROOT}"/modules/*.sh; do
+	. "${steamship_module_file}"
+done
+# Run each module's `init` function to initialize the module configuration.
+for steamship_module in ${STEAMSHIP_MODULES_SOURCED}; do
+	steamship_module_init_fn="steamship_${steamship_module}_init"
+	eval "${steamship_module_init_fn}"
+done
+unset steamship_module steamship_module_file steamship_module_init_fn
 
 steamship_prompt() {
 	ssi_order=${STEAMSHIP_PROMPT_ORDER}
@@ -150,13 +137,11 @@ steamship_refresh() {
 steamship_reset() {
 	# Invoke every module "init" function to reset the configuration
 	# variables to their defaults.
-	if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
-		for ssr_module in ${STEAMSHIP_MODULE_ORDER}; do
-			ssr_module_init_fn="steamship_${ssr_module}_init"
-			eval "${ssr_module_init_fn}"
-		done
-		unset ssr_module ssr_module_init_fn
-	fi
+	for ssr_module in ${STEAMSHIP_MODULES_SOURCED}; do
+		ssr_module_init_fn="steamship_${ssr_module}_init"
+		eval "${ssr_module_init_fn}"
+	done
+	unset ssr_module ssr_module_init_fn
 }
 
 # Load all available themes.

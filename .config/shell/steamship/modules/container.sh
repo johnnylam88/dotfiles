@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/container.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" container "*) return ;; esac
+
 steamship_container_init() {
 	STEAMSHIP_CONTAINER_SHOW='true'
 	STEAMSHIP_CONTAINER_PREFIX='on '
@@ -48,6 +50,8 @@ steamship_container_prompt() {
 		STEAMSHIP_PROMPT=$(steamship_container)
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} container"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" container "*)

@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/exit_code.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" exit_code "*) return ;; esac
+
 steamship_exit_code_init() {
 	STEAMSHIP_EXIT_CODE_SHOW='false'
 	STEAMSHIP_EXIT_CODE_PREFIX=''
@@ -48,6 +50,8 @@ steamship_exit_code_prompt() {
 		STEAMSHIP_PROMPT='$(steamship_exit_code)'
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} exit_code"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" exit_code "*)

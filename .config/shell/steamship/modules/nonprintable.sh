@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/nonprintable.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" nonprintable "*) return ;; esac
+
 # Global delimiter variables to be used by colors.sh.
 STEAMSHIP_ESC_START=
 STEAMSHIP_ESC_END=
@@ -44,6 +46,8 @@ steamship_nonprintable_prompt() {
 		STEAMSHIP_PROMPT="${steamship_preamble}${STEAMSHIP_PROMPT}"
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} nonprintable"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" nonprintable "*)

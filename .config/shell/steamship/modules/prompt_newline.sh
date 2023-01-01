@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/prompt_newline.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" prompt_newline "*) return ;; esac
+
 steamship_prompt_newline_init() {
 	STEAMSHIP_PROMPT_NEWLINE_SHOW='true'
 }
@@ -16,3 +18,5 @@ steamship_prompt_newline_prompt() {
 	STEAMSHIP_PROMPT='
 '"${STEAMSHIP_PROMPT}"
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} prompt_newline"

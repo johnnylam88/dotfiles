@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/git_status.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_status "*) return ;; esac
+
 steamship_git_status_init() {
 	STEAMSHIP_GIT_STATUS_SHOW='true'
 	STEAMSHIP_GIT_STATUS_PREFIX=' ['
@@ -166,6 +168,8 @@ steamship_git_status() {
 	echo "${ssgs_status}"
 	unset ssgs_state ssgs_color ssgs_colorvar ssgs_status
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} git_status"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_status "*)

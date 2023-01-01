@@ -10,6 +10,8 @@
 # | needed              | if needed              | if needed               |
 # --------------------------------------------------------------------------
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" user "*) return ;; esac
+
 steamship_user_init() {
 	STEAMSHIP_USER_SHOW='true'
 	STEAMSHIP_USER_PREFIX='with '
@@ -77,6 +79,8 @@ steamship_user_prompt() {
 		STEAMSHIP_PROMPT=$(steamship_user)
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} user"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" user "*)

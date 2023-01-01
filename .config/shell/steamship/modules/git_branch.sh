@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/git_branch.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_branch "*) return ;; esac
+
 steamship_git_branch_init() {
 	STEAMSHIP_GIT_BRANCH_SHOW='true'
 	STEAMSHIP_GIT_BRANCH_PREFIX=''
@@ -41,6 +43,8 @@ steamship_git_branch() {
 	echo "${ssgb_status}"
 	unset ssgb_branch ssgb_color ssgb_colorvar ssgb_status
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} git_branch"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" git_branch "*)

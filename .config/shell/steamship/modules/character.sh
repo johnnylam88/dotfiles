@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/character.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" character "*) return ;; esac
+
 steamship_character_init() {
 	STEAMSHIP_CHARACTER_SHOW='true'
 	STEAMSHIP_CHARACTER_PREFIX=''
@@ -73,6 +75,8 @@ steamship_character_prompt() {
 		fi
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} character"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" character "*)

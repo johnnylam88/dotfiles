@@ -1,6 +1,8 @@
 # shellcheck shell=sh
 # steamship/modules/delimiter.sh
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" delimiter "*) return ;; esac
+
 steamship_delimiter_init() {
 	STEAMSHIP_DELIMITER_SHOW='true'
 	STEAMSHIP_DELIMITER_PREFIX=''
@@ -63,6 +65,8 @@ steamship_delimiter_prompt() {
 		STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} delimiter"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" delimiter "*)

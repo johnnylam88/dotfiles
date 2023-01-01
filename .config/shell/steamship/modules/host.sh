@@ -9,6 +9,8 @@
 # | true                | never                  | always                  |
 # --------------------------------------------------------------------------
 
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" host "*) return ;; esac
+
 steamship_host_init() {
 	STEAMSHIP_HOST_SHOW='true'
 	STEAMSHIP_HOST_SHOW_FULL='false'
@@ -96,6 +98,8 @@ steamship_host_prompt() {
 		STEAMSHIP_PROMPT=$(steamship_host)
 	fi
 }
+
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} host"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" host "*)
