@@ -72,7 +72,12 @@ steamship_init() {
 
 steamship_init
 
-. "${STEAMSHIP_ROOT}/config.sh"
+# Load configuration file if it's available.
+: "${STEAMSHIP_CONFIG:="${HOME}/.config/steamship/steamship.sh"}"
+if [ -f "${STEAMSHIP_CONFIG}" ]; then
+	# shellcheck disable=SC1090
+	. "${STEAMSHIP_CONFIG}"
+fi
 
 # Load modules in the correct order. `nonprintable` needs to be loaded
 # first as it defines variables used by `colors`, which needs to be
