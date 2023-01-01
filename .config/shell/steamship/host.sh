@@ -20,6 +20,8 @@ steamship_host_init() {
 	# Set a default ${HOST} to the hostname of the system.
 	: "${HOST:=$(command hostname 2>/dev/null)}"
 	: "${HOST:=$(command uname -n 2>/dev/null)}"
+	# Set a default ${HOSTNAME} that matches ${HOST}.
+	: "${HOSTNAME:=${HOST}}"
 }
 
 steamship_host() {
@@ -32,31 +34,24 @@ steamship_host() {
 		fi
 	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			# shellcheck disable=SC3028,SC2016
+			# shellcheck disable=SC2016
 			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}"
 			# shellcheck disable=SC2016
 			: "${ssh_host:=${HOST:+'${HOST}'}}"
-			# shellcheck disable=SC2016
-			: "${ssh_host:='${SYSTYPE}'}"
 		else
-			# shellcheck disable=SC3028,SC2016
+			# shellcheck disable=SC2016
 			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}"
 			# shellcheck disable=SC2016
 			: "${ssh_host:=${HOST:+'${HOST%%.*}'}}"
-			# shellcheck disable=SC2016
-			: "${ssh_host:='${SYSTYPE%%.*}'}"
 		fi
 	else
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			# shellcheck disable=SC3028
 			: "${ssh_host:=${HOSTNAME}}"
 			: "${ssh_host:=${HOST}}"
-			: "${ssh_host:=${SYSTYPE}}"
 		else
 			# shellcheck disable=SC3028
 			: "${ssh_host:=${HOSTNAME%%.*}}"
 			: "${ssh_host:=${HOST%%.*}}"
-			: "${ssh_host:=${SYSTYPE%%.*}}"
 		fi
 	fi
 
