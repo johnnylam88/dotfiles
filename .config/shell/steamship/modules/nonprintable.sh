@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/nonprintable.sh
+# steamship/modules/nonprintable.sh
 
 # Global delimiter variables to be used by colors.sh.
 STEAMSHIP_ESC_START=

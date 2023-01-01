@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/host.sh
+# steamship/modules/host.sh
 
 # --------------------------------------------------------------------------
 # | STEAMSHIP_HOST_SHOW | show hostname on local | show hostname on remote |

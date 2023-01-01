@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/precmd.sh
+# steamship/modules/precmd.sh
 
 steamship_precmd_init() {
 	: "do nothing"

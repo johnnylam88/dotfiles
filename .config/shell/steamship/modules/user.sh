@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/user.sh
+# steamship/modules/user.sh
 
 # --------------------------------------------------------------------------
 # | STEAMSHIP_USER_SHOW | show username on local | show username on remote |

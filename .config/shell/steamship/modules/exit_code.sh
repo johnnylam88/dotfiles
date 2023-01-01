@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/exit_code.sh
+# steamship/modules/exit_code.sh
 
 steamship_exit_code_init() {
 	STEAMSHIP_EXIT_CODE_SHOW='false'

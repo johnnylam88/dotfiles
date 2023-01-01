@@ -101,7 +101,7 @@ STEAMSHIP_MODULE_ORDER='
 
 if [ -n "${STEAMSHIP_MODULE_ORDER}" ]; then
 	for steamship_module in ${STEAMSHIP_MODULE_ORDER}; do
-		steamship_module_file="${STEAMSHIP_ROOT}/${steamship_module}.sh"
+		steamship_module_file="${STEAMSHIP_ROOT}/modules/${steamship_module}.sh"
 		# shellcheck disable=SC1090
 		. "${steamship_module_file}"
 

@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/git_status.sh
+# steamship/modules/git_status.sh
 
 steamship_git_status_init() {
 	STEAMSHIP_GIT_STATUS_SHOW='true'

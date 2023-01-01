@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/git_branch.sh
+# steamship/modules/git_branch.sh
 
 steamship_git_branch_init() {
 	STEAMSHIP_GIT_BRANCH_SHOW='true'

@@ -1,10 +1,10 @@
 # shellcheck shell=sh
-# steamship/git.sh
+# steamship/modules/git.sh
 
 # Dependencies
 : "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-. "${STEAMSHIP_ROOT}/git_branch.sh"
-. "${STEAMSHIP_ROOT}/git_status.sh"
+. "${STEAMSHIP_ROOT}/modules/git_branch.sh"
+. "${STEAMSHIP_ROOT}/modules/git_status.sh"
 
 steamship_git_init() {
 	STEAMSHIP_GIT_SHOW='true'

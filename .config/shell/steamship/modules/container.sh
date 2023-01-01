@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/container.sh
+# steamship/modules/container.sh
 
 steamship_container_init() {
 	STEAMSHIP_CONTAINER_SHOW='true'

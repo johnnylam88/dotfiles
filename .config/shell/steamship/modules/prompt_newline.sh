@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/prompt_newline.sh
+# steamship/modules/prompt_newline.sh
 
 steamship_prompt_newline_init() {
 	STEAMSHIP_PROMPT_NEWLINE_SHOW='true'

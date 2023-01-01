@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/delimiter.sh
+# steamship/modules/delimiter.sh
 
 steamship_delimiter_init() {
 	STEAMSHIP_DELIMITER_SHOW='true'

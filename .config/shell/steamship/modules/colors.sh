@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/colors.sh
+# steamship/modules/colors.sh
 
 : "${STEAMSHIP_PROMPT_COLOR:="WHITE"}"
 

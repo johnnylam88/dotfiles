@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/dir.sh
+# steamship/modules/dir.sh
 
 steamship_dir_init() {
 	STEAMSHIP_DIR_SHOW='true'

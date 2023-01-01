@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/line_separator.sh
+# steamship/modules/line_separator.sh
 
 steamship_line_separator_init() {
 	STEAMSHIP_LINE_SEPARATOR_SHOW='true'

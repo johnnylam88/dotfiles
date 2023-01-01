@@ -1,5 +1,5 @@
 # shellcheck shell=sh
-# steamship/character.sh
+# steamship/modules/character.sh
 
 steamship_character_init() {
 	STEAMSHIP_CHARACTER_SHOW='true'
