@@ -7,12 +7,8 @@
 
 # Dependencies
 : "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-if [ -f "${STEAMSHIP_ROOT}/git_branch.sh" ]; then
-	. "${STEAMSHIP_ROOT}/git_branch.sh"
-fi
-if [ -f "${STEAMSHIP_ROOT}/git_status.sh" ]; then
-	. "${STEAMSHIP_ROOT}/git_status.sh"
-fi
+. "${STEAMSHIP_ROOT}/git_branch.sh"
+. "${STEAMSHIP_ROOT}/git_status.sh"
 
 steamship_git() {
 	ssg_git_branch=$(steamship_git_branch)
