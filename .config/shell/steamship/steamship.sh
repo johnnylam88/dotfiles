@@ -4,7 +4,7 @@
 # Path to steamship main directory.
 : "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
 
-# Order of sections show in the shell prompt.
+# Order of sections shown in the shell prompt.
 STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	user
 	dir
