@@ -3,8 +3,9 @@
 
 steamship_git_branch_init() {
 	STEAMSHIP_GIT_BRANCH_SHOW='true'
-	STEAMSHIP_GIT_BRANCH_PREFIX=' '
+	STEAMSHIP_GIT_BRANCH_PREFIX=''
 	STEAMSHIP_GIT_BRANCH_SUFFIX=''
+	STEAMSHIP_GIT_BRANCH_SYMBOL=' '
 	STEAMSHIP_GIT_BRANCH_COLOR='MAGENTA'
 }
 
@@ -22,7 +23,13 @@ steamship_git_branch() {
 	eval 'ssgb_color=${'"${ssgb_colorvar}"'}'
 	unset ssgb_colorvar
 
-	ssgb_status=${ssgb_branch}
+	ssgb_status=
+	if [ -n "${ssgb_branch}" ]; then
+		if [ -n "${STEAMSHIP_GIT_BRANCH_SYMBOL}" ]; then
+			ssgb_status=${STEAMSHIP_GIT_BRANCH_SYMBOL}
+		fi
+		ssgb_status="${ssgb_status}${ssgb_branch}"
+	fi
 	if [ -n "${ssgb_status}" ]; then
 		# Add prefix and suffix as part of the status.
 		ssgb_status="${STEAMSHIP_GIT_BRANCH_PREFIX}${ssgb_status}"
