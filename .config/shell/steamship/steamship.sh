@@ -72,7 +72,6 @@ steamship_init() {
 
 steamship_init
 
-. "${STEAMSHIP_ROOT}/theme.sh"
 . "${STEAMSHIP_ROOT}/config.sh"
 
 # Load modules in the correct order. `nonprintable` needs to be loaded
@@ -138,6 +137,31 @@ steamship_refresh() {
 	else
 		eval "PS1=${STEAMSHIP_PROMPT}"
 	fi
+}
+
+# Load all available themes.
+STEAMSHIP_THEMES=
+for steamship_theme_file in "${STEAMSHIP_ROOT}"/themes/*.sh; do
+	# shellcheck disable=SC1090
+	. "${steamship_theme_file}"
+done
+unset steamship_theme_file
+
+steamship_theme() {
+	sst_theme_fn=
+	sst_theme=${1}
+	if [ -n "${sst_theme}" ]; then
+		case " ${STEAMSHIP_THEMES} " in
+		*" ${sst_theme} "*)
+			sst_theme_fn="steamship_theme_${sst_theme}"
+			eval "${sst_theme_fn}"
+			;;
+		*)
+			echo 1>&2 "steamship: \`${sst_theme}' theme not found."
+			;;
+		esac
+	fi
+	unset sst_theme sst_theme_fn
 }
 
 steamship() {
