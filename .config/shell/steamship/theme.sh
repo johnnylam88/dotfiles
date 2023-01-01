@@ -51,17 +51,20 @@ steamship_theme_starship() {
 
 # shellcheck disable=SC2120
 steamship_theme() {
-	sst_theme=${1:-'starship'}
-	case " ${STEAMSHIP_THEMES} " in
-	*" ${sst_theme} "*)
-		;;
-	*)
-		echo 1>&2 "steamship_theme: \`${sst_theme}' theme not found, using \`starship'."
-		sst_theme='starship'
-	esac
-	sst_theme_fn="steamship_theme_${sst_theme}"
-	eval "${sst_theme_fn}"
-	unset sst_theme sst_theme_fn
+	sst_theme_fn=
+	sst_theme=${1}
+	if [ -n "${sst_theme}" ]; then
+		case " ${STEAMSHIP_THEMES} " in
+		*" ${sst_theme} "*)
+			sst_theme_fn="steamship_theme_${sst_theme}"
+			eval "${sst_theme_fn}"
+			;;
+		*)
+			echo 1>&2 "steamship: \`${sst_theme}' theme not found."
+			;;
+		esac
+		unset sst_theme sst_theme_fn
+	fi
 }
 
 # Load default theme when the module is loaded.

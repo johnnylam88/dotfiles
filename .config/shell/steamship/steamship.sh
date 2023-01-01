@@ -153,7 +153,7 @@ steamship() {
 	esac
 }
 
-steamship refresh
+steamship theme "${STEAMSHIP_THEME:-"starship"}"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" steamship "*)
