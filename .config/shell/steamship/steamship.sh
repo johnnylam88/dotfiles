@@ -19,6 +19,7 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 
 # Global variables to be used by other modules.
 STEAMSHIP_PROMPT=
+STEAMSHIP_PROMPT_SECONDARY=
 STEAMSHIP_PROMPT_PARAM_EXPANSION=
 STEAMSHIP_PROMPT_COMMAND_SUBST=
 
@@ -126,24 +127,30 @@ steamship_prompt() {
 	# Final fix-ups for non-printable characters.
 	ssi_order="${ssi_order} nonprintable"
 
-	# Execute each "*_prompt" function to progressively build
-	# STEAMSHIP_PROMPT as a side-effect.
+	# Execute each "prompt" function to progressively build
+	# STEAMSHIP_PROMPT and STEAMSHIP_PROMPT_SECONDARY as a
+	# side-effect.
 
 	STEAMSHIP_PROMPT=
+	STEAMSHIP_PROMPT_SECONDARY=
 	for ssi_section in ${ssi_order}; do
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
 		eval "${ssi_section_prompt_fn}"
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
-	# ${STEAMSHIP_PROMPT} contains the prompt string.
+	# ${STEAMSHIP_PROMPT} contains the main prompt string.
+	# ${STEAMSHIP_PROMPT_SECONDARY} contains the secondary
+	#     (continuation) prompt string.
 }
 
 steamship_refresh() {
 	steamship_prompt
 	if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		eval "PS1='${STEAMSHIP_PROMPT}'"
+		eval "PS2='${STEAMSHIP_PROMPT_SECONDARY}'"
 	else
 		eval "PS1=${STEAMSHIP_PROMPT}"
+		eval "PS2=${STEAMSHIP_PROMPT_SECONDARY}"
 	fi
 }
 

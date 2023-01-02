@@ -13,6 +13,8 @@ steamship_character_init() {
 	STEAMSHIP_CHARACTER_SYMBOL_FAILURE=${STEAMSHIP_CHARACTER_SYMBOL}
 	STEAMSHIP_CHARACTER_COLOR_SUCCESS=${STEAMSHIP_COLOR_SUCCESS}
 	STEAMSHIP_CHARACTER_COLOR_FAILURE=${STEAMSHIP_COLOR_FAILURE}
+	STEAMSHIP_CHARACTER_SYMBOL_SECONDARY=${STEAMSHIP_CHARACTER_SYMBOL}
+	STEAMSHIP_CHARACTER_COLOR_SECONDARY='YELLOW'
 }
 
 steamship_character() {
@@ -55,6 +57,25 @@ steamship_character() {
 	unset ssc_symbol ssc_color ssc_colorvar ssc_status
 }
 
+steamship_character_secondary() {
+	sscs_color=
+	sscs_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_SECONDARY}"
+	eval 'sscs_color=${'"${sscs_colorvar}"'}'
+
+	sscs_status=${STEAMSHIP_CHARACTER_SYMBOL_SECONDARY}
+	if [ -n "${sscs_status}" ]; then
+		# Reset color to *normal* for user text.
+		sscs_status="${sscs_color}${sscs_status}${STEAMSHIP_NORMAL}"
+		if [ "${1}" = '-p' ]; then
+			sscs_status="${STEAMSHIP_CHARACTER_PREFIX}${sscs_status}"
+		fi
+		sscs_status="${sscs_status}${STEAMSHIP_CHARACTER_SUFFIX}"
+	fi
+
+	echo "${sscs_status}"
+	unset sscs_color sscs_colorvar sscs_status
+}
+
 steamship_character_prompt() {
 	[ "${STEAMSHIP_CHARACTER_SHOW}" = true ] || return
 
@@ -74,6 +95,13 @@ steamship_character_prompt() {
 			STEAMSHIP_PROMPT=$(steamship_character)
 		fi
 	fi
+
+	# Append status to ${STEAMSHIP_PROMPT_SECONDARY}.
+	if [ -n "${STEAMSHIP_PROMPT_SECONDARY}" ]; then
+		STEAMSHIP_PROMPT_SECONDARY="${STEAMSHIP_PROMPT_SECONDARY}$(steamship_character_secondary -p)"
+	else
+		STEAMSHIP_PROMPT_SECONDARY=$(steamship_character_secondary)
+	fi
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} character"
@@ -84,7 +112,9 @@ case " ${STEAMSHIP_DEBUG} " in
 	export STEAMSHIP_RETVAL=1
 	steamship_character_init
 	steamship_character -p
+	steamship_charater_secondary -p
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_SECONDARY}"
 	;;
 esac
