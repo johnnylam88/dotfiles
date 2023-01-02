@@ -61,7 +61,6 @@ steamship_colors_prompt() {
 	# ${STEAMSHIP_PROMPT} or else prefix decisions will be wrong for the
 	# first visible section.
 	#
-	echo 1>&2 "steamship: setting base color to ${STEAMSHIP_PROMPT_COLOR}"
 	sscp_colorvar="STEAMSHIP_${STEAMSHIP_PROMPT_COLOR}"
 	eval 'STEAMSHIP_BASE_COLOR=${'"${sscp_colorvar}"'}'
 	unset sscp_colorvar

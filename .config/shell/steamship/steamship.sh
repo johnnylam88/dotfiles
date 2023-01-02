@@ -103,7 +103,16 @@ done
 unset steamship_module steamship_module_file steamship_module_init_fn
 
 steamship_prompt() {
-	ssi_order=${STEAMSHIP_PROMPT_ORDER}
+	# Put "colors" first as a special case to ensure that color variables
+	# are properly defined before any module "prompt" functions are
+	# executed.
+	#
+	# The colors "prompt" function does not touch STEAMSHIP_PROMPT, so it
+	# doesn't affect any prefix decisions.
+	ssi_order=colors
+
+	# Add any prompt sections that are requested by the user.
+	ssi_order="${ssi_order} ${STEAMSHIP_PROMPT_ORDER}"
 
 	# Prepend the special delimiter module to the prompt.
 	ssi_order="${ssi_order} delimiter"
@@ -123,7 +132,7 @@ steamship_prompt() {
 	STEAMSHIP_PROMPT=
 	for ssi_section in ${ssi_order}; do
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
-		eval "${ssi_section_prompt_fn}" 2>/dev/null
+		eval "${ssi_section_prompt_fn}"
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
 	# ${STEAMSHIP_PROMPT} contains the prompt string.
