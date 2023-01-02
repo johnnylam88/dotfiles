@@ -84,11 +84,14 @@ STEAMSHIP_MODULES_SOURCED=
 
 # Load `nonprintable` then `colors` as the first two modules as they
 # define variables used by the other modules.
+# shellcheck source=./modules/nonprintable.sh
 . "${STEAMSHIP_ROOT}/modules/nonprintable.sh"
+# shellcheck source=./modules/colors.sh
 . "${STEAMSHIP_ROOT}/modules/colors.sh"
 
 # Load all modules in the `modules` directory.
 for steamship_module_file in "${STEAMSHIP_ROOT}"/modules/*.sh; do
+	# shellcheck disable=SC1090
 	. "${steamship_module_file}"
 done
 # Run each module's `init` function to initialize the module configuration.
