@@ -3,8 +3,6 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" colors "*) return ;; esac
 
-: "${STEAMSHIP_PROMPT_COLOR:="WHITE"}"
-
 # Global color variables to be used by other modules.
 STEAMSHIP_BLUE=
 STEAMSHIP_CYAN=
@@ -19,6 +17,8 @@ STEAMSHIP_NORMAL=
 STEAMSHIP_BASE_COLOR=
 
 steamship_colors_init() {
+	STEAMSHIP_PROMPT_COLOR='WHITE'
+
 	if [ -t 1 ]; then
 		ssci_start=${STEAMSHIP_ESC_START}
 		ssci_end=${STEAMSHIP_ESC_END}
@@ -48,12 +48,23 @@ steamship_colors_init() {
 			fi
 			unset ssci_ncolors
 		fi
-
-		ssci_colorvar="STEAMSHIP_${STEAMSHIP_PROMPT_COLOR}"
-		eval 'STEAMSHIP_BASE_COLOR=${'${ssci_colorvar}'}'
-
-		unset ssci_start ssci_end ssci_bold ssci_colorvar
+		unset ssci_start ssci_end ssci_bold
 	fi
+}
+
+steamship_colors_prompt() {
+	# "prompt" function solely to reset the value of STEAMSHIP_BASE_COLOR
+	# based on ${STEAMSHIP_PROMPT_COLOR}, which may be set by a theme or
+	# by the user.
+	#
+	# It's very important that this function does not touch
+	# ${STEAMSHIP_PROMPT} or else prefix decisions will be wrong for the
+	# first visible section.
+	#
+	echo 1>&2 "steamship: setting base color to ${STEAMSHIP_PROMPT_COLOR}"
+	sscp_colorvar="STEAMSHIP_${STEAMSHIP_PROMPT_COLOR}"
+	eval 'STEAMSHIP_BASE_COLOR=${'"${sscp_colorvar}"'}'
+	unset sscp_colorvar
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} colors"
