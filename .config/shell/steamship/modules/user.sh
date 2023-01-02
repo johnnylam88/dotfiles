@@ -30,12 +30,12 @@ steamship_user_is_root() {
 steamship_user() {
 	ssu_user=
 	if [ -n "${BASH_VERSION}" ]; then
-		: "${ssu_user:="\\u"}"
+		ssu_user='\u'
 	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		# shellcheck disable=SC2016
-		: "${ssu_user:='${USER}'}"
+		ssu_user='${USER}'
 	else
-		: "${ssu_user:=${USER}}"
+		ssu_user=${USER}
 	fi
 
 	ssu_color=

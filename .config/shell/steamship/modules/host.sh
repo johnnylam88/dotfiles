@@ -31,30 +31,29 @@ steamship_host() {
 	ssh_host=
 	if [ -n "${BASH_VERSION}" ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = "true" ]; then
-			: "${ssh_host:="\\H"}"
+			ssh_host='\H'
 		else
-			: "${ssh_host:="\\h"}"
+			ssh_host='\h'
 		fi
 	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
 			# shellcheck disable=SC2016
-			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME}'}}"
+			ssh_host=${HOSTNAME:+'${HOSTNAME}'}
 			# shellcheck disable=SC2016
-			: "${ssh_host:=${HOST:+'${HOST}'}}"
+			ssh_host=${HOST:+'${HOST}'}
 		else
 			# shellcheck disable=SC2016
-			: "${ssh_host:=${HOSTNAME:+'${HOSTNAME%%.*}'}}"
+			ssh_host=${HOSTNAME:+'${HOSTNAME%%.*}'}
 			# shellcheck disable=SC2016
-			: "${ssh_host:=${HOST:+'${HOST%%.*}'}}"
+			ssh_host=${HOST:+'${HOST%%.*}'}
 		fi
 	else
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			: "${ssh_host:=${HOSTNAME}}"
-			: "${ssh_host:=${HOST}}"
+			ssh_host=${HOSTNAME}
+			ssh_host=${HOST}
 		else
-			# shellcheck disable=SC3028
-			: "${ssh_host:=${HOSTNAME%%.*}}"
-			: "${ssh_host:=${HOST%%.*}}"
+			ssh_host=${HOSTNAME%%.*}
+			ssh_host=${HOST%%.*}
 		fi
 	fi
 

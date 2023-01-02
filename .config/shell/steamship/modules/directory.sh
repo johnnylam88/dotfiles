@@ -96,6 +96,8 @@ steamship_directory() {
 		else
 			ssd_dir=$(steamship_directory_truncate_path)
 		fi
+	elif [ -n "${BASH_VERSION}" ]; then
+		ssd_dir='\w'
 	else
 		# shellcheck disable=SC2016
 		ssd_dir='${PWD}'
