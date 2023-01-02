@@ -6,6 +6,7 @@
 
 # Order of sections shown in the shell prompt.
 STEAMSHIP_PROMPT_ORDER_DEFAULT='
+	timestamp
 	user
 	directory
 	host
