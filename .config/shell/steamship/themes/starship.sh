@@ -17,8 +17,8 @@ steamship_theme_starship() {
 	# Starship doesn't have a delimiter symbol section.
 	STEAMSHIP_DELIMITER_SHOW='false'
 
-	STEAMSHIP_DIR_LOCK_SYMBOL='🔒'
-	STEAMSHIP_DIR_TRUNCATE_PREFIX='…/'
+	STEAMSHIP_DIRECTORY_LOCK_SYMBOL='🔒'
+	STEAMSHIP_DIRECTORY_TRUNCATE_PREFIX='…/'
 
 	STEAMSHIP_EXIT_CODE_SYMBOL='❌'
 

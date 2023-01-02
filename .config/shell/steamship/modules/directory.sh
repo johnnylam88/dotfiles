@@ -1,21 +1,21 @@
 # shellcheck shell=sh
-# steamship/modules/dir.sh
+# steamship/modules/directory.sh
 
-case " ${STEAMSHIP_MODULES_SOURCED} " in *" dir "*) return ;; esac
+case " ${STEAMSHIP_MODULES_SOURCED} " in *" directory "*) return ;; esac
 
-steamship_dir_init() {
-	STEAMSHIP_DIR_SHOW='true'
-	STEAMSHIP_DIR_PREFIX='in '
-	STEAMSHIP_DIR_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
-	STEAMSHIP_DIR_TRUNCATE='3'
-	STEAMSHIP_DIR_TRUNCATE_PREFIX='…/'
-	STEAMSHIP_DIR_TRUNCATE_REPO='true'
-	STEAMSHIP_DIR_COLOR='CYAN'
-	STEAMSHIP_DIR_LOCK_SYMBOL=' '
-	STEAMSHIP_DIR_LOCK_COLOR='RED'
+steamship_directory_init() {
+	STEAMSHIP_DIRECTORY_SHOW='true'
+	STEAMSHIP_DIRECTORY_PREFIX='in '
+	STEAMSHIP_DIRECTORY_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
+	STEAMSHIP_DIRECTORY_TRUNCATE='3'
+	STEAMSHIP_DIRECTORY_TRUNCATE_PREFIX='…/'
+	STEAMSHIP_DIRECTORY_TRUNCATE_REPO='true'
+	STEAMSHIP_DIRECTORY_COLOR='CYAN'
+	STEAMSHIP_DIRECTORY_LOCK_SYMBOL=' '
+	STEAMSHIP_DIRECTORY_LOCK_COLOR='RED'
 }
 
-steamship_dir_truncate_repo_path() {
+steamship_directory_truncate_repo_path() {
 	ssdrp_dir=${PWD}
 	ssdrp_toplevel=$(command git rev-parse --show-toplevel 2>/dev/null)
 	ssdrp_pwd=
@@ -34,7 +34,7 @@ steamship_dir_truncate_repo_path() {
 	unset ssdrp_dir ssdrp_toplevel ssdrp_pwd ssdrp_proj
 }
 
-steamship_dir_truncate_path() {
+steamship_directory_truncate_path() {
 	ssdtp_dir=${PWD}
 
 	# Tilde substitution for ${HOME}.
@@ -48,9 +48,9 @@ steamship_dir_truncate_path() {
 		;;
 	esac
 
-	# Truncate to last ${STEAMSHIP_DIR_TRUNCATE} components of path.
+	# Truncate to last ${STEAMSHIP_DIRECTORY_TRUNCATE} components of path.
 	ssdtp_chop=
-	case ${STEAMSHIP_DIR_TRUNCATE} in
+	case ${STEAMSHIP_DIRECTORY_TRUNCATE} in
 	1)	ssdtp_chop="${ssdtp_dir%/*}/"
 		;;
 	2)	case ${ssdtp_dir} in
@@ -79,22 +79,22 @@ steamship_dir_truncate_path() {
 	case ${ssdtp_dir} in
 	'~'|'~'/*|/*)
 		;;
-	*)	ssdtp_dir="${STEAMSHIP_DIR_TRUNCATE_PREFIX}${ssdtp_dir}"
+	*)	ssdtp_dir="${STEAMSHIP_DIRECTORY_TRUNCATE_PREFIX}${ssdtp_dir}"
 		;;
 	esac
 	echo "${ssdtp_dir}"
 	unset ssdtp_dir ssdtp_chop
 }
 
-steamship_dir() {
+steamship_directory() {
 	ssd_dir=
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
-		if	[ "${STEAMSHIP_DIR_TRUNCATE_REPO}" = true ] &&
+		if	[ "${STEAMSHIP_DIRECTORY_TRUNCATE_REPO}" = true ] &&
 			command git rev-parse --is-inside-work-tree >/dev/null 2>&1
 		then
-			ssd_dir=$(steamship_dir_truncate_repo_path)
+			ssd_dir=$(steamship_directory_truncate_repo_path)
 		else
-			ssd_dir=$(steamship_dir_truncate_path)
+			ssd_dir=$(steamship_directory_truncate_path)
 		fi
 	else
 		# shellcheck disable=SC2016
@@ -102,13 +102,13 @@ steamship_dir() {
 	fi
 
 	ssd_color=
-	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIR_COLOR}"
+	ssd_colorvar="STEAMSHIP_${STEAMSHIP_DIRECTORY_COLOR}"
 	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
 	ssd_lock_color=
-	ssd_lock_colorvar="STEAMSHIP_${STEAMSHIP_DIR_LOCK_COLOR}"
+	ssd_lock_colorvar="STEAMSHIP_${STEAMSHIP_DIRECTORY_LOCK_COLOR}"
 	eval 'ssd_lock_color=${'"${ssd_lock_colorvar}"'}'
-	ssd_lock="${ssd_lock_color}${STEAMSHIP_DIR_LOCK_SYMBOL}${STEAMSHIP_BASE_COLOR}"
+	ssd_lock="${ssd_lock_color}${STEAMSHIP_DIRECTORY_LOCK_SYMBOL}${STEAMSHIP_BASE_COLOR}"
 
 	ssd_status=${ssd_dir}
 	if [ -n "${ssd_status}" ]; then
@@ -118,9 +118,9 @@ steamship_dir() {
 			ssd_status="${ssd_status}${ssd_lock}"
 		fi
 		if [ "${1}" = '-p' ]; then
-			ssd_status="${STEAMSHIP_DIR_PREFIX}${ssd_status}"
+			ssd_status="${STEAMSHIP_DIRECTORY_PREFIX}${ssd_status}"
 		fi
-		ssd_status="${ssd_status}${STEAMSHIP_DIR_SUFFIX}"
+		ssd_status="${ssd_status}${STEAMSHIP_DIRECTORY_SUFFIX}"
 	fi
 
 	echo "${ssd_status}"
@@ -128,37 +128,37 @@ steamship_dir() {
 	unset ssd_dir ssd_color ssd_colorvar ssd_status
 }
 
-steamship_dir_prompt() {
+steamship_directory_prompt() {
 	[ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ] || return
-	[ "${STEAMSHIP_DIR_SHOW}" = true ] || return
+	[ "${STEAMSHIP_DIRECTORY_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_dir -p)'
+			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_directory -p)'
 		else
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT='$(steamship_dir)'
+			STEAMSHIP_PROMPT='$(steamship_directory)'
 		fi
 	else
 		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_dir -p)"
+			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_directory -p)"
 		else
-			STEAMSHIP_PROMPT=$(steamship_dir)
+			STEAMSHIP_PROMPT=$(steamship_directory)
 		fi
 	fi
 }
 
-STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} dir"
+STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} directory"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" dir "*)
 	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	steamship_dir_init
-	steamship_dir -p
-	steamship_dir_prompt
+	steamship_directory_init
+	steamship_directory -p
+	steamship_directory_prompt
 	echo "${STEAMSHIP_PROMPT}"
 	;;
 esac

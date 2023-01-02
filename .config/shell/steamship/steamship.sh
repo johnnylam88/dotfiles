@@ -7,7 +7,7 @@
 # Order of sections shown in the shell prompt.
 STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	user
-	dir
+	directory
 	host
 	git
 	container
