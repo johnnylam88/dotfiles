@@ -17,7 +17,7 @@ steamship_character_init() {
 	STEAMSHIP_CHARACTER_COLOR_SECONDARY='YELLOW'
 }
 
-steamship_character() {
+steamship_character_ps1() {
 	ssc_symbol=
 	ssc_color=
 	ssc_colorvar=
@@ -57,7 +57,7 @@ steamship_character() {
 	unset ssc_symbol ssc_color ssc_colorvar ssc_status
 }
 
-steamship_character_secondary() {
+steamship_character_ps2() {
 	sscs_color=
 	sscs_colorvar="STEAMSHIP_${STEAMSHIP_CHARACTER_COLOR_SECONDARY}"
 	eval 'sscs_color=${'"${sscs_colorvar}"'}'
@@ -83,24 +83,24 @@ steamship_character_prompt() {
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_character -p)'
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_character_ps1 -p)'
 		else
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT_PS1='$(steamship_character)'
+			STEAMSHIP_PROMPT_PS1='$(steamship_character_ps1)'
 		fi
 	else
 		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
-			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_character -p)"
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_character_ps1 -p)"
 		else
-			STEAMSHIP_PROMPT_PS1=$(steamship_character)
+			STEAMSHIP_PROMPT_PS1=$(steamship_character_ps1)
 		fi
 	fi
 
 	# Append status to ${STEAMSHIP_PROMPT_PS2}.
 	if [ -n "${STEAMSHIP_PROMPT_PS2}" ]; then
-		STEAMSHIP_PROMPT_PS2="${STEAMSHIP_PROMPT_PS2}$(steamship_character_secondary -p)"
+		STEAMSHIP_PROMPT_PS2="${STEAMSHIP_PROMPT_PS2}$(steamship_character_ps2 -p)"
 	else
-		STEAMSHIP_PROMPT_PS2=$(steamship_character_secondary)
+		STEAMSHIP_PROMPT_PS2=$(steamship_character_ps2)
 	fi
 }
 
@@ -112,7 +112,7 @@ case " ${STEAMSHIP_DEBUG} " in
 	export STEAMSHIP_RETVAL=1
 	steamship_character_init
 	steamship_character -p
-	steamship_charater_secondary -p
+	steamship_charater_ps2 -p
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT_PS1}"
 	echo "${STEAMSHIP_PROMPT_PS2}"
