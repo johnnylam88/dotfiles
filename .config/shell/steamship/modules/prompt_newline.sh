@@ -14,9 +14,9 @@ steamship_prompt_newline_init() {
 steamship_prompt_newline_prompt() {
 	[ "${STEAMSHIP_PROMPT_NEWLINE_SHOW}" = true ] || return
 
-	# Prepend a newline to ${STEAMSHIP_PROMPT}.
-	STEAMSHIP_PROMPT='
-'"${STEAMSHIP_PROMPT}"
+	# Prepend a newline to ${STEAMSHIP_PROMPT_PS1}.
+	STEAMSHIP_PROMPT_PS1='
+'"${STEAMSHIP_PROMPT_PS1}"
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} prompt_newline"

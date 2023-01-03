@@ -43,11 +43,11 @@ steamship_container() {
 steamship_container_prompt() {
 	[ "${STEAMSHIP_CONTAINER_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_container -p)"
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_container -p)"
 	else
-		STEAMSHIP_PROMPT=$(steamship_container)
+		STEAMSHIP_PROMPT_PS1=$(steamship_container)
 	fi
 }
 
@@ -58,6 +58,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_container_init
 	steamship_container -p
 	steamship_container_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

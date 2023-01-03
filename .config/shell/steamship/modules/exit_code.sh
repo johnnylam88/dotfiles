@@ -41,13 +41,13 @@ steamship_exit_code_prompt() {
 	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 	[ "${STEAMSHIP_EXIT_CODE_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 		# shellcheck disable=SC2016
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_exit_code -p)'
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_exit_code -p)'
 	else
 		# shellcheck disable=SC2016
-		STEAMSHIP_PROMPT='$(steamship_exit_code)'
+		STEAMSHIP_PROMPT_PS1='$(steamship_exit_code)'
 	fi
 }
 
@@ -61,6 +61,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_exit_code_init
 	steamship_exit_code -p
 	steamship_exit_code_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

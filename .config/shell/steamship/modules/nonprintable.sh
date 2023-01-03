@@ -41,9 +41,9 @@ steamship_nonprintable_init() {
 }
 
 steamship_nonprintable_prompt() {
-	# Prepend the preamble to ${STEAMSHIP_PROMPT}.
+	# Prepend the preamble to ${STEAMSHIP_PROMPT_PS1}.
 	if [ -n "${steamship_preamble}" ]; then
-		STEAMSHIP_PROMPT="${steamship_preamble}${STEAMSHIP_PROMPT}"
+		STEAMSHIP_PROMPT_PS1="${steamship_preamble}${STEAMSHIP_PROMPT_PS1}"
 	fi
 }
 
@@ -56,6 +56,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	echo "start: ${STEAMSHIP_ESC_START}"
 	echo "end: ${STEAMSHIP_ESC_END}"
 	echo "exist: ${STEAMSHIP_NONPRINTABLE:-no}"
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

@@ -72,11 +72,11 @@ steamship_user_prompt() {
 	[ "${STEAMSHIP_USER_SHOW}" = true ] ||
 	[ "${STEAMSHIP_USER_SHOW}" = needed ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_user -p)"
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_user -p)"
 	else
-		STEAMSHIP_PROMPT=$(steamship_user)
+		STEAMSHIP_PROMPT_PS1=$(steamship_user)
 	fi
 }
 
@@ -88,6 +88,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_user_init
 	steamship_user -p
 	steamship_user_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

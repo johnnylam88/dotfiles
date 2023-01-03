@@ -58,8 +58,8 @@ steamship_colors_prompt() {
 	# by the user.
 	#
 	# It's very important that this function does not touch
-	# ${STEAMSHIP_PROMPT} or else prefix decisions will be wrong for the
-	# first visible section.
+	# ${STEAMSHIP_PROMPT_PS1} or else prefix decisions will be wrong for
+	# the first visible section.
 	#
 	sscp_colorvar="STEAMSHIP_${STEAMSHIP_PROMPT_COLOR}"
 	eval 'STEAMSHIP_BASE_COLOR=${'"${sscp_colorvar}"'}'

@@ -57,11 +57,11 @@ steamship_timestamp_prompt() {
 	[ "${steamship_timestamp_available}" = true ] || return
 	[ "${STEAMSHIP_TIMESTAMP_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_timestamp -p)"
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_timestamp -p)"
 	else
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_timestamp)"
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_timestamp)"
 	fi
 }
 
@@ -75,6 +75,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_timestamp_init
 	steamship_timestamp -p
 	steamship_timestamp_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

@@ -57,12 +57,12 @@ steamship_delimiter() {
 steamship_delimiter_prompt() {
 	[ "${STEAMSHIP_DELIMITER_SHOW}" = true ] || return
 
-	# Prepend status to ${STEAMSHIP_PROMPT}.
+	# Prepend status to ${STEAMSHIP_PROMPT_PS1}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		# shellcheck disable=SC2016
-		STEAMSHIP_PROMPT='$(steamship_delimiter -p)'"${STEAMSHIP_PROMPT}"
+		STEAMSHIP_PROMPT_PS1='$(steamship_delimiter -p)'"${STEAMSHIP_PROMPT_PS1}"
 	else
-		STEAMSHIP_PROMPT="$(steamship_delimiter -p)${STEAMSHIP_PROMPT}"
+		STEAMSHIP_PROMPT_PS1="$(steamship_delimiter -p)${STEAMSHIP_PROMPT_PS1}"
 	fi
 }
 
@@ -73,6 +73,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_delimiter_init
 	steamship_delimiter -p
 	steamship_delimiter_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

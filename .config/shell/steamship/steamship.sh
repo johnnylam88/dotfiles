@@ -18,7 +18,7 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 '
 
 # Global variables to be used by other modules.
-STEAMSHIP_PROMPT=
+STEAMSHIP_PROMPT_PS1=
 STEAMSHIP_PROMPT_PS2=
 STEAMSHIP_PROMPT_PARAM_EXPANSION=
 STEAMSHIP_PROMPT_COMMAND_SUBST=
@@ -108,8 +108,8 @@ steamship_prompt() {
 	# are properly defined before any module "prompt" functions are
 	# executed.
 	#
-	# The colors "prompt" function does not touch STEAMSHIP_PROMPT, so it
-	# doesn't affect any prefix decisions.
+	# The colors "prompt" function does not touch the prompt variables,
+	# so it doesn't affect any prefix decisions.
 	ssi_order=colors
 
 	# Add any prompt sections that are requested by the user.
@@ -130,14 +130,14 @@ steamship_prompt() {
 	# Execute each "prompt" function to progressively build prompt
 	# variables as a side-effect.
 
-	STEAMSHIP_PROMPT=
+	STEAMSHIP_PROMPT_PS1=
 	STEAMSHIP_PROMPT_PS2=
 	for ssi_section in ${ssi_order}; do
 		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
 		eval "${ssi_section_prompt_fn}"
 	done
 	unset ssi_order ssi_section ssi_section_prompt_fn
-	# ${STEAMSHIP_PROMPT} contains the main prompt string.
+	# ${STEAMSHIP_PROMPT_PS1} contains the main prompt string.
 	# ${STEAMSHIP_PROMPT_PS2} contains the secondary
 	#     (continuation) prompt string.
 }
@@ -145,10 +145,10 @@ steamship_prompt() {
 steamship_refresh() {
 	steamship_prompt
 	if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
-		eval "PS1='${STEAMSHIP_PROMPT}'"
+		eval "PS1='${STEAMSHIP_PROMPT_PS1}'"
 		eval "PS2='${STEAMSHIP_PROMPT_PS2}'"
 	else
-		eval "PS1=${STEAMSHIP_PROMPT}"
+		eval "PS1=${STEAMSHIP_PROMPT_PS1}"
 		eval "PS2=${STEAMSHIP_PROMPT_PS2}"
 	fi
 }
@@ -209,6 +209,6 @@ steamship theme "${STEAMSHIP_THEME:-"starship"}"
 
 case " ${STEAMSHIP_DEBUG} " in
 *" steamship "*)
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

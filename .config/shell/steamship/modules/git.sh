@@ -37,13 +37,13 @@ steamship_git_prompt() {
 	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 	[ "${STEAMSHIP_GIT_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 		# shellcheck disable=SC2016
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_git -p)'
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_git -p)'
 	else
 		# shellcheck disable=SC2016
-		STEAMSHIP_PROMPT='$(steamship_git)'
+		STEAMSHIP_PROMPT_PS1='$(steamship_git)'
 	fi
 }
 
@@ -54,6 +54,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_git_init
 	steamship_git -p
 	steamship_git_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

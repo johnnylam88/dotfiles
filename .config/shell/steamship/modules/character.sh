@@ -79,20 +79,20 @@ steamship_character_secondary() {
 steamship_character_prompt() {
 	[ "${STEAMSHIP_CHARACTER_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_character -p)'
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_character -p)'
 		else
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT='$(steamship_character)'
+			STEAMSHIP_PROMPT_PS1='$(steamship_character)'
 		fi
 	else
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_character -p)"
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_character -p)"
 		else
-			STEAMSHIP_PROMPT=$(steamship_character)
+			STEAMSHIP_PROMPT_PS1=$(steamship_character)
 		fi
 	fi
 
@@ -114,7 +114,7 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_character -p
 	steamship_charater_secondary -p
 	steamship_character_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	echo "${STEAMSHIP_PROMPT_PS2}"
 	;;
 esac

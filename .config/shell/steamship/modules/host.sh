@@ -90,11 +90,11 @@ steamship_host_prompt() {
 	[ "${STEAMSHIP_HOST_SHOW}" = always ] ||
 	[ "${STEAMSHIP_HOST_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
-	if [ -n "${STEAMSHIP_PROMPT}" ]; then
-		STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_host -p)"
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
+	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_host -p)"
 	else
-		STEAMSHIP_PROMPT=$(steamship_host)
+		STEAMSHIP_PROMPT_PS1=$(steamship_host)
 	fi
 }
 
@@ -106,6 +106,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_host_init
 	steamship_host -p
 	steamship_host_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac

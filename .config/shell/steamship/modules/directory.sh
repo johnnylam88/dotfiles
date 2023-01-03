@@ -134,20 +134,20 @@ steamship_directory_prompt() {
 	[ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ] || return
 	[ "${STEAMSHIP_DIRECTORY_SHOW}" = true ] || return
 
-	# Append status to ${STEAMSHIP_PROMPT}.
+	# Append status to ${STEAMSHIP_PROMPT_PS1}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}"'$(steamship_directory -p)'
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_directory -p)'
 		else
 			# shellcheck disable=SC2016
-			STEAMSHIP_PROMPT='$(steamship_directory)'
+			STEAMSHIP_PROMPT_PS1='$(steamship_directory)'
 		fi
 	else
-		if [ -n "${STEAMSHIP_PROMPT}" ]; then
-			STEAMSHIP_PROMPT="${STEAMSHIP_PROMPT}$(steamship_directory -p)"
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_directory -p)"
 		else
-			STEAMSHIP_PROMPT=$(steamship_directory)
+			STEAMSHIP_PROMPT_PS1=$(steamship_directory)
 		fi
 	fi
 }
@@ -161,6 +161,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_directory_init
 	steamship_directory -p
 	steamship_directory_prompt
-	echo "${STEAMSHIP_PROMPT}"
+	echo "${STEAMSHIP_PROMPT_PS1}"
 	;;
 esac
