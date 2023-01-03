@@ -96,11 +96,11 @@ steamship_character_prompt() {
 		fi
 	fi
 
-	# Append status to ${STEAMSHIP_PROMPT_SECONDARY}.
-	if [ -n "${STEAMSHIP_PROMPT_SECONDARY}" ]; then
-		STEAMSHIP_PROMPT_SECONDARY="${STEAMSHIP_PROMPT_SECONDARY}$(steamship_character_secondary -p)"
+	# Append status to ${STEAMSHIP_PROMPT_PS2}.
+	if [ -n "${STEAMSHIP_PROMPT_PS2}" ]; then
+		STEAMSHIP_PROMPT_PS2="${STEAMSHIP_PROMPT_PS2}$(steamship_character_secondary -p)"
 	else
-		STEAMSHIP_PROMPT_SECONDARY=$(steamship_character_secondary)
+		STEAMSHIP_PROMPT_PS2=$(steamship_character_secondary)
 	fi
 }
 
@@ -115,6 +115,6 @@ case " ${STEAMSHIP_DEBUG} " in
 	steamship_charater_secondary -p
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT}"
-	echo "${STEAMSHIP_PROMPT_SECONDARY}"
+	echo "${STEAMSHIP_PROMPT_PS2}"
 	;;
 esac
