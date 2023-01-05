@@ -111,8 +111,8 @@ case " ${STEAMSHIP_DEBUG} " in
 	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
 	export STEAMSHIP_RETVAL=1
 	steamship_character_init
-	steamship_character -p
-	steamship_charater_ps2 -p
+	steamship_character_ps1 -p
+	steamship_character_ps2 -p
 	steamship_character_prompt
 	echo "${STEAMSHIP_PROMPT_PS1}"
 	echo "${STEAMSHIP_PROMPT_PS2}"
