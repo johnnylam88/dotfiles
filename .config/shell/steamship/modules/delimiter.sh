@@ -3,6 +3,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" delimiter "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_delimiter_init() {
 	STEAMSHIP_DELIMITER_SHOW='true'
 	STEAMSHIP_DELIMITER_PREFIX=''

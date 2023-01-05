@@ -12,6 +12,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" user "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_user_init() {
 	STEAMSHIP_USER_SHOW='true'
 	STEAMSHIP_USER_PREFIX='with '

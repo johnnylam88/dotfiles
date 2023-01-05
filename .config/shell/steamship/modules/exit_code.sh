@@ -3,6 +3,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" exit_code "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_exit_code_init() {
 	STEAMSHIP_EXIT_CODE_SHOW='false'
 	STEAMSHIP_EXIT_CODE_PREFIX=''

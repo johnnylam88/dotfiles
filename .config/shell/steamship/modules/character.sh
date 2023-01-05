@@ -3,6 +3,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" character "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_character_init() {
 	STEAMSHIP_CHARACTER_SHOW='true'
 	STEAMSHIP_CHARACTER_PREFIX=''

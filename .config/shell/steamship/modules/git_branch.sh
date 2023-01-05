@@ -3,6 +3,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_branch "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_git_branch_init() {
 	STEAMSHIP_GIT_BRANCH_SHOW='true'
 	STEAMSHIP_GIT_BRANCH_PREFIX=''

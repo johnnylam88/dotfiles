@@ -3,6 +3,11 @@
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" directory "*) return ;; esac
 
+# Dependencies
+: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# shellcheck disable=SC1091
+. "${STEAMSHIP_ROOT}/modules/colors.sh"
+
 steamship_directory_init() {
 	STEAMSHIP_DIRECTORY_SHOW='true'
 	STEAMSHIP_DIRECTORY_PREFIX='in '
