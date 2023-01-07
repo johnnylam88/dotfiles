@@ -1,89 +1,87 @@
 # shrc -- called for each invocation of an interactive shell
 
-case X${SHRC_SOURCED} in
-X)
-	SHRC_SOURCED=yes
+[ -n "${SHRC_SOURCED}" ] && return
 
-	###########################################################################
-	# Shell functions and aliases
+SHRC_SOURCED=yes
 
-	########################################
-	# Starfighter prompt
+###########################################################################
+# Shell functions and aliases
 
-	STEAMSHIP_ROOT="${HOME}/.config/shell/steamship"
-	if [ -f "${STEAMSHIP_ROOT}/steamship.sh" ]; then
-		. "${STEAMSHIP_ROOT}/steamship.sh"
-	else
-		: ${PS1:="$ "}
-	fi
+########################################
+# Steamship prompt
 
-	########################################
-	# Functions
+STEAMSHIP_ROOT="${HOME}/.config/shell/steamship"
+if [ -f "${STEAMSHIP_ROOT}/steamship.sh" ]; then
+	. "${STEAMSHIP_ROOT}/steamship.sh"
+else
+	: ${PS1:="$ "}
+fi
 
-	agent() {
-		agent_env="${HOME}/.ssh/environment"
-		case "${1}" in
-		start)
-			# Start ssh-agent(1) if not already started.
-			shift
+########################################
+# Functions
+
+agent() {
+	agent_env="${HOME}/.ssh/environment"
+	case "${1}" in
+	start)
+		# Start ssh-agent(1) if not already started.
+		shift
+		/usr/bin/ssh-add -l >/dev/null 2>&1
+		if [ "$?" = 2 ]; then
+			if [ -r "${agent_env}" ]; then
+				. "${agent_env}" >/dev/null
+			fi
 			/usr/bin/ssh-add -l >/dev/null 2>&1
 			if [ "$?" = 2 ]; then
-				if [ -r "${agent_env}" ]; then
-					. "${agent_env}" >/dev/null
-				fi
-				/usr/bin/ssh-add -l >/dev/null 2>&1
-				if [ "$?" = 2 ]; then
-					( umask 066; /usr/bin/ssh-agent > "${agent_env}" )
-					. "${agent_env}"
-				fi
+				( umask 066; /usr/bin/ssh-agent > "${agent_env}" )
+				. "${agent_env}"
 			fi
-			;;
-		stop)
-			# Stop ssh-agent(1) if it is running.
-			shift
-			/usr/bin/ssh-add -l >/dev/null 2>&1
-			[ "$?" = 2 ] || eval `/usr/bin/ssh-agent -k`
-			;;
-		esac
-		unset agent_env
-	}
-
-	########################################
-	# Aliases
-
-	alias cp='cp -i'
-	alias mv='mv -i'
-	alias ls='ls -CF'
-	alias ll='ls -lF'
-	alias la='ls -aCF'
-
-	case ${SYSTYPE} in
-	cygwin|linux)
-		# Assume that Cygwin and Linux use GNU ls(1).
-		alias ls='ls -CF --color=auto'
-		alias ll='ls -laF --color=auto --group-directories-first'
+		fi
+		;;
+	stop)
+		# Stop ssh-agent(1) if it is running.
+		shift
+		/usr/bin/ssh-add -l >/dev/null 2>&1
+		[ "$?" = 2 ] || eval `/usr/bin/ssh-agent -k`
 		;;
 	esac
-	case ${SYSTYPE} in
-	cygwin)
-		if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
-			alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
-		fi
-		alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
-		;;
-	esac
+	unset agent_env
+}
 
-	########################################
-	# Shell options
+########################################
+# Aliases
 
-	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-		set -o emacs			# emacs command-line editing mode
-		set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
-		set -o notify			# Asynchronous reports on children
-		#ulimit -c unlimited	# core dump size limit
-		if [ -n "${BASH_VERSION}" ]; then
-			shopt -s checkwinsize	# check window size after each command
-		fi
-	fi
+alias cp='cp -i'
+alias mv='mv -i'
+alias ls='ls -CF'
+alias ll='ls -lF'
+alias la='ls -aCF'
+
+case ${SYSTYPE} in
+cygwin|linux)
+	# Assume that Cygwin and Linux use GNU ls(1).
+	alias ls='ls -CF --color=auto'
+	alias ll='ls -laF --color=auto --group-directories-first'
 	;;
 esac
+case ${SYSTYPE} in
+cygwin)
+	if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
+		alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
+	fi
+	alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
+	;;
+esac
+
+########################################
+# Shell options
+
+if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+	set -o emacs			# emacs command-line editing mode
+	set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
+	set -o notify			# Asynchronous reports on children
+	#ulimit -c unlimited	# core dump size limit
+	if [ -n "${BASH_VERSION}" ]; then
+		shopt -s checkwinsize	# check window size after each command
+	fi
+fi

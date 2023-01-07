@@ -1,110 +1,108 @@
 # shenv -- called for each invocation of a shell
 
-case X${SHENV_SOURCED} in
-X)
-	SHENV_SOURCED=yes
+[ -n "${SHENV_SOURCED}" ] && return
 
-	if [ -n "${KSH_VERSION}" ]; then
-		# ${HOME}/.kshrc should be called for each invocation of a shell.
-		if [ -f "${HOME}/.kshrc" ]; then
-			. "${HOME}/.kshrc"
-		fi
+SHENV_SOURCED=yes
+
+if [ -n "${KSH_VERSION}" ]; then
+	# ${HOME}/.kshrc should be called for each invocation of a shell.
+	if [ -f "${HOME}/.kshrc" ]; then
+		. "${HOME}/.kshrc"
 	fi
+fi
 
-	###########################################################################
-	# Shell environment
+###########################################################################
+# Shell environment
 
-	case X${SYSTYPE} in
-	X)	case X${SHELL} in
-		*/com.termux/*)
-			SYSTYPE=termux
+case X${SYSTYPE} in
+X)	case X${SHELL} in
+	*/com.termux/*)
+		SYSTYPE=termux
+		;;
+	*)
+		case X${MSYSTEM} in
+		X)
+			if [ -f /bin/cygwin1.dll ]; then
+				SYSTYPE=cygwin
+			else
+				SYSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
+			fi
 			;;
 		*)
-			case X${MSYSTEM} in
-			X)
-				if [ -f /bin/cygwin1.dll ]; then
-					SYSTYPE=cygwin
-				else
-					SYSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
-				fi
-				;;
-			*)
-				if [ -f /git-bash.exe ]; then
-					# Git for Windows
-					case X${MSYSTEM} in
-					XMSYS*)		SYSTYPE=git-sdk-msys2 ;;
-					XMINGW32)	SYSTYPE=git-sdk-32 ;;
-					XMINGW64)	SYSTYPE=git-sdk-64 ;;
-					*)		SYSTYPE="git-sdk-${MSYSTEM}" ;;
-					esac
-				else
-					# MSYS2
-					case X${MSYSTEM} in
-					XMSYS*)		SYSTYPE=msys2 ;;
-					XMINGW32)	SYSTYPE=mingw32 ;;
-					XMINGW64)	SYSTYPE=mingw64 ;;
-					*)		SYSTYPE="${MSYSTEM}" ;;
-					esac
-				fi
-				;;
-			esac
-		esac
-		;;
-	esac
-
-	prepend_to_path() {
-		case ":${PATH}:" in
-		*:"${1}":*)
-			;;
-		*)
-			PATH="${1}:${PATH}"
+			if [ -f /git-bash.exe ]; then
+				# Git for Windows
+				case X${MSYSTEM} in
+				XMSYS*)		SYSTYPE=git-sdk-msys2 ;;
+				XMINGW32)	SYSTYPE=git-sdk-32 ;;
+				XMINGW64)	SYSTYPE=git-sdk-64 ;;
+				*)		SYSTYPE="git-sdk-${MSYSTEM}" ;;
+				esac
+			else
+				# MSYS2
+				case X${MSYSTEM} in
+				XMSYS*)		SYSTYPE=msys2 ;;
+				XMINGW32)	SYSTYPE=mingw32 ;;
+				XMINGW64)	SYSTYPE=mingw64 ;;
+				*)		SYSTYPE="${MSYSTEM}" ;;
+				esac
+			fi
 			;;
 		esac
-	}
+	esac
+	;;
+esac
 
-	# Prepend system-specific directories to ${PATH}.
-	case ${SYSTYPE} in
-	termux)
-		export TERMUX_ROOT="/data/data/com.termux/files"
-		prepend_to_path "${HOME}/local/bin"
-		prepend_to_path "${HOME}/local/sbin"
+prepend_to_path() {
+	case ":${PATH}:" in
+	*:"${1}":*)
 		;;
-	cygwin)
-		if [ -d /drv/PortableApps/CommonFiles/node ]; then
-			prepend_to_path /drv/PortableApps/CommonFiles/node
-			prepend_to_path /drv/PortableApps/CommonFiles/node/Data/npm-global
-		fi
-		export LANG=$(/usr/bin/locale -uU)
+	*)
+		PATH="${1}:${PATH}"
 		;;
 	esac
+}
 
-	# Prepend user directories to ${PATH}.
-	prepend_to_path "${HOME}/bin"
-	prepend_to_path "${HOME}/.local/bin"
+# Prepend system-specific directories to ${PATH}.
+case ${SYSTYPE} in
+termux)
+	export TERMUX_ROOT="/data/data/com.termux/files"
+	prepend_to_path "${HOME}/local/bin"
+	prepend_to_path "${HOME}/local/sbin"
+	;;
+cygwin)
+	if [ -d /drv/PortableApps/CommonFiles/node ]; then
+		prepend_to_path /drv/PortableApps/CommonFiles/node
+		prepend_to_path /drv/PortableApps/CommonFiles/node/Data/npm-global
+	fi
+	export LANG=$(/usr/bin/locale -uU)
+	;;
+esac
 
-	unset prepend_to_path
+# Prepend user directories to ${PATH}.
+prepend_to_path "${HOME}/bin"
+prepend_to_path "${HOME}/.local/bin"
 
-	export PATH
+unset prepend_to_path
 
-	# Use vi(1) as the main editor.
-	EDITOR="/usr/bin/vi"
+export PATH
 
-	# Set TERM to a safe default if it isn't already set.
-	: ${TERM:=vt100}
+# Use vi(1) as the main editor.
+EDITOR="/usr/bin/vi"
 
-	# This should be set in the system-wide /etc/profile, but SDF.org
-	# relies on it being properly set up in $HOME/.profile.
-	: ${MAIL:=/mail/${LOGNAME:?}}
+# Set TERM to a safe default if it isn't already set.
+: ${TERM:=vt100}
 
-	export EDITOR MAIL TERM
+# This should be set in the system-wide /etc/profile, but SDF.org
+# relies on it being properly set up in $HOME/.profile.
+: ${MAIL:=/mail/${LOGNAME:?}}
 
-	# Check for interactive shell before loading the rc file.
-	case $- in
-	*i*)
-		if [ -f "${HOME}/.config/shell/shrc" ]; then
-			. "${HOME}/.config/shell/shrc"
-		fi
-		;;
-	esac
+export EDITOR MAIL TERM
+
+# Check for interactive shell before loading the rc file.
+case $- in
+*i*)
+	if [ -f "${HOME}/.config/shell/shrc" ]; then
+		. "${HOME}/.config/shell/shrc"
+	fi
 	;;
 esac
