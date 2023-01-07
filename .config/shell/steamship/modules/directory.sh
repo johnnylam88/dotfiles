@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/directory.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" directory "*) return ;; esac
 
@@ -158,14 +158,3 @@ steamship_directory_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} directory"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" dir "*)
-	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
-	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	steamship_directory_init
-	steamship_directory -p
-	steamship_directory_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

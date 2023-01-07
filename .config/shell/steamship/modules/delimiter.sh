@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/delimiter.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" delimiter "*) return ;; esac
 
@@ -36,9 +36,7 @@ steamship_delimiter() {
 	fi
 	eval 'ssd_color=${'"${ssd_colorvar}"'}'
 
-	if	[ -n "${STEAMSHIP_DEBUG}" ] ||
-		steamship_user_is_root
-	then
+	if steamship_user_is_root; then
 		ssd_symbol=${STEAMSHIP_DELIMITER_SYMBOL_ROOT}
 	fi
 	# ${ssd_symbol} is always set and non-null.
@@ -72,12 +70,3 @@ steamship_delimiter_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} delimiter"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" delimiter "*)
-	steamship_delimiter_init
-	steamship_delimiter -p
-	steamship_delimiter_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

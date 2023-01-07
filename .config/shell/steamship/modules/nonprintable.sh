@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/nonprintable.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" nonprintable "*) return ;; esac
 
@@ -48,14 +48,3 @@ steamship_nonprintable_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} nonprintable"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" nonprintable "*)
-	steamship_nonprintable_init
-	steamship_nonprintable_prompt
-	echo "start: ${STEAMSHIP_ESC_START}"
-	echo "end: ${STEAMSHIP_ESC_END}"
-	echo "exist: ${STEAMSHIP_NONPRINTABLE:-no}"
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

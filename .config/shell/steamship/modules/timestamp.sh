@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/timestamp.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" timestamp "*) return ;; esac
 
@@ -71,15 +71,3 @@ steamship_timestamp_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} timestamp"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" timestamp "*)
-	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	export STEAMSHIP_TIMESTAMP_SHOW=true
-	export STEAMSHIP_RETVAL=1
-	steamship_timestamp_init
-	steamship_timestamp -p
-	steamship_timestamp_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

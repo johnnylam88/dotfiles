@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/line_separator.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" line_separator "*) return ;; esac
 

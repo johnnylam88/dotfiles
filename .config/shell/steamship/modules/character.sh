@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/character.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" character "*) return ;; esac
 
@@ -38,9 +38,7 @@ steamship_character_ps1() {
 	fi
 	eval 'ssc_color=${'"${ssc_colorvar}"'}'
 
-	if	[ -n "${STEAMSHIP_DEBUG}" ] ||
-		steamship_user_is_root
-	then
+	if steamship_user_is_root; then
 		ssc_symbol=${STEAMSHIP_CHARACTER_SYMBOL_ROOT}
 	fi
 	# ${ssc_symbol} is always set and non-null.
@@ -110,16 +108,3 @@ steamship_character_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} character"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" character "*)
-	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	export STEAMSHIP_RETVAL=1
-	steamship_character_init
-	steamship_character_ps1 -p
-	steamship_character_ps2 -p
-	steamship_character_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	echo "${STEAMSHIP_PROMPT_PS2}"
-	;;
-esac

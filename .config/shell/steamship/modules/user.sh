@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/user.sh
+# shellcheck shell=sh
 
 # --------------------------------------------------------------------------
 # | STEAMSHIP_USER_SHOW | show username on local | show username on remote |
@@ -86,13 +86,3 @@ steamship_user_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} user"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" user "*)
-	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
-	steamship_user_init
-	steamship_user -p
-	steamship_user_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

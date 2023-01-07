@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/container.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" container "*) return ;; esac
 
@@ -14,13 +14,15 @@ steamship_container_init() {
 	STEAMSHIP_CONTAINER_SUFFIX=${STEAMSHIP_SUFFIX_DEFAULT}
 	STEAMSHIP_CONTAINER_SYMBOL='⬢ '
 	STEAMSHIP_CONTAINER_COLOR='CYAN'
+
+	steamship_container_env_file='/run/.containerenv'
 }
 
 steamship_container() {
 	ssc_name=
-	if [ -f /run/.containerenv ]; then
-		# shellcheck disable=SC1091,SC2154
-		ssc_name=$(. /run/.containerenv && printf '%s' "${name}")
+	if [ -f "${steamship_container_env_file}" ]; then
+		# shellcheck disable=SC1090,SC2154
+		ssc_name=$(. "${steamship_container_env_file}" && printf '%s' "${name}")
 	fi
 	ssc_color=
 	ssc_colorvar="STEAMSHIP_${STEAMSHIP_CONTAINER_COLOR}"
@@ -57,12 +59,3 @@ steamship_container_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} container"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" container "*)
-	steamship_container_init
-	steamship_container -p
-	steamship_container_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

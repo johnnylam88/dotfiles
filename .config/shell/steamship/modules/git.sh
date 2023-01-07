@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/git.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git "*) return ;; esac
 
@@ -48,12 +48,3 @@ steamship_git_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} git"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" git "*)
-	steamship_git_init
-	steamship_git -p
-	steamship_git_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

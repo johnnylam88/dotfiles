@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/prompt_newline.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" prompt_newline "*) return ;; esac
 

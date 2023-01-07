@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/precmd.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" precmd "*) return ;; esac
 
@@ -40,14 +40,3 @@ steamship_precmd_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} precmd"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" precmd "*)
-	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	# shellcheck disable=SC2090
-	export STEAMSHIP_PROMPT_PS1='$ '
-	steamship_precmd_init
-	steamship_precmd_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

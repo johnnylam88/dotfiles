@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/host.sh
+# shellcheck shell=sh
 
 # --------------------------------------------------------------------------
 # | STEAMSHIP_HOST_SHOW | show hostname on local | show hostname on remote |
@@ -104,13 +104,3 @@ steamship_host_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} host"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" host "*)
-	export STEAMSHIP_PROMPT_PARAM_EXPANSION=true
-	steamship_host_init
-	steamship_host -p
-	steamship_host_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac

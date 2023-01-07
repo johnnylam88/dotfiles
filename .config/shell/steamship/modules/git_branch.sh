@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/git_branch.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_branch "*) return ;; esac
 
@@ -50,10 +50,3 @@ steamship_git_branch() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} git_branch"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" git_branch "*)
-	steamship_git_branch_init
-	steamship_git_branch
-	;;
-esac

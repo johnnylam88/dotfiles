@@ -1,5 +1,5 @@
-# shellcheck shell=sh
 # steamship/modules/exit_code.sh
+# shellcheck shell=sh
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" exit_code "*) return ;; esac
 
@@ -57,15 +57,3 @@ steamship_exit_code_prompt() {
 }
 
 STEAMSHIP_MODULES_SOURCED="${STEAMSHIP_MODULES_SOURCED} exit_code"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" exit_code "*)
-	export STEAMSHIP_PROMPT_COMMAND_SUBST=true
-	export STEAMSHIP_EXIT_CODE_SHOW=true
-	export STEAMSHIP_RETVAL=1
-	steamship_exit_code_init
-	steamship_exit_code -p
-	steamship_exit_code_prompt
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac
