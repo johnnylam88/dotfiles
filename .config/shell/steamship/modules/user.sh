@@ -36,9 +36,6 @@ steamship_user() {
 	ssu_user=
 	if [ -n "${BASH_VERSION}" ]; then
 		ssu_user='\u'
-	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
-		# shellcheck disable=SC2016
-		ssu_user='${USER}'
 	else
 		ssu_user=${USER}
 	fi

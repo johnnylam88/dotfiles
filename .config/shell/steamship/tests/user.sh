@@ -4,11 +4,6 @@ STEAMSHIP_ROOT=${PWD%/*}
 
 . "${STEAMSHIP_ROOT}/modules/user.sh"
 
-# shellcheck disable=SC2034
-STEAMSHIP_PROMPT_PARAM_EXPANSION='false'
-# shellcheck disable=SC2034
-STEAMSHIP_PROMPT_COMMAND_SUBST='true'
-
 for module in ${STEAMSHIP_MODULES_SOURCED}; do
 	module_init_fn="steamship_${module}_init"
 	eval "${module_init_fn}"

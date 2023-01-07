@@ -40,18 +40,6 @@ steamship_host() {
 		else
 			ssh_host='\h'
 		fi
-	elif [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
-		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
-			# shellcheck disable=SC2016
-			ssh_host=${HOSTNAME:+'${HOSTNAME}'}
-			# shellcheck disable=SC2016
-			ssh_host=${HOST:+'${HOST}'}
-		else
-			# shellcheck disable=SC2016
-			ssh_host=${HOSTNAME:+'${HOSTNAME%%.*}'}
-			# shellcheck disable=SC2016
-			ssh_host=${HOST:+'${HOST%%.*}'}
-		fi
 	else
 		if [ "${STEAMSHIP_HOST_SHOW_FULL}" = true ]; then
 			ssh_host=${HOSTNAME}
