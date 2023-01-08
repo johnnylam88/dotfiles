@@ -2,6 +2,8 @@
 
 STEAMSHIP_ROOT=${PWD%/*}
 
+steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
+
 . "${STEAMSHIP_ROOT}/modules/directory.sh"
 
 STEAMSHIP_PROMPT_PARAM_EXPANSION='true'

@@ -14,6 +14,15 @@ case " ${STEAMSHIP_LIBS_SOURCED} " in *" modules "*) return ;; esac
 # shellcheck disable=SC2034
 STEAMSHIP_MODULES_SOURCED=
 
+steamship_modload() {
+	if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
+		. "${STEAMSHIP_ROOT}/modules/${1}.sh"
+	else
+		echo 1>&2 "steamship: \`${1}' module not found."
+		return 1
+	fi
+}
+
 steamship_modules_init() {
 	STEAMSHIP_MODULES_SOURCED=
 

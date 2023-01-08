@@ -12,9 +12,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" host "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/modules/colors.sh"
+steamship_modload colors
 
 steamship_host_init() {
 	STEAMSHIP_HOST_SHOW='true'

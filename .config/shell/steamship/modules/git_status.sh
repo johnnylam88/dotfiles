@@ -4,9 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_status "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/modules/colors.sh"
+steamship_modload colors
 
 steamship_git_status_init() {
 	STEAMSHIP_GIT_STATUS_SHOW='true'

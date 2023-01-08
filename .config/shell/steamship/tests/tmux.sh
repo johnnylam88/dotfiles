@@ -2,6 +2,8 @@
 
 STEAMSHIP_ROOT=${PWD%/*}
 
+steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
+
 . "${STEAMSHIP_ROOT}/modules/tmux.sh"
 
 for module in ${STEAMSHIP_MODULES_SOURCED}; do

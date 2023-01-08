@@ -4,9 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" colors "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/modules/nonprintable.sh"
+steamship_modload nonprintable
 
 # Global color variables to be used by other modules.
 STEAMSHIP_BLUE=

@@ -2,6 +2,8 @@
 
 STEAMSHIP_ROOT=${PWD%/*}
 
+steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
+
 . "${STEAMSHIP_ROOT}/modules/exit_code.sh"
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'

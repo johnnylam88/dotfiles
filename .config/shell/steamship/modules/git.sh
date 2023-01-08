@@ -4,9 +4,8 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-. "${STEAMSHIP_ROOT}/modules/git_branch.sh"
-. "${STEAMSHIP_ROOT}/modules/git_status.sh"
+steamship_modload git_branch
+steamship_modload git_status
 
 steamship_git_init() {
 	STEAMSHIP_GIT_SHOW='true'

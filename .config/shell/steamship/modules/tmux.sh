@@ -4,9 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" tmux "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/modules/colors.sh"
+steamship_modload colors
 
 steamship_tmux_init() {
 	STEAMSHIP_TMUX_SHOW='true'
