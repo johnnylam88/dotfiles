@@ -40,5 +40,7 @@ steamship_theme_ascii() {
 
 	STEAMSHIP_HOST_SYMBOL_SSH=''
 
+	STEAMSHIP_TMUX_SYMBOL='%'
+
 	STEAMSHIP_PROMPT_COLOR='NORMAL'
 }

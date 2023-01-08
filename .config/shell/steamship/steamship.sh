@@ -12,6 +12,7 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	host
 	git
 	container
+	tmux
 	line_separator
 	exit_code
 	character

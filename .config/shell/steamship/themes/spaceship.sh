@@ -38,5 +38,7 @@ steamship_theme_spaceship() {
 
 	STEAMSHIP_HOST_SYMBOL_SSH=''
 
+	STEAMSHIP_TMUX_SYMBOL='💻 '
+
 	STEAMSHIP_PROMPT_COLOR='WHITE'
 }
