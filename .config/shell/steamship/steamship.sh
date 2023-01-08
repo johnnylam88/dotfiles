@@ -1,208 +1,44 @@
-# shellcheck shell=sh
 # steamship/steamship.sh
+# shellcheck shell=sh
 
-# Path to steamship main directory.
-: "${STEAMSHIP_ROOT:="${HOME}/.config/shell/steamship"}"
+# Path to the steamship main directory.
+: "${STEAMSHIP_ROOT:="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
 
-# Order of sections shown in the shell prompt.
-STEAMSHIP_PROMPT_ORDER_DEFAULT='
-	timestamp
-	user
-	directory
-	host
-	git
-	container
-	tmux
-	line_separator
-	exit_code
-	character
-'
-
-# Global variables to be used by other modules.
-STEAMSHIP_PROMPT_PS1=
-STEAMSHIP_PROMPT_PS2=
-STEAMSHIP_PROMPT_PARAM_EXPANSION=
-STEAMSHIP_PROMPT_COMMAND_SUBST=
-
-: "${STEAMSHIP_PROMPT_ORDER=${STEAMSHIP_PROMPT_ORDER_DEFAULT}}"
-
-# Default prefix and suffix for sections.
-: "${STEAMSHIP_PREFIX_DEFAULT="via "}"
-: "${STEAMSHIP_SUFFIX_DEFAULT=" "}"
-
-# Success and failure colors.
-: "${STEAMSHIP_COLOR_SUCCESS:="GREEN"}"
-: "${STEAMSHIP_COLOR_FAILURE:="RED"}"
-
-#######################################
-# Initialization
-
-steamship_init() {
-	# POSIX shells will do variable expansion of prompt strings.
-	STEAMSHIP_PROMPT_PARAM_EXPANSION='true'
-
-	# The bash, ksh, and zsh shells will do command substitution in
-	# prompt strings.
-	if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-		STEAMSHIP_PROMPT_COMMAND_SUBST='true'
-	fi
-
-	# shellcheck disable=SC3044
-	if [ -z "${BASH_VERSION}" ] || shopt -q promptvars; then
-		: "do nothing"
-	else
-		# Bash has "promptvars" shell option turned off.
-		STEAMSHIP_PROMPT_PARAM_EXPANSION=
-		STEAMSHIP_PROMPT_COMMAND_SUBST=
-	fi
-	if [ -z "${KSH_VERSION}" ] || true; then
-		: "do nothing"
-	else
-		# UNREACHABLE because ksh always does parameter expansion and
-		# command substitution in prompt strings.
-		: "do nothing"
-	fi
-	# shellcheck disable=SC3010
-	if [ -z "${ZSH_VERSION}" ] || [[ -o PROMPT_SUBST ]]; then
-		: "do nothing"
-	else
-		# Zsh has "PROMPT_SUBST" option turned off.
-		STEAMSHIP_PROMPT_PARAM_EXPANSION=
-		# shellcheck disable=SC2034
-		STEAMSHIP_PROMPT_COMMAND_SUBST=
-	fi
-}
-
-steamship_init
-
-# Load configuration file if it's available.
-: "${STEAMSHIP_CONFIG:="${HOME}/.config/steamship/steamship.sh"}"
-if [ -f "${STEAMSHIP_CONFIG}" ]; then
-	# shellcheck disable=SC1090
-	. "${STEAMSHIP_CONFIG}"
-fi
-
-# Track the order in which modules are sourced.
-STEAMSHIP_MODULES_SOURCED=
-
-# Load all modules in the `modules` directory.
-for steamship_module_file in "${STEAMSHIP_ROOT}"/modules/*.sh; do
-	# shellcheck disable=SC1090
-	. "${steamship_module_file}"
-done
-# Run each module's `init` function to initialize the module configuration.
-for steamship_module in ${STEAMSHIP_MODULES_SOURCED}; do
-	steamship_module_init_fn="steamship_${steamship_module}_init"
-	eval "${steamship_module_init_fn}"
-done
-unset steamship_module steamship_module_file steamship_module_init_fn
-
-steamship_prompt() {
-	# Put "colors" first as a special case to ensure that color variables
-	# are properly defined before any module "prompt" functions are
-	# executed.
-	#
-	# The colors "prompt" function does not touch the prompt variables,
-	# so it doesn't affect any prefix decisions.
-	ssi_order=colors
-
-	# Add any prompt sections that are requested by the user.
-	ssi_order="${ssi_order} ${STEAMSHIP_PROMPT_ORDER}"
-
-	# Prepend the special delimiter module to the prompt.
-	ssi_order="${ssi_order} delimiter"
-
-	# Prepend the newline module to the prompt.
-	ssi_order="${ssi_order} prompt_newline"
-
-	# Call the special precmd module to wrap the prompt in a command.
-	ssi_order="${ssi_order} precmd"
-
-	# Final fix-ups for non-printable characters.
-	ssi_order="${ssi_order} nonprintable"
-
-	# Execute each "prompt" function to progressively build prompt
-	# variables as a side-effect.
-
-	STEAMSHIP_PROMPT_PS1=
-	STEAMSHIP_PROMPT_PS2=
-	for ssi_section in ${ssi_order}; do
-		ssi_section_prompt_fn="steamship_${ssi_section}_prompt"
-		eval "${ssi_section_prompt_fn}"
+steamship_load() {
+	# Load all libraries in the `lib` directory.
+	STEAMSHIP_LIBS_SOURCED=
+	for ssl_lib_file in "${STEAMSHIP_ROOT}"/lib/*.sh; do
+		# shellcheck disable=SC1090
+		. "${ssl_lib_file}"
 	done
-	unset ssi_order ssi_section ssi_section_prompt_fn
-	# ${STEAMSHIP_PROMPT_PS1} contains the main prompt string.
-	# ${STEAMSHIP_PROMPT_PS2} contains the secondary
-	#     (continuation) prompt string.
-}
-
-steamship_refresh() {
-	steamship_prompt
-	if [ "${STEAMSHIP_PROMPT_PARAM_EXPANSION}" = true ]; then
-		eval "PS1='${STEAMSHIP_PROMPT_PS1}'"
-		eval "PS2='${STEAMSHIP_PROMPT_PS2}'"
-	else
-		eval "PS1=${STEAMSHIP_PROMPT_PS1}"
-		eval "PS2=${STEAMSHIP_PROMPT_PS2}"
-	fi
-}
-
-steamship_reset() {
-	# Invoke every module "init" function to reset the configuration
-	# variables to their defaults.
-	for ssr_module in ${STEAMSHIP_MODULES_SOURCED}; do
-		ssr_module_init_fn="steamship_${ssr_module}_init"
-		eval "${ssr_module_init_fn}"
+	# Run "init" function for each library.
+	for ssl_lib in ${STEAMSHIP_LIBS_SOURCED}; do
+		ssl_lib_init_fn="steamship_${ssl_lib}_init"
+		eval "${ssl_lib_init_fn}"
 	done
-	unset ssr_module ssr_module_init_fn
-}
-
-# Load all available themes.
-STEAMSHIP_THEMES=
-for steamship_theme_file in "${STEAMSHIP_ROOT}"/themes/*.sh; do
-	# shellcheck disable=SC1090
-	. "${steamship_theme_file}"
-done
-unset steamship_theme_file
-
-steamship_theme() {
-	sst_theme_fn=
-	sst_theme=${1}
-	if [ -n "${sst_theme}" ]; then
-		case " ${STEAMSHIP_THEMES} " in
-		*" ${sst_theme} "*)
-			sst_theme_fn="steamship_theme_${sst_theme}"
-			eval "${sst_theme_fn}"
-			;;
-		*)
-			echo 1>&2 "steamship: \`${sst_theme}' theme not found."
-			;;
-		esac
-	fi
-	unset sst_theme sst_theme_fn
+	unset ssl_lib ssl_lib_file ssl_lib_init_fn
 }
 
 steamship() {
 	case ${1} in
 	refresh)
-		steamship_refresh
+		# Rebuild prompt strings after configuration changes.
+		steamship_prompt_refresh
 		;;
 	reset)
-		steamship_reset
-		steamship_refresh
+		# Reset to default settings.
+		steamship_modules_reset
+		steamship_config
+		steamship_themes_load "${STEAMSHIP_THEME:-"starship"}"
+		steamship_prompt_refresh
 		;;
 	theme)
 		shift
-		steamship_theme "${@}"
-		steamship_refresh
+		steamship_themes_load "${@}"
+		steamship_prompt_refresh
 		;;
 	esac
 }
 
-steamship theme "${STEAMSHIP_THEME:-"starship"}"
-
-case " ${STEAMSHIP_DEBUG} " in
-*" steamship "*)
-	echo "${STEAMSHIP_PROMPT_PS1}"
-	;;
-esac
+steamship_load
+steamship reset
