@@ -1,5 +1,5 @@
 # steamship/modules/nonprintable.sh
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" nonprintable "*) return ;; esac
 
