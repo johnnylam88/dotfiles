@@ -1,15 +1,18 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
-STEAMSHIP_ROOT=${PWD%/*}
+if [ -z "${STEAMSHIP_ROOT}" ]; then
+	if [ -f "${PWD}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD}
+	elif [ -f "${PWD%/*}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD%/*}
+	fi
+fi
+if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
+	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
+fi
 
-steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
-
-. "${STEAMSHIP_ROOT}/modules/tmux.sh"
-
-for module in ${STEAMSHIP_MODULES_SOURCED}; do
-	module_init_fn="steamship_${module}_init"
-	eval "${module_init_fn}"
-done
+steamship_modload tmux
+steamship_modules_reset
 
 STEAMSHIP_TMUX_SHOW='true'
 STEAMSHIP_TMUX_PREFIX='via '
@@ -17,21 +20,8 @@ STEAMSHIP_TMUX_SUFFIX=' '
 STEAMSHIP_TMUX_SYMBOL='%'
 STEAMSHIP_TMUX_COLOR='YELLOW'
 
-TESTS=
-
 # Mock
 tmux() { echo 'tmux'; }
-
-assert_equal()
-{
-	if [ "${3}" = "${4}" ]; then
-		echo "${0} > ${1} > ${2}: pass"
-	else
-		echo "${0} > ${1} > ${2}: FAIL"
-		echo "    expected: ${4}"
-		echo "    got:      ${3}"
-	fi
-}
 
 TESTS="${TESTS} test1"
 test1() {
@@ -77,6 +67,4 @@ test2() {
 	unset steamship_tmux_env_file
 }
 
-for test_fn in ${TESTS}; do
-	eval "${test_fn}" "${test_fn}"
-done
+run_tests

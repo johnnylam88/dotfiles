@@ -1,15 +1,18 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
-STEAMSHIP_ROOT=${PWD%/*}
+if [ -z "${STEAMSHIP_ROOT}" ]; then
+	if [ -f "${PWD}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD}
+	elif [ -f "${PWD%/*}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD%/*}
+	fi
+fi
+if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
+	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
+fi
 
-steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
-
-. "${STEAMSHIP_ROOT}/modules/user.sh"
-
-for module in ${STEAMSHIP_MODULES_SOURCED}; do
-	module_init_fn="steamship_${module}_init"
-	eval "${module_init_fn}"
-done
+steamship_modload user
+steamship_modules_reset
 
 [ -z "${BASH_VERSION}" ] || unset BASH_VERSION
 
@@ -19,22 +22,9 @@ STEAMSHIP_USER_SUFFIX=' '
 STEAMSHIP_USER_COLOR='YELLOW'
 STEAMSHIP_USER_COLOR_ROOT='RED'
 
-# Overwrite same function from modules/user.sh.
+# Mock
 steamship_user_is_root() {
 	[ "${STEAMSHIP_USER_IS_ROOT:-true}" = true ]
-}
-
-TESTS=
-
-assert_equal()
-{
-	if [ "${3}" = "${4}" ]; then
-		echo "${0} > ${1} > ${2}: pass"
-	else
-		echo "${0} > ${1} > ${2}: FAIL"
-		echo "    expected: ${4}"
-		echo "    got:      ${3}"
-	fi
 }
 
 TESTS="${TESTS} test1"
@@ -85,6 +75,4 @@ test2() {
 	unset STEAMSHIP_USER_IS_ROOT USER
 }
 
-for test_fn in ${TESTS}; do
-	eval "${test_fn}" "${test_fn}"
-done
+run_tests

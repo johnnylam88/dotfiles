@@ -1,28 +1,20 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
-STEAMSHIP_ROOT=${PWD%/*}
+if [ -z "${STEAMSHIP_ROOT}" ]; then
+	if [ -f "${PWD}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD}
+	elif [ -f "${PWD%/*}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD%/*}
+	fi
+fi
+if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
+	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
+fi
 
-. "${STEAMSHIP_ROOT}/modules/line_separator.sh"
-
-for module in ${STEAMSHIP_MODULES_SOURCED}; do
-	module_init_fn="steamship_${module}_init"
-	eval "${module_init_fn}"
-done
+steamship_modload line_separator
+steamship_modules_reset
 
 STEAMSHIP_LINE_SEPARATOR_SHOW='true'
-
-TESTS=
-
-assert_equal()
-{
-	if [ "${3}" = "${4}" ]; then
-		echo "${0} > ${1} > ${2}: pass"
-	else
-		echo "${0} > ${1} > ${2}: FAIL"
-		echo "    expected: ${4}"
-		echo "    got:      ${3}"
-	fi
-}
 
 TESTS="${TESTS} test1"
 test1() {
@@ -42,6 +34,4 @@ test1() {
 	unset STEAMSHIP_PROMPT_PS1
 }
 
-for test_fn in ${TESTS}; do
-	eval "${test_fn}" "${test_fn}"
-done
+run_tests

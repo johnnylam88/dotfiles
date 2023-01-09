@@ -16,6 +16,7 @@ STEAMSHIP_MODULES_SOURCED=
 
 steamship_modload() {
 	if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
+		# shellcheck disable=1090
 		. "${STEAMSHIP_ROOT}/modules/${1}.sh"
 	else
 		echo 1>&2 "steamship: \`${1}' module not found."

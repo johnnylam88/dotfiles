@@ -1,18 +1,21 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
-STEAMSHIP_ROOT=${PWD%/*}
-
-steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
-
-. "${STEAMSHIP_ROOT}/modules/directory.sh"
+if [ -z "${STEAMSHIP_ROOT}" ]; then
+	if [ -f "${PWD}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD}
+	elif [ -f "${PWD%/*}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD%/*}
+	fi
+fi
+if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
+	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
+fi
 
 STEAMSHIP_PROMPT_PARAM_EXPANSION='true'
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-for module in ${STEAMSHIP_MODULES_SOURCED}; do
-	module_init_fn="steamship_${module}_init"
-	eval "${module_init_fn}"
-done
+steamship_modload directory
+steamship_modules_reset
 
 STEAMSHIP_DIRECTORY_SHOW='true'
 STEAMSHIP_DIRECTORY_PREFIX='in '
@@ -24,19 +27,7 @@ STEAMSHIP_DIRECTORY_COLOR='CYAN'
 STEAMSHIP_DIRECTORY_LOCK_SYMBOL=' [LOCKED]'
 STEAMSHIP_DIRECTORY_LOCK_COLOR='RED'
 
-TESTS=
 TESTDIR="./dir.$$"
-
-assert_equal()
-{
-	if [ "${3}" = "${4}" ]; then
-		echo "${0} > ${1} > ${2}: pass"
-	else
-		echo "${0} > ${1} > ${2}: FAIL"
-		echo "    expected: ${4}"
-		echo "    got:      ${3}"
-	fi
-}
 
 TESTS="${TESTS} test1"
 test1() {
@@ -145,6 +136,4 @@ test4() {
 	unset STEAMSHIP_DIRECTORY_TRUNCATE_REPO
 }
 
-for test_fn in ${TESTS}; do
-	eval "${test_fn}" "${test_fn}"
-done
+run_tests

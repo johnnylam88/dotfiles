@@ -1,15 +1,18 @@
-# shellcheck shell=sh
+# shellcheck shell=sh disable=SC2034
 
-STEAMSHIP_ROOT=${PWD%/*}
+if [ -z "${STEAMSHIP_ROOT}" ]; then
+	if [ -f "${PWD}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD}
+	elif [ -f "${PWD%/*}/steamship.sh" ]; then
+		STEAMSHIP_ROOT=${PWD%/*}
+	fi
+fi
+if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
+	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
+fi
 
-steamship_modload() { . "${STEAMSHIP_ROOT}/modules/${1}.sh"; }
-
-. "${STEAMSHIP_ROOT}/modules/host.sh"
-
-for module in ${STEAMSHIP_MODULES_SOURCED}; do
-	module_init_fn="steamship_${module}_init"
-	eval "${module_init_fn}"
-done
+steamship_modload host
+steamship_modules_reset
 
 [ -z "${BASH_VERSION}" ] || unset BASH_VERSION
 [ -z "${SSH_CONNECTION}" ] || unset SSH_CONNECTION
@@ -21,19 +24,6 @@ STEAMSHIP_HOST_SUFFIX=' '
 STEAMSHIP_HOST_COLOR='BLUE'
 STEAMSHIP_HOST_COLOR_SSH='GREEN'
 STEAMSHIP_HOST_SYMBOL_SSH='@'
-
-TESTS=
-
-assert_equal()
-{
-	if [ "${3}" = "${4}" ]; then
-		echo "${0} > ${1} > ${2}: pass"
-	else
-		echo "${0} > ${1} > ${2}: FAIL"
-		echo "    expected: ${4}"
-		echo "    got:      ${3}"
-	fi
-}
 
 TESTS="${TESTS} test1"
 test1() {
@@ -111,6 +101,4 @@ test3() {
 	unset STEAMSHIP_HOST_SHOW_FULL HOST HOSTNAME
 }
 
-for test_fn in ${TESTS}; do
-	eval "${test_fn}" "${test_fn}"
-done
+run_tests
