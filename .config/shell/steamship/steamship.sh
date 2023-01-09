@@ -1,8 +1,22 @@
 # steamship/steamship.sh
 # shellcheck shell=sh
 
-# Path to the steamship main directory.
-: "${STEAMSHIP_ROOT:="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
+steamship_init() {
+	if [ -z "${STEAMSHIP_ROOT}" ]; then
+		# Path to the steamship main directory.
+		STEAMSHIP_ROOT="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"
+	fi
+}
+
+steamship_libload() {
+	if [ -f "${STEAMSHIP_ROOT}/lib/${1}.sh" ]; then
+		# shellcheck disable=SC1090
+		. "${STEAMSHIP_ROOT}/lib/${1}.sh"
+	else
+		echo 1>&2 "steamship: \`${1}' library not found."
+		return 1
+	fi
+}
 
 steamship_load() {
 	# Load all libraries in the `lib` directory.
@@ -40,5 +54,6 @@ steamship() {
 	esac
 }
 
+steamship_init
 steamship_load
 steamship reset

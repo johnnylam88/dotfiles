@@ -4,23 +4,22 @@
 case " ${STEAMSHIP_LIBS_SOURCED} " in *" modules "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/lib/config.sh"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/lib/shell_features.sh"
+steamship_libload config
+steamship_libload shell_features
 
 # Track the order in which modules are sourced.
 # shellcheck disable=SC2034
 STEAMSHIP_MODULES_SOURCED=
 
 steamship_modload() {
-	if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
-		# shellcheck disable=1090
-		. "${STEAMSHIP_ROOT}/modules/${1}.sh"
-	else
-		echo 1>&2 "steamship: \`${1}' module not found."
-		return 1
+	if [ -n "${STEAMSHIP_ROOT}" ]; then
+		if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
+			# shellcheck disable=1090
+			. "${STEAMSHIP_ROOT}/modules/${1}.sh"
+		else
+			echo 1>&2 "steamship: \`${1}' module not found."
+			return 1
+		fi
 	fi
 }
 
@@ -28,11 +27,13 @@ steamship_modules_init() {
 	STEAMSHIP_MODULES_SOURCED=
 
 	# Load all modules in the `modules` directory.
-	for ssm_module_file in "${STEAMSHIP_ROOT}"/modules/*.sh; do
-		# shellcheck disable=SC1090
-		. "${ssm_module_file}"
-	done
-	unset ssm_module_file
+	if [ -n "${STEAMSHIP_ROOT}" ]; then
+		for ssm_module_file in "${STEAMSHIP_ROOT}"/modules/*.sh; do
+			# shellcheck disable=SC1090
+			. "${ssm_module_file}"
+		done
+		unset ssm_module_file
+	fi
 	# ${STEAMSHIP_MODULES_SOURCED} contains the modules in the order they
 	# were sourced.
 }

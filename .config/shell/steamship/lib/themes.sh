@@ -7,18 +7,18 @@ case " ${STEAMSHIP_LIBS_SOURCED} " in *" themes "*) return ;; esac
 # shellcheck disable=SC2034
 STEAMSHIP_THEMES=
 
-: "${STEAMSHIP_ROOT:="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
-
 steamship_themes_init()
 {
 	STEAMSHIP_THEMES=
 
 	# Load all available themes in the `themes` directory.
-	for sst_theme_file in "${STEAMSHIP_ROOT}"/themes/*.sh; do
-		# shellcheck disable=SC1090
-		. "${sst_theme_file}"
-	done
-	unset sst_theme_file
+	if [ -n "${STEAMSHIP_ROOT}" ]; then
+		for sst_theme_file in "${STEAMSHIP_ROOT}"/themes/*.sh; do
+			# shellcheck disable=SC1090
+			. "${sst_theme_file}"
+		done
+		unset sst_theme_file
+	fi
 	# ${STEAMSHIP_THEMES} contains the list of available themes.
 }
 

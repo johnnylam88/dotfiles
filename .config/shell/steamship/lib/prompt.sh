@@ -4,9 +4,7 @@
 case " ${STEAMSHIP_LIBS_SOURCED} " in *" prompt "*) return ;; esac
 
 # Dependencies
-: "${STEAMSHIP_ROOT:="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
-# shellcheck disable=SC1091
-. "${STEAMSHIP_ROOT}/lib/shell_features.sh"
+steamship_libload shell_features
 
 # Global variables to be used by other modules.
 STEAMSHIP_PROMPT_PS1=
