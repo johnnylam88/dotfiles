@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload line_separator
+steamship_load_module line_separator
 steamship_modules_reset
 
 STEAMSHIP_LINE_SEPARATOR_SHOW='true'

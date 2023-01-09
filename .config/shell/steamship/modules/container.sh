@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" container "*) return ;; esac
 
 # Dependencies
-steamship_modload colors
+steamship_load_module colors
 
 steamship_container_init() {
 	STEAMSHIP_CONTAINER_SHOW='true'

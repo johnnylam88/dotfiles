@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" exit_code "*) return ;; esac
 
 # Dependencies
-steamship_modload colors
+steamship_load_module colors
 
 steamship_exit_code_init() {
 	STEAMSHIP_EXIT_CODE_SHOW='false'

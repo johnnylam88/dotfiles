@@ -14,7 +14,7 @@ fi
 STEAMSHIP_PROMPT_PARAM_EXPANSION='true'
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload directory
+steamship_load_module directory
 steamship_modules_reset
 
 STEAMSHIP_DIRECTORY_SHOW='true'

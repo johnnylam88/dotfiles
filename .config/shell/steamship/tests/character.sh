@@ -13,7 +13,7 @@ fi
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload character
+steamship_load_module character
 steamship_modules_reset
 
 STEAMSHIP_CHARACTER_SHOW='true'

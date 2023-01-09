@@ -13,7 +13,7 @@ fi
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload timestamp
+steamship_load_module timestamp
 steamship_modules_reset
 
 [ -z "${BASH_VERSION}" ] || unset BASH_VERSION

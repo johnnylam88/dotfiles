@@ -13,7 +13,7 @@ fi
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload delimiter
+steamship_load_module delimiter
 steamship_modules_reset
 
 STEAMSHIP_DELIMITER_SHOW='true'

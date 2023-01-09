@@ -13,7 +13,7 @@ fi
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload precmd
+steamship_load_module precmd
 steamship_modules_reset
 
 hook() {

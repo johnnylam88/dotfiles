@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" git_branch "*) return ;; esac
 
 # Dependencies
-steamship_modload colors
+steamship_load_module colors
 
 steamship_git_branch_init() {
 	STEAMSHIP_GIT_BRANCH_SHOW='true'

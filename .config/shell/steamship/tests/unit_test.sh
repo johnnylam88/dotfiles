@@ -8,7 +8,7 @@ if [ -z "${STEAMSHIP_ROOT}" ]; then
 	fi
 fi
 
-steamship_modload() {
+steamship_load_module() {
 	if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
 		# shellcheck disable=SC1090
 		. "${STEAMSHIP_ROOT}/modules/${1}.sh"

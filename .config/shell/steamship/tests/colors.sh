@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload colors
+steamship_load_module colors
 steamship_modules_reset
 
 TESTS="${TESTS} test1"

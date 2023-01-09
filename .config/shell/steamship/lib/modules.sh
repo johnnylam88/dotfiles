@@ -4,14 +4,14 @@
 case " ${STEAMSHIP_LIBS_SOURCED} " in *" modules "*) return ;; esac
 
 # Dependencies
-steamship_libload config
-steamship_libload shell_features
+steamship_load_library config
+steamship_load_library shell_features
 
 # Track the order in which modules are sourced.
 # shellcheck disable=SC2034
 STEAMSHIP_MODULES_SOURCED=
 
-steamship_modload() {
+steamship_load_module() {
 	if [ -n "${STEAMSHIP_ROOT}" ]; then
 		if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
 			# shellcheck disable=1090

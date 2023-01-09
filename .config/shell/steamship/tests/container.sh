@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload container
+steamship_load_module container
 steamship_modules_reset
 
 STEAMSHIP_CONTAINER_SHOW='true'

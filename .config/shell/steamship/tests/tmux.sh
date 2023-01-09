@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload tmux
+steamship_load_module tmux
 steamship_modules_reset
 
 STEAMSHIP_TMUX_SHOW='true'

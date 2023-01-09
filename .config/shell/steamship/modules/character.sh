@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" character "*) return ;; esac
 
 # Dependencies
-steamship_modload colors
+steamship_load_module colors
 
 steamship_character_init() {
 	STEAMSHIP_CHARACTER_SHOW='true'

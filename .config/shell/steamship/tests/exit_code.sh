@@ -13,7 +13,7 @@ fi
 
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
-steamship_modload exit_code
+steamship_load_module exit_code
 steamship_modules_reset
 
 STEAMSHIP_EXIT_CODE_SHOW='true'

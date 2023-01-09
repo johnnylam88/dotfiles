@@ -8,7 +8,7 @@ steamship_init() {
 	fi
 }
 
-steamship_libload() {
+steamship_load_library() {
 	if [ -f "${STEAMSHIP_ROOT}/lib/${1}.sh" ]; then
 		# shellcheck disable=SC1090
 		. "${STEAMSHIP_ROOT}/lib/${1}.sh"

@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" colors "*) return ;; esac
 
 # Dependencies
-steamship_modload nonprintable
+steamship_load_module nonprintable
 
 # Global color variables to be used by other modules.
 STEAMSHIP_BLUE=

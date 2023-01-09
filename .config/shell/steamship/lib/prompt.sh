@@ -4,7 +4,7 @@
 case " ${STEAMSHIP_LIBS_SOURCED} " in *" prompt "*) return ;; esac
 
 # Dependencies
-steamship_libload shell_features
+steamship_load_library shell_features
 
 # Global variables to be used by other modules.
 STEAMSHIP_PROMPT_PS1=

@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload host
+steamship_load_module host
 steamship_modules_reset
 
 [ -z "${BASH_VERSION}" ] || unset BASH_VERSION

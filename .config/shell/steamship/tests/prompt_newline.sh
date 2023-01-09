@@ -11,7 +11,7 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
-steamship_modload prompt_newline
+steamship_load_module prompt_newline
 steamship_modules_reset
 
 STEAMSHIP_PROMPT_NEWLINE_SHOW='true'

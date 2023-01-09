@@ -13,7 +13,7 @@
 case " ${STEAMSHIP_MODULES_SOURCED} " in *" user "*) return ;; esac
 
 # Dependencies
-steamship_modload colors
+steamship_load_module colors
 
 steamship_user_init() {
 	STEAMSHIP_USER_SHOW='true'
