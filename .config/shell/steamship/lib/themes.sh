@@ -24,21 +24,17 @@ steamship_themes_init()
 
 steamship_themes_load()
 {
-	sstl_theme_fn=
-	sstl_theme=${1}
-	if [ -n "${sstl_theme}" ]; then
+	if [ $# -gt 0 ]; then
 		case " ${STEAMSHIP_THEMES} " in
-		*" ${sstl_theme} "*)
-			sstl_theme_fn="steamship_theme_${sstl_theme}"
-			eval "${sstl_theme_fn}"
+		*" ${1} "*)
+			eval "steamship_theme_${1}"
 			;;
 		*)
-			echo 1>&2 "steamship: \`${sstl_theme}' theme not found."
+			echo 1>&2 "steamship: \`${1}' theme not found."
 			return 1
 			;;
 		esac
 	fi
-	unset sstl_theme sstl_theme_fn
 }
 
 STEAMSHIP_LIBS_SOURCED="${STEAMSHIP_LIBS_SOURCED} themes"
