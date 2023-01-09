@@ -51,10 +51,20 @@ steamship_tmux_prompt() {
 	[ "${STEAMSHIP_TMUX_SHOW}" = true ] || return
 
 	# Append status to ${STEAMSHIP_PROMPT_PS1}.
-	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
-		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_tmux -p)"
+	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+			# shellcheck disable=SC2016
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}"'$(steamship_tmux -p)'
+		else
+			# shellcheck disable=SC2016
+			STEAMSHIP_PROMPT_PS1='$(steamship_tmux)'
+		fi
 	else
-		STEAMSHIP_PROMPT_PS1=$(steamship_tmux)
+		if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
+			STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_tmux -p)"
+		else
+			STEAMSHIP_PROMPT_PS1=$(steamship_tmux)
+		fi
 	fi
 }
 
