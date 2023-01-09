@@ -22,7 +22,7 @@ steamship_themes_init()
 	# ${STEAMSHIP_THEMES} contains the list of available themes.
 }
 
-steamship_themes_load()
+steamship_load_theme()
 {
 	if [ $# -gt 0 ]; then
 		case " ${STEAMSHIP_THEMES} " in

@@ -43,12 +43,12 @@ steamship() {
 		# Reset to default settings.
 		steamship_modules_reset
 		steamship_config
-		steamship_themes_load "${STEAMSHIP_THEME:-"starship"}"
+		steamship_load_theme "${STEAMSHIP_THEME:-"starship"}"
 		steamship_prompt_refresh
 		;;
 	theme)
 		shift
-		steamship_themes_load "${@}"
+		steamship_load_theme "${@}"
 		steamship_prompt_refresh
 		;;
 	esac
