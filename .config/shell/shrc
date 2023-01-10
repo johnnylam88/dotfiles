@@ -13,9 +13,10 @@ SHRC_SOURCED=yes
 STEAMSHIP_ROOT="${HOME}/.config/shell/steamship"
 if [ -f "${STEAMSHIP_ROOT}/steamship.sh" ]; then
 	. "${STEAMSHIP_ROOT}/steamship.sh"
-else
-	: ${PS1:="$ "}
 fi
+
+# Default prompt
+: ${PS1:="$ "}
 
 ########################################
 # Functions
