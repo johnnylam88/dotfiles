@@ -2,9 +2,29 @@
 # shellcheck shell=sh
 
 steamship_init() {
+	# ${STEAMSHIP_ROOT} is the path to the steamship main directory.
 	if [ -z "${STEAMSHIP_ROOT}" ]; then
-		# Path to the steamship main directory.
-		STEAMSHIP_ROOT="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"
+		if [ -n "${BASH_VERSION}" ]; then
+			# Bash has ${BASH_SOURCE[0]} as the path to the sourced file.
+			eval 'STEAMSHIP_ROOT=${BASH_SOURCE[0]%/*}'
+		elif [ -n "${ZSH_VERSION}" ]; then
+			# ZSH has ${0} as the path to the sourced file, but only if
+			# the shell option FUNCTION_ARGZERO is toggled on.
+			ssi_zsh_argzero=
+			# shellcheck disable=SC2034
+			eval '[[ -o FUNCTION_ARGZERO ]]' 2>/dev/null && ssh_zsh_argzero='true'
+			[ -z "${ssi_zsh_argzero}" ] || setopt FUNCTION_ARGZERO
+			STEAMSHIP_ROOT=${0%/*}
+			[ -n "${ssi_zsh_argzero}" ] || unsetopt FUNCTION_ARGZERO
+			unset ssi_zsh_argzero
+		else
+			# Modern KSH has ${.sh.file} as the path to the sourced file.
+			if eval '[[ -n "${.sh.file}" ]]' 2>/dev/null; then
+				eval 'STEAMSHIP_ROOT=${.sh.file%/*}'
+			fi
+		fi
+		# Default path.
+		: "${STEAMSHIP_ROOT="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
 	fi
 }
 
