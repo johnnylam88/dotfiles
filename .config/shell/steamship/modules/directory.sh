@@ -20,7 +20,7 @@ steamship_directory_init() {
 
 steamship_directory_truncate_repo_path() {
 	ssdrp_dir=${PWD}
-	ssdrp_toplevel=$(command git rev-parse --show-toplevel 2>/dev/null)
+	ssdrp_toplevel=$(steamship_git_repo_path)
 	ssdrp_pwd=
 	ssdrp_proj=
 	if [ -n "${ssdrp_toplevel}" ]; then
@@ -93,7 +93,7 @@ steamship_directory() {
 	ssd_dir=
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then
 		if	[ "${STEAMSHIP_DIRECTORY_TRUNCATE_REPO}" = true ] &&
-			command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+			steamship_is_git
 		then
 			ssd_dir=$(steamship_directory_truncate_repo_path)
 		else
