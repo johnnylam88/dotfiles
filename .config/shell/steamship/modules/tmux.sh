@@ -49,6 +49,7 @@ steamship_tmux() {
 steamship_tmux_prompt() {
 	[ -n "${TMUX_PANE}" ] || return
 	[ "${STEAMSHIP_TMUX_SHOW}" = true ] || return
+	steamship_exists tmux || return
 
 	# Append status to ${STEAMSHIP_PROMPT_PS1}.
 	if [ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ]; then

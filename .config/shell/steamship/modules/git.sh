@@ -35,6 +35,7 @@ steamship_git() {
 steamship_git_prompt() {
 	[ "${STEAMSHIP_PROMPT_COMMAND_SUBST}" = true ] || return
 	[ "${STEAMSHIP_GIT_SHOW}" = true ] || return
+	steamship_exists git || true
 
 	# Append status to ${STEAMSHIP_PROMPT_PS1}.
 	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
