@@ -7,6 +7,9 @@ if [ -z "${STEAMSHIP_ROOT}" ]; then
 		STEAMSHIP_ROOT=${PWD%/*}
 	fi
 fi
+if [ -f "${STEAMSHIP_ROOT}/lib/utils.sh" ]; then
+	. "${STEAMSHIP_ROOT}/lib/utils.sh"
+fi
 
 steamship_load_module() {
 	if [ -f "${STEAMSHIP_ROOT}/modules/${1}.sh" ]; then
