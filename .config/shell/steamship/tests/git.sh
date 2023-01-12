@@ -11,6 +11,13 @@ if [ -f "${STEAMSHIP_ROOT}/tests/unit_test.sh" ]; then
 	. "${STEAMSHIP_ROOT}/tests/unit_test.sh"
 fi
 
+if steamship_exists git; then
+	: "do nothing"
+else
+	echo "${0} > \`git' not found: skipped"
+	exit 0
+fi
+
 STEAMSHIP_PROMPT_COMMAND_SUBST='true'
 
 steamship_load_module git

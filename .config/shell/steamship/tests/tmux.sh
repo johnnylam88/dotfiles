@@ -25,6 +25,13 @@ tmux() { echo 'tmux'; }
 
 TESTS="${TESTS} test1"
 test1() {
+	if steamship_exists tmux; then
+		: "do nothing"
+	else
+		echo "${0} > ${1}: \`tmux' not found: skip"
+		return 0
+	fi
+
 	TMUX_PANE='0'
 
 	test1_name=${1}

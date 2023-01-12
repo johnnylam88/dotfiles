@@ -80,6 +80,13 @@ test2() {
 
 TESTS="${TESTS} test3"
 test3() {
+	if steamship_exists git; then
+		: "do nothing"
+	else
+		echo "${0} > ${1} > \`git' not found: skip"
+		return 0
+	fi
+
 	STEAMSHIP_DIRECTORY_TRUNCATE_REPO='true'
 
 	mkdir -p "${TESTDIR}/a/b" || return 1
@@ -109,6 +116,13 @@ test3() {
 
 TESTS="${TESTS} test4"
 test4() {
+	if steamship_exists git; then
+		: "do nothing"
+	else
+		echo "${0} > ${1} > \`git' not found: skip"
+		return 0
+	fi
+
 	STEAMSHIP_DIRECTORY_TRUNCATE_REPO='false'
 
 	mkdir -p "${TESTDIR}/a/b" || return 1
