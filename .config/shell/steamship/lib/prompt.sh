@@ -24,10 +24,6 @@ STEAMSHIP_PROMPT_ORDER_DEFAULT='
 	character
 '
 
-steamship_prompt_init() {
-	: "do nothing"
-}
-
 steamship_prompt() {
 	ssp_order_user=${STEAMSHIP_PROMPT_ORDER-${STEAMSHIP_PROMPT_ORDER_DEFAULT}}
 

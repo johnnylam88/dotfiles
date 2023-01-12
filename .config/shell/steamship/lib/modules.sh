@@ -23,6 +23,8 @@ steamship_load_module() {
 	fi
 }
 
+STEAMSHIP_LIBS_INIT="${STEAMSHIP_LIBS_INIT} steamship_modules_init"
+
 steamship_modules_init() {
 	STEAMSHIP_MODULES_SOURCED=
 

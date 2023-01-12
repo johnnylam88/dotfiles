@@ -40,17 +40,18 @@ steamship_load_library() {
 
 steamship_load() {
 	# Load all libraries in the `lib` directory.
+	# shellcheck disable=SC2034
 	STEAMSHIP_LIBS_SOURCED=
+	STEAMSHIP_LIBS_INIT=
 	for ssl_lib_file in "${STEAMSHIP_ROOT}"/lib/*.sh; do
 		# shellcheck disable=SC1090
 		. "${ssl_lib_file}"
 	done
 	# Run "init" function for each library.
-	for ssl_lib in ${STEAMSHIP_LIBS_SOURCED}; do
-		ssl_lib_init_fn="steamship_${ssl_lib}_init"
+	for ssl_lib_init_fn in ${STEAMSHIP_LIBS_INIT}; do
 		eval "${ssl_lib_init_fn}"
 	done
-	unset ssl_lib ssl_lib_file ssl_lib_init_fn
+	unset ssl_lib_file ssl_lib_init_fn
 }
 
 steamship() {

@@ -7,6 +7,8 @@ case " ${STEAMSHIP_LIBS_SOURCED} " in *" themes "*) return ;; esac
 # shellcheck disable=SC2034
 STEAMSHIP_THEMES=
 
+STEAMSHIP_LIBS_INIT="${STEAMSHIP_LIBS_INIT} steamship_themes_init"
+
 steamship_themes_init()
 {
 	STEAMSHIP_THEMES=

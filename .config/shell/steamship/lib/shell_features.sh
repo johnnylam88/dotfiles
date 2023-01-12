@@ -9,6 +9,8 @@ STEAMSHIP_PROMPT_PARAM_EXPANSION=
 # shellcheck disable=SC2034
 STEAMSHIP_PROMPT_COMMAND_SUBST=
 
+STEAMSHIP_LIBS_INIT="${STEAMSHIP_LIBS_INIT} steamship_shell_features_init"
+
 steamship_shell_features_init() {
 	# POSIX shell_features will do variable expansion of prompt strings.
 	STEAMSHIP_PROMPT_PARAM_EXPANSION='true'
