@@ -35,11 +35,11 @@ steamship_shquote() {
 
 # Save the parameter list as quoted strings separated by newlines.
 # USAGE:
-#     steamship_save_argv "$@"
+#     steamship_save_argv "${@}"
 # EXAMPLE:
-#     argv=$(steamship_save_argv "#@")   # save parameters
+#     argv=$(steamship_save_argv "${@}") # save parameters
 #     set -- foo bar baz boo             # set new parameters
-#     eval "set -- ${argv}"              # restore saved parameters
+#     eval set -- ${argv}                # restore saved parameters
 steamship_save_argv() {
 	for sssa_arg; do
 		steamship_shquote "${sssa_arg}"
@@ -56,31 +56,48 @@ steamship_save_argv() {
 # EXAMPLE:
 #     $ steamship_upsearch package.json node_modules
 #     /home/username/path/to/project/node_modules
-steamship_upsearch() (
-	# Returns the path to the first file found in an "upsearch" from the
-	# current directory.
-	ssu_argv=$(steamship_save_argv "$@")
+steamship_upsearch() {
+	ssu_retval=
+	ssu_argv=$(steamship_save_argv "${@}")
 	ssu_root=${PWD}
+	# loop variables
+	ssu_argv_left=; ssu_glob=; ssu_name=; ssu_path=
 	while [ -n "${ssu_root}" ]; do
-		for ssu_arg in ${ssu_argv}; do
-			eval "set -- ${ssu_arg}"
-			for ssu_glob; do
-				for ssu_name in ${ssu_glob}; do
-					ssu_path="${ssu_root}/${ssu_name}"
-					if [ -e "${ssu_path}" ]; then
-						echo "${ssu_path}"
-						return 0
-					fi
-				done
+		eval set -- ${ssu_argv}
+		while [ ${#} -gt 0 ]; do
+			ssu_glob=${1}; shift
+			ssu_argv_left=$(steamship_save_argv "${@}")
+			case ${ssu_glob} in
+			*'*'*|*'?'*|*'['*) # pathname expansion
+				eval set -- ${ssu_glob} ;;
+			*)	set -- "${ssu_glob}" ;;
+			esac
+			for ssu_name; do
+				ssu_path="${ssu_root}/${ssu_name}"
+				if [ -e "${ssu_path}" ]; then
+					echo "${ssu_path}"
+					ssu_retval=0
+					break 3
+				fi
 			done
+			eval set -- ${ssu_argv_left}
 		done
-
-		[ -d "${ssu_root}/.git" ] && return 1
-
+		if [ -d "${ssu_root}/.git" ]; then
+			ssu_retval=1
+			break
+		fi
 		ssu_root=${ssu_root%/*}
 		[ -z "${ssu_root}" ] || cd ..
 	done
-	return 1
-)
+	unset ssu_argv ssu_root ssu_argv_left ssu_glob ssu_name ssu_path
+	[ -n "${ssu_retval}" ] || ssu_retval=1
+	if [ "${ssu_retval}" = 0 ]; then
+		unset ssu_retval
+		return 0
+	else
+		unset ssu_retval
+		return 1
+	fi
+}
 
 STEAMSHIP_LIBS_SOURCED="${STEAMSHIP_LIBS_SOURCED} utils"
