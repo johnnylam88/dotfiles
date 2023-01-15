@@ -41,4 +41,24 @@ test1() {
 	unset STEAMSHIP_PROMPT_PS1
 }
 
+TESTS="${TESTS} test2"
+test2() {
+	# shellcheck disable=SC2016
+	STEAMSHIP_PROMPT_PS1='$(echo "${STEAMSHIP_RETVAL}")'
+	steamship_precmd_add_hook '{ STEAMSHIP_RETVAL=11; }'
+	steamship_precmd_prompt
+
+	test2_name=${1}
+	eval "test2_ps1=${STEAMSHIP_PROMPT_PS1}"
+	test2_ps1_expected='11'
+
+	# shellcheck disable=SC2154
+	assert_equal "${test2_name}" \
+		"add string in ps1" \
+		"${test2_ps1}" \
+		"${test2_ps1_expected}"
+
+	unset STEAMSHIP_PROMPT_PS1
+}
+
 run_tests
