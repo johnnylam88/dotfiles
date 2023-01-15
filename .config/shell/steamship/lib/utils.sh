@@ -26,6 +26,13 @@ steamship_git_repo_path() {
 	git rev-parse --show-toplevel 2>/dev/null
 }
 
+# Shell-quote an arbitrary string.
+# USAGE:
+#     steamship_quote_arg "string_with_weird_characters"
+steamship_shquote() {
+	printf %s\\n "${1}" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
+}
+
 # Save the parameter list as quoted strings separated by newlines.
 # USAGE:
 #     steamship_save_argv "$@"
@@ -35,10 +42,10 @@ steamship_git_repo_path() {
 #     eval "set -- ${argv}"              # restore saved parameters
 steamship_save_argv() {
 	for sssa_arg; do
-		printf '%s\n' "${sssa_arg}" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
+		steamship_shquote "${sssa_arg}"
 	done
 	echo " "
-	unset sssa_arv
+	unset sssa_arg
 }
 
 # Search upward through the directory tree from the current directory
