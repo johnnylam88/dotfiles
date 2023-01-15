@@ -64,7 +64,7 @@ steamship_timestamp_prompt() {
 	if [ -n "${STEAMSHIP_PROMPT_PS1}" ]; then
 		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_timestamp -p)"
 	else
-		STEAMSHIP_PROMPT_PS1="${STEAMSHIP_PROMPT_PS1}$(steamship_timestamp)"
+		STEAMSHIP_PROMPT_PS1=$(steamship_timestamp)
 	fi
 }
 
