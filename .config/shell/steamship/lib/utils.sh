@@ -63,12 +63,14 @@ steamship_upsearch() {
 	# loop variables
 	ssu_argv_left=; ssu_glob=; ssu_name=; ssu_path=
 	while [ -n "${ssu_root}" ]; do
+		# shellcheck disable=SC2086
 		eval set -- ${ssu_argv}
 		while [ ${#} -gt 0 ]; do
 			ssu_glob=${1}; shift
 			ssu_argv_left=$(steamship_save_argv "${@}")
 			case ${ssu_glob} in
 			*'*'*|*'?'*|*'['*) # pathname expansion
+				# shellcheck disable=SC2086
 				eval set -- ${ssu_glob} ;;
 			*)	set -- "${ssu_glob}" ;;
 			esac
@@ -80,6 +82,7 @@ steamship_upsearch() {
 					break 3
 				fi
 			done
+			# shellcheck disable=SC2086
 			eval set -- ${ssu_argv_left}
 		done
 		if [ -d "${ssu_root}/.git" ]; then
