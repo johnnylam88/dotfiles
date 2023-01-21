@@ -10,7 +10,7 @@ SHRC_SOURCED=yes
 ########################################
 # Steamship prompt
 
-STEAMSHIP_ROOT="${HOME}/.config/shell/steamship"
+STEAMSHIP_ROOT="${HOME}/.local/share/steamship"
 if [ -f "${STEAMSHIP_ROOT}/steamship.sh" ]; then
 	. "${STEAMSHIP_ROOT}/steamship.sh"
 fi
