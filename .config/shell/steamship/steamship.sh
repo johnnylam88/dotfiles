@@ -24,7 +24,7 @@ steamship_init() {
 			fi
 		fi
 		# Default path.
-		: "${STEAMSHIP_ROOT="${XDG_CONFIG_HOME:-"${HOME}/.config"}/shell/steamship"}"
+		: "${STEAMSHIP_ROOT="${HOME}/.local/share/steamship"}"
 	fi
 }
 
