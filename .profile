@@ -1,22 +1,7 @@
-# $HOME/.profile -- called for each invocation of a login shell
-
-[ -n "${HOME_PROFILE_SOURCED}" ] && return
-
-HOME_PROFILE_SOURCED=yes
-
-# Ensure that ${HOME}/.config/shell/shenv is called for each
-# shell invocation, regardless of login or interactive status.
+# $HOME/.profile
 #
-if [ -f "${HOME}/.config/shell/shenv" ]; then
-	export ENV="${HOME}/.config/shell/shenv"
-	if [ -n "${BASH_VERSION}" ]; then
-		# Bash uses ${BASH_ENV} instead of ${ENV}, except if
-		# it's invoked with the --posix option.
-		export BASH_ENV=${ENV}
-		. "${BASH_ENV}"
-	elif [ -n "${YASH_VERSION}" ]; then
-		. "${ENV}"
-	elif [ -n "${ZSH_VERSION}" ]; then
-		. "${ENV}"
-	fi
+# POSIX sh(1) reads this file by default if invoked as a login shell
+
+if [ -f "${HOME}/.config/shell/profile" ]; then
+	. "${HOME}/.config/shell/profile"
 fi

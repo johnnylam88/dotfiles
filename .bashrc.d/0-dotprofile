@@ -3,8 +3,8 @@
 # Fedora's default user dotfiles for bash(1) have ${HOME}/.bash_profile
 # source ${HOME}/.bashrc, which invokes every file in ${HOME}/.bashrc.d.
 # Create a file in ${HOME}/.bashrc.d that is sourced first that just
-# sources our ${HOME}/.profile.
+# sources our profile.
 
-if [ -f "${HOME}/.profile" ]; then
-	. "${HOME}/.profile"
+if [ -f "${HOME}/.config/shell/profile" ]; then
+	. "${HOME}/.config/shell/profile"
 fi
