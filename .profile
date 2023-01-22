@@ -16,5 +16,7 @@ if [ -f "${HOME}/.config/shell/shenv" ]; then
 		. "${BASH_ENV}"
 	elif [ -n "${YASH_VERSION}" ]; then
 		. "${ENV}"
+	elif [ -n "${ZSH_VERSION}" ]; then
+		. "${ENV}"
 	fi
 fi
