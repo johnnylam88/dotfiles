@@ -14,5 +14,7 @@ if [ -f "${HOME}/.config/shell/shenv" ]; then
 		# it's invoked with the --posix option.
 		export BASH_ENV=${ENV}
 		. "${BASH_ENV}"
+	elif [ -n "${YASH_VERSION}" ]; then
+		. "${ENV}"
 	fi
 fi

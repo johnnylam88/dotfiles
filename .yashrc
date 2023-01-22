@@ -1,0 +1,7 @@
+# $HOME/.yashrc
+#
+# yash(1) reads this file by default if the shell is in interactive mode.
+
+if [ -n "${ENV}" ] && [ -f "${ENV}" ]; then
+	. "${ENV}"
+fi

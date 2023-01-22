@@ -1,0 +1,7 @@
+# $HOME/.yash_profile
+#
+# yash(1) reads this file by default if invoked as a login shell.
+
+if [ -f "${HOME}/.profile" ]; then
+	. "${HOME}/.profile"
+fi
