@@ -1,6 +1,7 @@
 #!/bin/sh
 
 script=${0##*/}
+libexecdir="${HOME}/.local/libexec/toolbox"
 
 default=
 doit=
@@ -30,9 +31,11 @@ fi
 
 if [ -n "${toolbox_name}" ]; then
 	run="toolbox run -c ${toolbox_name}"
+	setup_script="${libexecdir}/${toolbox_name}.sh"
 else
 	default=yes
 	run="toolbox run"
+	setup_script="${libexecdir}/default.sh"
 fi
 
 # Stop toolbox and remove it if it exists.
@@ -84,22 +87,11 @@ eval xargs -rt "${cmd}" <<- EOF
 	vim
 EOF
 
-if [ -n "${default}" ]; then
-	: "Packages for the default toolbox container."
-else
-	: "Packages for non-default containers, matched by name."
-	case ${toolbox_name} in
-	steamship)
-		eval xargs -rt "${cmd}" <<- EOF
-			bash
-			dash
-			ksh
-			mksh
-			oksh
-			shellcheck
-			yash
-			zsh
-		EOF
-		;;
-	esac
+if [ -x "${setup_script}" ]; then
+	echo "Running script: ${setup_script}"
+	cmd='${doit} ${run} ${setup_script} "${toolbox_name}"'
+	if ! eval "${cmd}"; then
+		echo 1>&2 "${script}: error running setup script \`${setup_script}'"
+		exit 6
+	fi
 fi
