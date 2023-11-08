@@ -23,9 +23,11 @@ setup() {
 		make
 		ncurses-devel
 		openssl-devel
+		python
 		readline
 		readline-devel
 		shellcheck
+		tig
 	EOF
 
 	# Install Lua 5.1.
@@ -49,6 +51,9 @@ setup() {
 	# Install helper modules for LuaRocks.
 	sudo luarocks install luasocket
 	sudo luarocks install luasec
+
+    # Install bitlib since it is in the standard WoW API.
+	sudo luarocks install bitlib
 
 	# Install Fennel.
 	sudo luarocks install readline
