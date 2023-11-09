@@ -1,9 +1,13 @@
 #!/bin/sh
 
 script=${0##*/}
+env="env"
 git="git"
 repo_path="${HOME}/.home"
-dotkeeper="$git"' --git-dir='"${repo_path}"' --work-tree='"${HOME}"
+
+run() {
+	${env} GIT_DIR="${repo_path}" GIT_WORK_TREE="${HOME}" "${@}"
+}
 
 case "${1}" in
 help)
@@ -34,8 +38,17 @@ clone)
 		exit 3
 	fi
 	${git} clone --bare "${1}" "${repo_path}" &&
-	${dotkeeper} config --local status.showUntrackedFiles no &&
-	${dotkeeper} checkout
+	run ${git} config --local status.showUntrackedFiles no &&
+	run ${git} checkout
+	;;
+
+edit)
+	if [ ! -d "${repo_path}" ]; then
+		echo 1>&2 "${script}: path does not exist \`${repo_path}'"
+		exit 3
+	fi
+	shift
+    run ${EDITOR:-vi} "${@}"
 	;;
 
 vcs)
@@ -44,7 +57,7 @@ vcs)
 		exit 3
 	fi
 	shift
-	${dotkeeper} "$@"
+	run ${git} "${@}"
 	;;
 
 *)
