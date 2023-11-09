@@ -40,17 +40,24 @@ vim.opt.runtimepath:prepend({
 
 -- Configure hotpot.nvim.
 require("hotpot").setup({
-  -- Resolve require("fennel") to the fennel.lua provided by hotpot.nvim.
+  -- Resolve `(require :fennel)` to the fennel.lua provided by hotpot.nvim.
   provide_require_fennel = true,
 })
 
--- Generate plugins table.
-local config_plugins_path = vim.fn.stdpath("config") .. "/fnl/config/plugins"
+-- Path added to Lua package load path by hotpot.nvim for resolving
+-- `(require :module_name)` for Fennel modules.
+local nvim_fennel_library_path = vim.fn.stdpath("config") .. "/fnl"
+
+-- Generate plugins table for lazy.nvim.
+local config_plugins_path = nvim_fennel_library_path .. "/config/plugins"
 local plugins = {
   -- Hardcode hotpot.nvim plugin.
   { "rktjmp/hotpot.nvim" },
 }
 if vim.loop.fs_stat(config_plugins_path) then
+  -- Load each plugin-specific lazy.nvim configuration as a Fennel module.
+  -- Each module should return a table according to the lazy.vim Plugin Spec:
+  --   https://github.com/folke/lazy.nvim#-plugin-spec
   for file in vim.fs.dir(config_plugins_path) do
     file = file:match("^(.*)%.fnl$")
     plugins[#plugins + 1] = require("config.plugins." .. file)
@@ -60,5 +67,7 @@ end
 -- Configure lazy.nvim.
 require("lazy").setup(
   plugins,
-  { install = { missing = true } } -- install missing plugins
+  {
+    install = { missing = true }, -- install missing plugins
+  }
 )
