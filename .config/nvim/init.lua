@@ -30,35 +30,20 @@ end
 install_plugin("folke/lazy.nvim") -- plugin manager
 install_plugin("rktjmp/hotpot.nvim") -- Fennel for neovim
 
--- Configure hotpot.nvim.
+-- Load hotpot.nvim.
 require("hotpot").setup({
   -- Resolve `(require :fennel)` to the fennel.lua provided by hotpot.nvim.
   provide_require_fennel = true,
 })
 
--- Path added to Lua package load path by hotpot.nvim for resolving
--- `(require :module_name)` for Fennel modules.
-local nvim_fennel_library_path = vim.fn.stdpath("config") .. "/fnl"
-
--- Generate plugins table for lazy.nvim.
-local config_specs_path = nvim_fennel_library_path .. "/config/specs"
+-- Plugin specs table for lazy.nvim.
 local plugins = {
   -- Hardcode hotpot.nvim plugin.
   { "rktjmp/hotpot.nvim" },
 }
-if vim.loop.fs_stat(config_specs_path) then
-  -- Load each plugin configuration as a Fennel module.
-  -- Each module should return an array of spec tables, where the spec table
-  -- is defined by the lazy.vim Plugin Spec:
-  --   https://github.com/folke/lazy.nvim#-plugin-spec
-  for file in vim.fs.dir(config_specs_path) do
-    file = file:match("^(.*)%.fnl$")
-    table.insert(plugins, require("config.specs." .. file))
-  end
-end
 
 -- Load configuration.
-require("config")
+require("config").setup(plugins)
 
--- Configure lazy.nvim.
+-- Load lazy.nvim.
 require("lazy").setup(plugins, { install = { missing = true }})
