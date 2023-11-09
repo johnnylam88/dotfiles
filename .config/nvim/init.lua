@@ -41,19 +41,19 @@ require("hotpot").setup({
 local nvim_fennel_library_path = vim.fn.stdpath("config") .. "/fnl"
 
 -- Generate plugins table for lazy.nvim.
-local config_plugins_path = nvim_fennel_library_path .. "/config/plugins"
+local config_specs_path = nvim_fennel_library_path .. "/config/specs"
 local plugins = {
   -- Hardcode hotpot.nvim plugin.
   { "rktjmp/hotpot.nvim" },
 }
-if vim.loop.fs_stat(config_plugins_path) then
+if vim.loop.fs_stat(config_specs_path) then
   -- Load each plugin configuration as a Fennel module.
   -- Each module should return an array of spec tables, where the spec table
   -- is defined by the lazy.vim Plugin Spec:
   --   https://github.com/folke/lazy.nvim#-plugin-spec
-  for file in vim.fs.dir(config_plugins_path) do
+  for file in vim.fs.dir(config_specs_path) do
     file = file:match("^(.*)%.fnl$")
-    table.insert(plugins, require("config.plugins." .. file))
+    table.insert(plugins, require("config.specs." .. file))
   end
 end
 
