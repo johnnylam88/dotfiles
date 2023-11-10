@@ -1,0 +1,100 @@
+#!/bin/sh
+
+script=${0##*/}
+
+if [ -z "${SUDO_USER}" ]; then
+	echo 1>&2 "${script} requires running with sudo(8)."
+	exit 128
+fi
+if [ "$(id -u)" != 0 ]; then
+	echo 1>&2 "${script} requires root privileges."
+	exit 128
+fi
+
+uid=$(id -u "${SUDO_USER}")
+gid=$(id -g "${SUDO_USER}")
+
+containerfile='/var/mnt/windata/veracrypt.hc'
+name=${containerfile##*/}; name="${name%.hc}dev"
+volume_keyfile="/etc/cryptsetup-keys.d/${name}.key"
+cryptdev="/dev/mapper/${name}"
+mountdir="/var/mnt/crypt"
+
+rollback_actions=
+
+vera_open() {
+	if [ -e "${cryptdev}" ]; then
+		# Veracrypt container is already open.
+		return 0
+	fi
+	if [ ! -f "${containerfile}" ]; then
+		echo 1>&2 "${script}: container file missing: ${containerfile}"
+		return 1
+	fi
+	if [ ! -f "${volume_keyfile}" ]; then
+		echo 1>&2 "${script}: volume keyfile missing: ${volume_keyfile}"
+		return 2
+	fi
+	if	cryptsetup \
+			open "${containerfile}" "${name}" \
+			--type tcrypt < "${volume_keyfile}"
+	then
+		rollback_actions="vera_close ${rollback_actions}"
+	fi
+}
+
+vera_close() {
+	if [ ! -e "${cryptdev}" ]; then
+		# Veracrypt container is already closed.
+		return 0
+	fi
+	if cryptsetup close "${name}"; then
+		rollback_actions="vera_open ${rollback_actions}"
+	fi
+}
+
+vera_mount() {
+	if mount | grep -q "${cryptdev} on ${mountdir}"; then
+		# Veracrypt container is already mounted.
+		return 0
+	fi
+	if [ ! -e "${cryptdev}" ]; then
+		echo 1>&2 "${script}: device missing: ${cryptdev}"
+		return 3
+	fi
+	if [ ! -d "${mountdir}" ]; then
+		echo 1>&2 "${script}: mount directory missing: ${mountdir}"
+		return 4
+	fi
+	if	mount -t ntfs3 \
+			-o "defaults,nosuid,nodev,uid=${uid},gid=${gid},umask=0002,discard,noatime" \
+			"${cryptdev}" "${mountdir}"
+	then
+		rollback_actions="vera_umount ${rollback_actions}"
+	fi
+}
+
+vera_umount() {
+	if mount | grep -q "${cryptdev} on ${mountdir}"; then
+		if umount "${mountdir}"; then
+			rollback_actions="vera_mount ${rollback_actions}"
+		fi
+	else
+		# Veracrypt container is already unmounted.
+		return 0
+	fi
+}
+
+rollback() {
+	for action in ${rollback_actions}; do
+		echo 1>&2 "rollback: ${action}"
+		eval "${action}"
+	done
+}
+
+case $1 in
+open)	vera_open ;;
+close)	vera_close ;;
+mount)	{ vera_open && vera_mount; } || rollback ;;
+umount)	{ vera_umount && vera_close; } || rollback ;;
+esac

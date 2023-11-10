@@ -84,7 +84,7 @@ cmd='${doit} ${run} sudo dnf install -y'
 # Common packages to all containers.
 eval xargs -rt "${cmd}" <<- EOF
 	tmux
-	vim
+	vim-minimal
 EOF
 
 if [ -x "${setup_script}" ]; then
