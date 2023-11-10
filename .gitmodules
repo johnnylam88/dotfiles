@@ -4,6 +4,3 @@
 [submodule ".vim/pack/plugins/start/vim-signify"]
 	path = .vim/pack/plugins/start/vim-signify
 	url = https://github.com/mhinz/vim-signify.git
-[submodule ".vim/pack/syntax/start/fennel"]
-	path = .vim/pack/syntax/start/fennel
-	url = https://github.com/jaawerth/fennel.vim.git
