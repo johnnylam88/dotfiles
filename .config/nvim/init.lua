@@ -4,7 +4,7 @@
 -- Path to plugins managed by lazy.vim.
 local nvim_plugins_path = vim.fn.stdpath("data") .. "/lazy"
 
-local function install_plugin(name, alias)
+local function require_plugin(name, alias)
   local _, _, owner, repo = name:find([[(.+)/(.+)]])
   local path = ("%s/%s"):format(nvim_plugins_path, alias or repo)
 
@@ -27,8 +27,8 @@ local function install_plugin(name, alias)
 end
 
 -- Bootstrap required plugins.
-install_plugin("folke/lazy.nvim") -- plugin manager
-install_plugin("rktjmp/hotpot.nvim") -- Fennel for neovim
+require_plugin("folke/lazy.nvim") -- plugin manager
+require_plugin("rktjmp/hotpot.nvim") -- Fennel for neovim
 
 -- Load hotpot.nvim.
 require("hotpot").setup({
