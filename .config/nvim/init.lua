@@ -54,7 +54,8 @@ if vim.loop.fs_stat(specs_path) then
 end
 
 -- Load configuration.
-require("config")
+require("options")
+require("tui")
 
 -- Load lazy.nvim.
 require("lazy").setup(plugins, { install = { missing = true }})
