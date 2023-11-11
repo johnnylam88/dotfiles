@@ -89,6 +89,7 @@ EOF
 
 if [ -x "${setup_script}" ]; then
 	echo "Running script: ${setup_script}"
+	# shellcheck disable=SC2016
 	cmd='${doit} ${run} ${setup_script} "${toolbox_name}"'
 	if ! eval "${cmd}"; then
 		echo 1>&2 "${script}: error running setup script \`${setup_script}'"

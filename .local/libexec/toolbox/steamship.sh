@@ -15,6 +15,15 @@ toolbox_statedir="${HOME}/.var/toolbox/${toolbox_name}"
 setup() {
 	mkdir -p "${toolbox_statedir}"
 
+	# Install neovim for development.
+	xargs -rt sudo dnf install -y <<- EOF
+		gcc
+		libstdc++-devel
+		neovim
+	EOF
+	# Use nvim in place of vi.
+	sudo update-alternatives --install /usr/bin/vim vim "$(which nvim)" 10
+
 	# Install all shell packages for testing steamship prompt.
 	xargs -rt sudo dnf install -y <<- EOF
 		bash

@@ -15,6 +15,15 @@ toolbox_statedir="${HOME}/.var/toolbox/${toolbox_name}"
 setup() {
 	mkdir -p "${toolbox_statedir}"
 
+	# Install neovim for development.
+	xargs -rt sudo dnf install -y <<- EOF
+		gcc
+		libstdc++-devel
+		neovim
+	EOF
+	# Use nvim in place of vi.
+	sudo update-alternatives --install /usr/bin/vim vim "$(which nvim)" 10
+
 	# Install packages that are useful in the default toolbox.
 	xargs -rt sudo dnf install -y <<- EOF
 		shellcheck
