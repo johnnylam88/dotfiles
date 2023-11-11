@@ -2,7 +2,7 @@
 	name = Johnny C. Lam
 	email = jlam88@gmail.com
 [core]
-	symlinks = false
+	symlinks = true
 	autocrlf = input
 [rebase]
 	autosquash = true
