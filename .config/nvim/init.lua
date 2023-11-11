@@ -42,8 +42,19 @@ local plugins = {
   { "rktjmp/hotpot.nvim" },
 }
 
+local specs_path = vim.fn.stdpath("config") .. "/fnl/packages"
+if vim.loop.fs_stat(specs_path) then
+  -- Each Fennel file within the `packages` directory should return an array
+  -- whose values follow the lazy.vim Plugin Spec:
+  --   https://github.com/folke/lazy.nvim#-plugin-spec
+  for file in vim.fs.dir(specs_path) do
+    file = file:match("^(.*)%.fnl$")
+    table.insert(plugins, require("packages." .. file))
+  end
+end
+
 -- Load configuration.
-require("config").setup(plugins)
+require("config")
 
 -- Load lazy.nvim.
 require("lazy").setup(plugins, { install = { missing = true }})
