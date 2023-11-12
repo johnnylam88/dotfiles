@@ -31,7 +31,9 @@ require_plugin("folke/lazy.nvim") -- plugin manager
 require_plugin("udayvir-singh/tangerine.nvim") -- Fennel for neovim
 
 -- Load hotpot.nvim.
-require("tangerine").setup({ })
+require("tangerine").setup({
+  compiler = { hooks = { "oninit" } },
+})
 
 -- Plugin specs table for lazy.nvim.
 local plugins = {
