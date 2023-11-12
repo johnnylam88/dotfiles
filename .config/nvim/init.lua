@@ -28,18 +28,15 @@ end
 
 -- Bootstrap required plugins.
 require_plugin("folke/lazy.nvim") -- plugin manager
-require_plugin("rktjmp/hotpot.nvim") -- Fennel for neovim
+require_plugin("udayvir-singh/tangerine.nvim") -- Fennel for neovim
 
 -- Load hotpot.nvim.
-require("hotpot").setup({
-  -- Resolve `(require :fennel)` to the fennel.lua provided by hotpot.nvim.
-  provide_require_fennel = true,
-})
+require("tangerine").setup({ })
 
 -- Plugin specs table for lazy.nvim.
 local plugins = {
-  -- Hardcode hotpot.nvim plugin.
-  { "rktjmp/hotpot.nvim" },
+  -- Hardcode tangerine.nvim plugin.
+  { "udayvir-singh/tangerine.nvim" },
 }
 
 local specs_path = vim.fn.stdpath("config") .. "/fnl/packages"
@@ -58,4 +55,9 @@ require("options")
 require("tui")
 
 -- Load lazy.nvim.
-require("lazy").setup(plugins, { install = { missing = true }})
+require("lazy").setup(
+  plugins,
+  {
+    install = { missing = true },
+    performance = { reset_packpath = false }, -- for tangerine.nvim
+  })
