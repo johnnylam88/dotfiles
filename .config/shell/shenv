@@ -74,7 +74,10 @@ cygwin)
 		prepend_to_path /drv/PortableApps/CommonFiles/node
 		prepend_to_path /drv/PortableApps/CommonFiles/node/Data/npm-global
 	fi
+	# ${LANG} taken from Cygwin .bashrc.
 	export LANG=$(/usr/bin/locale -uU)
+	# Cygwin doesn't set ${LOGNAME}, but it should match ${USER}.
+	export LOGNAME=${USER}
 	;;
 esac
 
