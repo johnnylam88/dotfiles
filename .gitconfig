@@ -4,6 +4,8 @@
 [core]
 	symlinks = true
 	autocrlf = input
+[pull]
+	rebase = false
 [rebase]
 	autosquash = true
 [init]
