@@ -54,14 +54,18 @@ setup() {
 	  wget "https://luarocks.org/releases/luarocks-${VERSION}.tar.gz" &&
 	  tar zxvpf "luarocks-${VERSION}.tar.gz" &&
 	  cd "luarocks-${VERSION}" &&
-	  ./configure && make &&
+	  ./configure \
+		--lua-version=5.1 \
+		--with-lua-bin=/usr/local/bin \
+		--with-lua-interpreter=lua &&
+	  make &&
 	  sudo make install ) || return 1
 
 	# Install helper modules for LuaRocks.
 	sudo luarocks install luasocket
 	sudo luarocks install luasec
 
-    # Install bitlib since it is in the standard WoW API.
+	# Install bitlib since it is in the standard WoW API.
 	sudo luarocks install bitlib
 
 	# Install Fennel.
