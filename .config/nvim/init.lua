@@ -8,7 +8,7 @@ local function require_plugin(name, alias)
   local _, _, owner, repo = name:find([[(.+)/(.+)]])
   local path = ("%s/%s"):format(nvim_plugins_path, alias or repo)
 
-  if not vim.loop.fs_stat(path) then
+  if (vim.fn.isdirectory(path) == 0) then
     vim.notify(("Installing %s/%s..."):format(owner, repo), vim.log.levels.INFO)
 
     local command = {
@@ -40,7 +40,7 @@ local plugins = {
 }
 
 local specs_path = vim.fn.stdpath("config") .. "/fnl/packages"
-if vim.loop.fs_stat(specs_path) then
+if (vim.fn.isdirectory(specs_path) > 0) then
   -- Each Fennel file within the `packages` directory should return an array
   -- whose values follow the lazy.vim Plugin Spec:
   --   https://github.com/folke/lazy.nvim#-plugin-spec
