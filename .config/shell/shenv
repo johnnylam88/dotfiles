@@ -31,20 +31,10 @@ X)	case X${SHELL} in
 		*)
 			if [ -f /git-bash.exe ]; then
 				# Git for Windows
-				case X${MSYSTEM} in
-				XMSYS*)		SYSTYPE=git-sdk-msys2 ;;
-				XMINGW32)	SYSTYPE=git-sdk-32 ;;
-				XMINGW64)	SYSTYPE=git-sdk-64 ;;
-				*)		SYSTYPE="git-sdk-${MSYSTEM}" ;;
-				esac
+				SYSTYPE="git-${MSYSTEM}"
 			else
 				# MSYS2
-				case X${MSYSTEM} in
-				XMSYS*)		SYSTYPE=msys2 ;;
-				XMINGW32)	SYSTYPE=mingw32 ;;
-				XMINGW64)	SYSTYPE=mingw64 ;;
-				*)		SYSTYPE="${MSYSTEM}" ;;
-				esac
+				SYSTYPE="msys2-${MSYSTEM}"
 			fi
 			;;
 		esac
@@ -70,14 +60,26 @@ termux)
 	prepend_to_path "${HOME}/local/sbin"
 	;;
 cygwin)
-	if [ -d /drv/PortableApps/CommonFiles/node ]; then
-		prepend_to_path /drv/PortableApps/CommonFiles/node
-		prepend_to_path /drv/PortableApps/CommonFiles/node/Data/npm-global
-	fi
 	# ${LANG} taken from Cygwin .bashrc.
 	export LANG=$(/usr/bin/locale -uU)
 	# Cygwin doesn't set ${LOGNAME}, but it should match ${USER}.
 	export LOGNAME=${USER}
+	;;
+git-*)
+	# ${LANG} taken from MSYS2 .bashrc.
+	export LANG=$(/usr/bin/locale -uU)
+	# Git BASH doesn't set ${LOGNAME} nor ${USER}.
+	export USER=${PORTABLE_USER}
+	export LOGNAME=${USER}
+	;;
+msys2-*)
+	# ${LANG} taken from MSYS2 .bashrc.
+	export LANG=$(/usr/bin/locale -uU)
+	# MSYS2 doesn't set ${LOGNAME}.
+	export LOGNAME=${USER}
+	if [ -d /drv/tools/git/cmd ]; then
+		prepend_to_path /drv/tools/git/cmd
+	fi
 	;;
 esac
 

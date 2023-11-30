@@ -59,11 +59,17 @@ alias ll='ls -lF'
 alias la='ls -aCF'
 
 case ${SYSTYPE} in
-cygwin|linux)
+cygwin|git-*|msys2-*|linux)
 	# Assume that Cygwin and Linux use GNU ls(1).
 	alias ls='ls -CF --color=auto'
 	alias ll='ls -laF --color=auto --group-directories-first'
 	;;
+esac
+case ${SYSTYPE} in
+git-*|msys2-*)
+	if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
+		alias npp='start "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
+	fi
 esac
 case ${SYSTYPE} in
 cygwin)
