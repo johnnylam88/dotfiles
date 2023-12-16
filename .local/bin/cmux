@@ -1,0 +1,47 @@
+#!/bin/sh
+
+script=${0##*/}
+manager=distrobox # distrobox, toolbox
+container_name=
+
+case ${1} in
+-n)
+	case ${2} in
+	-*)	
+		echo 1>&2 "${script}: '-n' must be followed by the container name"
+		exit 1
+		;;
+	*)	
+		container_name=${2}
+		shift 2
+		;;
+	esac
+	;;
+esac
+
+case ${manager} in
+distrobox)
+	run="distrobox enter ${container_name} --"
+	;;
+toolbox)
+	run="toolbox run -c ${container_name}"
+	;;
+esac
+
+if [ -f /run/.containerenv ]; then
+	# shellcheck disable=SC2016
+	name_cmd='. /run/.containerenv && printf "${name}"'
+	if [ -z "${container_name}" ]; then
+		container_name=$(eval "${name_cmd}")
+		# shellcheck disable=SC2034
+		run=
+	else
+		container_name=$(eval "${name_cmd}")
+		echo 1>&2 "${script}: '-n' cannot be used inside container \`${container_name}'"
+		exit 1
+	fi
+fi
+
+# shellcheck disable=SC2016
+cmd='${run} tmux new-session -As "tmux-${container_name}" "${@}"'
+eval "exec ${cmd}"
