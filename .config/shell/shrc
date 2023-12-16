@@ -8,17 +8,6 @@ SHRC_SOURCED=yes
 # Shell functions and aliases
 
 ########################################
-# Steamship prompt
-
-if [ -f "${HOME}/.local/share/steamship/steamship.sh" ]; then
-	STEAMSHIP_ROOT="${HOME}/.local/share/steamship"
-	. "${STEAMSHIP_ROOT}/steamship.sh"
-fi
-
-# Default prompt
-: ${PS1:="$ "}
-
-########################################
 # Functions
 
 agent() {
@@ -98,5 +87,30 @@ if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
 	#ulimit -c unlimited	# core dump size limit
 	if [ -n "${BASH_VERSION}" ]; then
 		shopt -s checkwinsize	# check window size after each command
+	fi
+fi
+
+########################################
+# Prompt
+
+# Default prompt
+: "${PS1:='$ '}"
+
+PS1_DEFAULT=${PS1}
+
+if command -v starship >/dev/null 2>&1; then
+	if [ -n "${BASH_VERSION}" ]; then
+		eval "$(starship init bash)"
+	elif [ -n "${ZSH_VERSION}" ]; then
+		eval "$(starship init zsh)"
+	else
+		PS1='$(starship prompt)'
+	fi
+fi
+
+if [ "${PS1}" = "${PS1_DEFAULT}" ]; then
+	if [ -f "${HOME}/.local/share/steamship/steamship.sh" ]; then
+		STEAMSHIP_ROOT="${HOME}/.local/share/steamship"
+		. "${STEAMSHIP_ROOT}/steamship.sh"
 	fi
 fi
