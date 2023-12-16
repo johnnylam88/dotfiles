@@ -4,8 +4,8 @@
   (set vim.opt.shiftwidth indent)
   (set vim.opt.softtabstop indent))
 
-;; Expand tabs to spaces.
-(set vim.opt.expandtab true)
+;; Expand tabs to spaces (this should be by filetype).
+;(set vim.opt.expandtab true)
 
 ;; Don't "fix" existing files by adding a "missing" newline at the end of
 ;; the file if it's opened read/write.
