@@ -53,6 +53,7 @@ if (vim.fn.isdirectory(specs_path) > 0) then
 end
 
 -- Load configuration.
+require("compat")
 require("options")
 require("tui")
 
