@@ -70,6 +70,7 @@ git-*|msys2-*)
 	if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
 		alias npp='start "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
 	fi
+	;;
 esac
 case ${SYSTYPE} in
 cygwin)
@@ -77,6 +78,13 @@ cygwin)
 		alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
 	fi
 	alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
+	;;
+esac
+case ${SYSTYPE} in
+msys2-*)
+	# Use aliases to vim(1) due to lack of an "alternatives" system.
+	alias vi=nvim
+	alias vim=nvim
 	;;
 esac
 
