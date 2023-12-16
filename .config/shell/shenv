@@ -55,31 +55,39 @@ prepend_to_path() {
 # Prepend system-specific directories to ${PATH}.
 case ${SYSTYPE} in
 termux)
-	export TERMUX_ROOT="/data/data/com.termux/files"
+	TERMUX_ROOT="/data/data/com.termux/files"
 	prepend_to_path "${HOME}/local/bin"
 	prepend_to_path "${HOME}/local/sbin"
+	export TERMUX_ROOT
 	;;
 cygwin)
 	# ${LANG} taken from Cygwin .bashrc.
-	export LANG=$(/usr/bin/locale -uU)
-	# Cygwin doesn't set ${LOGNAME}, but it should match ${USER}.
-	export LOGNAME=${USER}
+	LANG=$(/usr/bin/locale -uU)
+	export LANG
 	;;
 git-*)
 	# ${LANG} taken from MSYS2 .bashrc.
-	export LANG=$(/usr/bin/locale -uU)
-	# Git BASH doesn't set ${LOGNAME} nor ${USER}.
-	export USER=${PORTABLE_USER}
-	export LOGNAME=${USER}
+	LANG=$(/usr/bin/locale -uU)
+	# Git BASH doesn't set ${USER}.
+	USER=${PORTABLE_USER}
+	export LANG USER
 	;;
 msys2-*)
 	# ${LANG} taken from MSYS2 .bashrc.
-	export LANG=$(/usr/bin/locale -uU)
-	# MSYS2 doesn't set ${LOGNAME}.
-	export LOGNAME=${USER}
-	if [ -d /drv/tools/git/cmd ]; then
-		prepend_to_path /drv/tools/git/cmd
-	fi
+	LANG=$(/usr/bin/locale -uU)
+	# EDITOR and DIFFPROG settings for pacdiff(8).
+	EDITOR=/usr/bin/nvim
+	DIFFPROG='/usr/bin/nvim -d'
+	# Use Git for Windows with MSYS2.
+	prepend_to_path /drv/tools/git/cmd
+	export DIFFPROG EDITOR LANG
+	;;
+esac
+
+case ${SYSTYPE} in
+cygwin|git-*|msys2-*)
+	# Prepend path to `gsudo` for UAC access on Windows.
+	prepend_to_path /drv/tools/gsudo/x64
 	;;
 esac
 
@@ -88,20 +96,22 @@ prepend_to_path "${HOME}/bin"
 prepend_to_path "${HOME}/.local/bin"
 
 unset prepend_to_path
-
 export PATH
 
-# Use vi(1) as the main editor.
-EDITOR="/usr/bin/vi"
+# Default to vim(1) as the main editor.
+: "${EDITOR:=/usr/bin/vi}"
 
 # Set TERM to a safe default if it isn't already set.
-: ${TERM:=vt100}
+: "${TERM:=vt100}"
+
+# Set LOGNAME to ${USER} if it isn't already set.
+: "${LOGNAME:=${USER}}"
 
 # This should be set in the system-wide /etc/profile, but SDF.org
 # relies on it being properly set up in $HOME/.profile.
-: ${MAIL:=/mail/${LOGNAME:?}}
+: "${MAIL:=/mail/${LOGNAME:?}}"
 
-export EDITOR MAIL TERM
+export EDITOR LOGNAME MAIL TERM
 
 # Check for interactive shell before loading the rc file.
 case $- in
