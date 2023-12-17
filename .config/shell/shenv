@@ -15,7 +15,8 @@ fi
 # Shell environment
 
 case X${SYSTYPE} in
-X)	case X${SHELL} in
+X)
+	case X${SHELL} in
 	*/com.termux/*)
 		SYSTYPE=termux
 		;;
@@ -54,12 +55,6 @@ prepend_to_path() {
 
 # Prepend system-specific directories to ${PATH}.
 case ${SYSTYPE} in
-termux)
-	TERMUX_ROOT="/data/data/com.termux/files"
-	prepend_to_path "${HOME}/local/bin"
-	prepend_to_path "${HOME}/local/sbin"
-	export TERMUX_ROOT
-	;;
 cygwin)
 	# ${LANG} taken from Cygwin .bashrc.
 	LANG=$(/usr/bin/locale -uU)
@@ -72,6 +67,10 @@ git-*)
 	USER=${PORTABLE_USER}
 	export LANG USER
 	;;
+linux)
+	# Set EDITOR to 'vim' to override a common default of 'nano'.
+	EDITOR=/usr/bin/vim
+	;;
 msys2-*)
 	# ${LANG} taken from MSYS2 .bashrc.
 	LANG=$(/usr/bin/locale -uU)
@@ -81,6 +80,12 @@ msys2-*)
 	# Use Git for Windows with MSYS2.
 	prepend_to_path /drv/tools/git/cmd
 	export DIFFPROG EDITOR LANG
+	;;
+termux)
+	TERMUX_ROOT="/data/data/com.termux/files"
+	prepend_to_path "${HOME}/local/bin"
+	prepend_to_path "${HOME}/local/sbin"
+	export TERMUX_ROOT
 	;;
 esac
 
@@ -98,7 +103,7 @@ prepend_to_path "${HOME}/.local/bin"
 unset prepend_to_path
 export PATH
 
-# Default to vim(1) as the main editor.
+# Default to vi(1) as the main editor.
 : "${EDITOR:=/usr/bin/vi}"
 
 # Set TERM to a safe default if it isn't already set.
