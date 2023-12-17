@@ -75,8 +75,8 @@ msys2-*)
 	# ${LANG} taken from MSYS2 .bashrc.
 	LANG=$(/usr/bin/locale -uU)
 	# EDITOR and DIFFPROG settings for pacdiff(8).
-	EDITOR=/usr/bin/nvim
-	DIFFPROG='/usr/bin/nvim -d'
+	EDITOR=$(command -v nvim || command -v nano)
+	DIFFPROG="${EDITOR} -d"
 	# Use Git for Windows with MSYS2.
 	prepend_to_path /drv/tools/git/cmd
 	export DIFFPROG EDITOR LANG
