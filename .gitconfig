@@ -1,6 +1,7 @@
 [user]
 	name = Johnny C. Lam
 	email = jlam88@gmail.com
+	signingkey = 1069C2D892E7C176
 [core]
 	symlinks = true
 	autocrlf = input

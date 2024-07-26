@@ -1,0 +1,16 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: gpg_ssh
+# BEFORE: prompt
+
+# Launch gpg-agent(1) as a replacement for ssh-agent(1) if both GPG_TTY and
+# SSH_AUTH_SOCK are set appropriately.
+
+if [ -n "${GPG_TTY}" ]; then
+	case ${SSH_AUTH_SOCK} in
+	*/S.gpg-agent.ssh)
+		gpgconf --launch gpg-agent
+		;;
+	esac
+fi
