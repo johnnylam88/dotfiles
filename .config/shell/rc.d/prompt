@@ -1,0 +1,29 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: prompt
+
+# Default prompt.
+: "${PS1:='$ '}"
+
+PS1_DEFAULT="${PS1}"
+
+# Use starship(1) if it is available.
+if command -v starship >/dev/null 2>&1; then
+	if [ -n "${BASH_VERSION}" ]; then
+		eval "$(starship init bash)"
+	elif [ -n "${ZSH_VERSION}" ]; then
+		eval "$(starship init zsh)"
+	else
+		PS1='$(starship prompt)'
+	fi
+fi
+
+# Fall back to steamship if it is available.
+if [ "${PS1}" = "${PS1_DEFAULT}" ]; then
+	if [ -f "${HOME}/.local/share/steamship/steamship.sh" ]; then
+		STEAMSHIP_ROOT="${HOME}/.local/share/steamship"
+		# shellcheck disable=SC1091
+		. "${STEAMSHIP_ROOT}/steamship.sh"
+	fi
+fi

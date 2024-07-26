@@ -1,0 +1,14 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: aliases
+# PROVIDE: colorls
+# BEFORE: prompt
+
+# Assume that Cygwin, MSYS2, and Linux use GNU ls(1) that supports color.
+case ${SYSTYPE} in
+cygwin|git-*|linux|msys2-*)
+	alias ls="ls -CF --color=auto"
+	alias ll="ls -alF --color=auto --group-directories-first"
+	;;
+esac

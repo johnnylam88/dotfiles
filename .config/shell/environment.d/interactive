@@ -1,0 +1,14 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: interactive
+
+# Load configuration for interactive shells.
+case ${-} in
+*i*)
+	if [ -f "${HOME}/.config/shell/shrc" ]; then
+		# shellcheck disable=SC1091
+		. "${HOME}/.config/shell/shrc"
+	fi
+	;;
+esac

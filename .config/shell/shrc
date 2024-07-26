@@ -1,116 +1,18 @@
-# shrc -- called for each invocation of an interactive shell
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# This file is sourced for each invocation of an interactive shell.
 
-[ -n "${SHRC_SOURCED}" ] && return
-
+[ -z "${SHRC_SOURCED}" ] || return
 SHRC_SOURCED=yes
 
-###########################################################################
-# Shell functions and aliases
-
-########################################
-# Functions
-
-agent() {
-	agent_env="${HOME}/.ssh/environment"
-	case "${1}" in
-	start)
-		# Start ssh-agent(1) if not already started.
-		shift
-		/usr/bin/ssh-add -l >/dev/null 2>&1
-		if [ "$?" = 2 ]; then
-			if [ -r "${agent_env}" ]; then
-				. "${agent_env}" >/dev/null
-			fi
-			/usr/bin/ssh-add -l >/dev/null 2>&1
-			if [ "$?" = 2 ]; then
-				( umask 066; /usr/bin/ssh-agent > "${agent_env}" )
-				. "${agent_env}"
-			fi
+if [ -d "${HOME}/.config/shell/rc.d" ]; then
+	for file in \
+		$(sh "${HOME}/.config/shell/rcorder.sh" "${HOME}"/.config/shell/rc.d/*)
+	do
+		if [ -f "${file}" ]; then
+			# shellcheck disable=SC1090
+			. "${file}"
 		fi
-		;;
-	stop)
-		# Stop ssh-agent(1) if it is running.
-		shift
-		/usr/bin/ssh-add -l >/dev/null 2>&1
-		[ "$?" = 2 ] || eval `/usr/bin/ssh-agent -k`
-		;;
-	esac
-	unset agent_env
-}
-
-########################################
-# Aliases
-
-alias cp='cp -i'
-alias mv='mv -i'
-alias ls='ls -CF'
-alias ll='ls -lF'
-alias la='ls -aCF'
-
-case ${SYSTYPE} in
-cygwin|git-*|msys2-*|linux)
-	# Assume that Cygwin and Linux use GNU ls(1).
-	alias ls='ls -CF --color=auto'
-	alias ll='ls -laF --color=auto --group-directories-first'
-	;;
-esac
-case ${SYSTYPE} in
-git-*|msys2-*)
-	if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
-		alias npp='start "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
-	fi
-	;;
-esac
-case ${SYSTYPE} in
-cygwin)
-	if [ -f '/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe' ]; then
-		alias npp='cygstart "/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe"'
-	fi
-	alias tmux='/usr/bin/tmux -S ~/.tmux/socket'
-	;;
-esac
-case ${SYSTYPE} in
-msys2-*)
-	# Use aliases to vim(1) due to lack of an "alternatives" system.
-	alias vi=nvim
-	alias vim=nvim
-	;;
-esac
-
-########################################
-# Shell options
-
-if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
-	set -o emacs			# emacs command-line editing mode
-	set -o ignoreeof		# Don't exit on EOF (Ctrl-D)
-	set -o notify			# Asynchronous reports on children
-	#ulimit -c unlimited	# core dump size limit
-	if [ -n "${BASH_VERSION}" ]; then
-		shopt -s checkwinsize	# check window size after each command
-	fi
-fi
-
-########################################
-# Prompt
-
-# Default prompt
-: "${PS1:='$ '}"
-
-PS1_DEFAULT=${PS1}
-
-if command -v starship >/dev/null 2>&1; then
-	if [ -n "${BASH_VERSION}" ]; then
-		eval "$(starship init bash)"
-	elif [ -n "${ZSH_VERSION}" ]; then
-		eval "$(starship init zsh)"
-	else
-		PS1='$(starship prompt)'
-	fi
-fi
-
-if [ "${PS1}" = "${PS1_DEFAULT}" ]; then
-	if [ -f "${HOME}/.local/share/steamship/steamship.sh" ]; then
-		STEAMSHIP_ROOT="${HOME}/.local/share/steamship"
-		. "${STEAMSHIP_ROOT}/steamship.sh"
-	fi
+	done
 fi

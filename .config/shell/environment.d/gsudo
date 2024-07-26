@@ -1,0 +1,13 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: functions systype
+# PROVIDE: gsudo
+# BEFORE: interactive
+
+# Add path to gsudo(1) for UAC on Windows.
+case ${SYSTYPE} in
+cygwin|git-*|msys2-*)
+	prepend_to_path /drv/tools/gsudo/x64
+	;;
+esac

@@ -1,7 +1,9 @@
-# profile -- called for each invocation of a login shell
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# This file is sourced for each invocation of a login shell.
 
-[ -n "${PROFILE_SOURCED}" ] && return
-
+[ -z "${PROFILE_SOURCED}" ] || return
 PROFILE_SOURCED=yes
 
 # Ensure that ${HOME}/.config/shell/shenv is called for each
@@ -9,14 +11,19 @@ PROFILE_SOURCED=yes
 #
 if [ -f "${HOME}/.config/shell/shenv" ]; then
 	export ENV="${HOME}/.config/shell/shenv"
+
+	# Bash, yash, and zsh don't automatically source ${ENV} from
+	# a login shell unless invoked in POSIX mode.
 	if [ -n "${BASH_VERSION}" ]; then
-		# Bash uses ${BASH_ENV} instead of ${ENV}, except if
-		# it's invoked with the --posix option.
-		export BASH_ENV=${ENV}
+		# Bash uses BASH_ENV instead of ENV.
+		export BASH_ENV="${ENV}"
+		# shellcheck disable=SC1090
 		. "${ENV}"
 	elif [ -n "${YASH_VERSION}" ]; then
+		# shellcheck disable=SC1090
 		. "${ENV}"
 	elif [ -n "${ZSH_VERSION}" ]; then
+		# shellcheck disable=SC1090
 		. "${ENV}"
 	fi
 fi

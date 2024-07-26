@@ -1,0 +1,26 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: aliases
+# PROVIDE: notepadplusplus
+# BEFORE: prompt
+
+# Add alias for Notepad++ on Windows.
+npp_exe=/drv/PortableApps/Notepad++Portable/Notepad++Portable.exe
+
+case ${SYSTYPE} in
+cygwin)
+	if [ -f "${npp_exe}" ]; then
+		# shellcheck disable=SC2139
+		alias npp="cygstart ${npp_exe}"
+	fi
+	;;
+git-*|msys2-*)
+	if [ -f "${npp_exe}" ]; then
+		# shellcheck disable=SC2139
+		alias npp="start ${npp_exe}"
+	fi
+	;;
+esac
+
+unset npp_exe

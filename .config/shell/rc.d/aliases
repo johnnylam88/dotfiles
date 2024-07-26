@@ -1,0 +1,12 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: aliases
+# BEFORE: prompt
+
+alias cp="cp -i"
+alias mv="mv -i"
+
+alias ls="ls -CF"
+alias ll="ls -lF"
+alias la="ls -aCF"

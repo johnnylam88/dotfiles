@@ -1,0 +1,15 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: functions
+# BEFORE: interactive
+
+prepend_to_path() {
+	case ":${PATH}:" in
+	*:"${1}":*)
+		;;
+	*)
+		PATH="${1}:${PATH}"
+		;;
+	esac
+}

@@ -1,0 +1,17 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: functions systype
+# PROVIDE: termux
+# BEFORE: defaults
+
+# Environment variables specific to Termux on Android.
+case ${SYSTYPE} in
+termux)
+	TERMUX_ROOT=/data/data/com.termux/files
+	export TERMUX_ROOT
+
+	prepend_to_path "${HOME}/local/bin"
+	prepend_to_path "${HOME}/local/sbin"
+	;;
+esac

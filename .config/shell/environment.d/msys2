@@ -1,0 +1,21 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: functions systype
+# PROVIDE: msys2
+# BEFORE: defaults
+
+# Environment variables specific to MSYS2.
+case ${SYSTYPE} in
+msys2-*)
+	# ${LANG} is taken from MSYS2's .bashrc.
+	LANG=$(/usr/bin/locale -uU)
+	# EDITOR and DIFFPROG settings for pacdiff(8).
+	EDITOR=$(command -v nvim || command -v nano)
+	DIFFPROG="${EDITOR} -d"
+	export DIFFPROG EDITOR LANG
+
+	# Use Git for Windows with MSYS2 instead of MSYS2's git(1).
+	prepend_to_path /drv/tools/git/cmd
+	;;
+esac

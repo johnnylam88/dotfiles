@@ -1,0 +1,21 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: options
+# BEFORE: prompt
+
+if [ -n "${BASH_VERSION}${KSH_VERSION}${ZSH_VERSION}" ]; then
+	# EMACS command-line editing mode.
+	set -o emacs
+
+	# Don't exit the shell on EOF (Ctrl-D).
+	set -o ignoreeof
+
+	# Asynchronous reports on child processes.
+	set -o notify
+fi
+
+if [ -n "${BASH_VERSION}" ]; then
+	# Check window size after each command.
+	shopt -s checkwinsize
+fi

@@ -1,0 +1,27 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: systype
+# BEFORE: defaults
+
+if [ -z "${SYSTYPE}" ]; then
+	case ${SHELL} in
+	*/com.termux/*)
+		SYSTYPE=termux
+		;;
+	*)
+		if [ -z "${MSYSTEM}" ]; then
+			if [ -f /bin/cygwin1.dll ]; then
+				SYSTYPE=cygwin
+			else
+				SYSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
+			fi
+		elif [ -f /git-bash.exe ]; then
+			# Git for Windows
+			SYSTYPE="git-${MSYSTEM}"
+		else
+			# MSYS2
+			SYSTYPE="msys2-${MSYSTEM}"
+		fi
+	esac
+fi

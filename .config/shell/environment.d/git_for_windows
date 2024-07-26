@@ -1,0 +1,17 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: systype
+# PROVIDE: git_for_windows
+# BEFORE: defaults
+
+# Environment variables specific to Git for Windows.
+case ${SYSTYPE} in
+git-*)
+	# ${LANG} is taken from MSYS2's .bashrc.
+	LANG=$(/usr/bin/locale -uU)
+	# Git Bash doesn't set the USER environent variable.
+	USER=${PORTABLE_USER:-me}
+	export LANG USER
+	;;
+esac

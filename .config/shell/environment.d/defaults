@@ -1,0 +1,24 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: defaults
+# BEFORE: interactive
+
+# Set safe defaults for various environment variables.
+# These may be overridden in the system-specific files loaded
+# before this one.
+
+# Default to vi(1) as the main editor.
+: "${EDITOR:=/usr/bin/vi}"
+
+# Default TERM to vt100.
+: "${TERM:=vt100}"
+
+# Default LOGNAME to ${USER}.
+: "${LOGNAME:=${USER}}"
+
+# MAIL should be set in the system-wide /etc/profile, but SDF.org
+# relies on it being properly set by the user.
+: "${MAIL:=/mail/${LOGNAME:?}}"
+
+export EDITOR LOGNAME MAIL TERM

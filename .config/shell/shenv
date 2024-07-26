@@ -1,128 +1,19 @@
-# shenv -- called for each invocation of a shell
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# This file is sourced for each invocation of a shell.
 
-[ -n "${SHENV_SOURCED}" ] && return
-
+[ -z "${SHENV_SOURCED}" ] || return
 SHENV_SOURCED=yes
 
-if [ -n "${KSH_VERSION}" ]; then
-	# ${HOME}/.kshrc should be called for each invocation of a shell.
-	if [ -f "${HOME}/.kshrc" ]; then
-		. "${HOME}/.kshrc"
-	fi
+if [ -d "${HOME}/.config/shell/environment.d" ]; then
+	for file in \
+		$(sh "${HOME}/.config/shell/rcorder.sh" \
+			"${HOME}"/.config/shell/environment.d/*)
+	do
+		if [ -f "${file}" ]; then
+			# shellcheck disable=SC1090
+			. "${file}"
+		fi
+	done
 fi
-
-###########################################################################
-# Shell environment
-
-case X${SYSTYPE} in
-X)
-	case X${SHELL} in
-	*/com.termux/*)
-		SYSTYPE=termux
-		;;
-	*)
-		case X${MSYSTEM} in
-		X)
-			if [ -f /bin/cygwin1.dll ]; then
-				SYSTYPE=cygwin
-			else
-				SYSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
-			fi
-			;;
-		*)
-			if [ -f /git-bash.exe ]; then
-				# Git for Windows
-				SYSTYPE="git-${MSYSTEM}"
-			else
-				# MSYS2
-				SYSTYPE="msys2-${MSYSTEM}"
-			fi
-			;;
-		esac
-	esac
-	;;
-esac
-
-prepend_to_path() {
-	case ":${PATH}:" in
-	*:"${1}":*)
-		;;
-	*)
-		PATH="${1}:${PATH}"
-		;;
-	esac
-}
-
-# Prepend system-specific directories to ${PATH}.
-case ${SYSTYPE} in
-cygwin)
-	# ${LANG} taken from Cygwin .bashrc.
-	LANG=$(/usr/bin/locale -uU)
-	export LANG
-	;;
-git-*)
-	# ${LANG} taken from MSYS2 .bashrc.
-	LANG=$(/usr/bin/locale -uU)
-	# Git BASH doesn't set ${USER}.
-	USER=${PORTABLE_USER}
-	export LANG USER
-	;;
-linux)
-	# Set EDITOR to 'vim' to override a common default of 'nano'.
-	EDITOR=/usr/bin/vim
-	;;
-msys2-*)
-	# ${LANG} taken from MSYS2 .bashrc.
-	LANG=$(/usr/bin/locale -uU)
-	# EDITOR and DIFFPROG settings for pacdiff(8).
-	EDITOR=$(command -v nvim || command -v nano)
-	DIFFPROG="${EDITOR} -d"
-	# Use Git for Windows with MSYS2.
-	prepend_to_path /drv/tools/git/cmd
-	export DIFFPROG EDITOR LANG
-	;;
-termux)
-	TERMUX_ROOT="/data/data/com.termux/files"
-	prepend_to_path "${HOME}/local/bin"
-	prepend_to_path "${HOME}/local/sbin"
-	export TERMUX_ROOT
-	;;
-esac
-
-case ${SYSTYPE} in
-cygwin|git-*|msys2-*)
-	# Prepend path to `gsudo` for UAC access on Windows.
-	prepend_to_path /drv/tools/gsudo/x64
-	;;
-esac
-
-# Prepend user directories to ${PATH}.
-prepend_to_path "${HOME}/bin"
-prepend_to_path "${HOME}/.local/bin"
-
-unset prepend_to_path
-export PATH
-
-# Default to vi(1) as the main editor.
-: "${EDITOR:=/usr/bin/vi}"
-
-# Set TERM to a safe default if it isn't already set.
-: "${TERM:=vt100}"
-
-# Set LOGNAME to ${USER} if it isn't already set.
-: "${LOGNAME:=${USER}}"
-
-# This should be set in the system-wide /etc/profile, but SDF.org
-# relies on it being properly set up in $HOME/.profile.
-: "${MAIL:=/mail/${LOGNAME:?}}"
-
-export EDITOR LOGNAME MAIL TERM
-
-# Check for interactive shell before loading the rc file.
-case $- in
-*i*)
-	if [ -f "${HOME}/.config/shell/shrc" ]; then
-		. "${HOME}/.config/shell/shrc"
-	fi
-	;;
-esac

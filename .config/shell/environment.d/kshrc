@@ -1,0 +1,13 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: kshrc
+# BEFORE: interactive
+
+if [ -n "${KSH_VERSION}" ]; then
+	# ${HOME}/.kshrc should be called for each invocation of ksh(1).
+	if [ -f "${HOME}/.kshrc" ]; then
+		# shellcheck disable=SC1091
+		. "${HOME}/.kshrc"
+	fi
+fi
