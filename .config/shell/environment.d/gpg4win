@@ -1,0 +1,13 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: functions systype
+# PROVIDE: gpg4win
+# BEFORE: interactive
+
+# Add path to Gpg4Win on Windows.
+case ${SYSTYPE} in
+cygwin|git-*|msys2-*)
+	prepend_to_path /drv/tools/gpg4win/bin
+	;;
+esac
