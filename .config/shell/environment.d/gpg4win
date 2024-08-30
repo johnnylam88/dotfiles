@@ -3,7 +3,7 @@
 #
 # REQUIRE: functions systype
 # PROVIDE: gpg4win
-# BEFORE: interactive
+# BEFORE: GPG interactive
 
 # Add path to Gpg4Win on Windows.
 case ${SYSTYPE} in

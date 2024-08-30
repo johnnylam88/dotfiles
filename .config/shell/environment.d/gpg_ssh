@@ -1,15 +1,23 @@
 # vim: set filetype=sh :
 # shellcheck shell=sh
 #
+# REQUIRE: GPG
 # PROVIDE: gpg_ssh
 # BEFORE: interactive
 
 # Environment variables needed to use gpg-agent(1) as a replacement
-# for ssh-agent(1) to allow using a PGP key for SSH authentication.
+# agent process to allow using a PGP key for SSH authentication.
 
+# Locate the gpg-agent(1) SSH socket for ssh(1).
 if command -v gpg-agent >/dev/null 2>&1; then
 	GPG_TTY=$(tty)
 	SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 
 	export GPG_TTY SSH_AUTH_SOCK
+fi
+
+# Use ssh-pageant(1) to support programs that speak the Pageant
+# (PuTTY) protocol.
+if command -v ssh-pageant >/dev/null 2>&1; then
+	eval $(ssh-pageant -r -a "/tmp/.ssh-pageant-${USERNAME}" 2>/dev/null)
 fi
