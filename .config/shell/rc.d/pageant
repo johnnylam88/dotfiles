@@ -10,8 +10,23 @@
 
 case ${SSH_AUTH_SOCK} in
 */S.ssh-pageant.*)
-	if command -v ssh-pageant >/dev/null 2>&1; then
-		eval $(ssh-pageant -r -a "${SSH_AUTH_SOCK}") >/dev/null
+	# Path to cached environment variables for the agent.
+	SSH_AGENT_ENV="${HOME}/.ssh/environment"
+
+	# Try to ensure the correct environment variables are already set.
+	ssh-add -l >/dev/null 2>&1
+	if [ "${?}" = 2 ] && [ -r "${SSH_AGENT_ENV}" ]; then
+		# shellcheck disable=SC1090
+		. "${SSH_AGENT_ENV}" >/dev/null
+	fi
+
+	# Start agent if not already started.
+	ssh-add -l >/dev/null 2>&1
+	if [ "${?}" = 2 ]; then
+		( umask 0066 &&
+		  ssh-pageant -r -a "${SSH_AUTH_SOCK}" > "${SSH_AGENT_ENV}" )
+		# shellcheck disable=SC1090
+		. "${SSH_AGENT_ENV}" >/dev/null
 	fi
 	;;
 esac
