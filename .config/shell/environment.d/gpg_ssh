@@ -15,9 +15,3 @@ if command -v gpg-agent >/dev/null 2>&1; then
 
 	export GPG_TTY SSH_AUTH_SOCK
 fi
-
-# Use ssh-pageant(1) to support programs that speak the Pageant
-# (PuTTY) protocol.
-if command -v ssh-pageant >/dev/null 2>&1; then
-	eval $(ssh-pageant -r -a "/tmp/.ssh-pageant-${USERNAME}" 2>/dev/null)
-fi

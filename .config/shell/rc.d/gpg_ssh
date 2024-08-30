@@ -4,13 +4,9 @@
 # PROVIDE: gpg_ssh
 # BEFORE: prompt
 
-# Launch gpg-agent(1) as a replacement for ssh-agent(1) if both GPG_TTY and
-# SSH_AUTH_SOCK are set appropriately.
+# Launch gpg-agent(1) as a replacement for ssh-agent(1).
 
-if [ -n "${GPG_TTY}" ]; then
-	case ${SSH_AUTH_SOCK} in
-	*/S.gpg-agent.ssh)
-		gpgconf --launch gpg-agent
-		;;
-	esac
+if [ -n "${GPG_TTY}" ] && command -v gpgconf >/dev/null 2>&1; then
+	# Always start gpg-agent(1) in the background.
+	gpgconf --launch gpg-agent
 fi

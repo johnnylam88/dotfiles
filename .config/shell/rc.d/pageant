@@ -1,0 +1,17 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: gpg_ssh
+# PROVIDE: pageant
+# BEFORE: prompt
+
+# Start ssh-pageant(1) if it's available to allow programs to authenticate
+# using the Pageant (PuTTY) protocol.
+
+case ${SSH_AUTH_SOCK} in
+*/S.ssh-pageant.*)
+	if command -v ssh-pageant >/dev/null 2>&1; then
+		eval $(ssh-pageant -r -a "${SSH_AUTH_SOCK}") >/dev/null
+	fi
+	;;
+esac

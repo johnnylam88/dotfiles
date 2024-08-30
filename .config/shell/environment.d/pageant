@@ -1,0 +1,12 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# REQUIRE: gpg_ssh
+# PROVIDE: pageant
+# BEFORE: interactive
+
+# Set a socket location for programs that support the Pageant (PuTTY)
+# protocol.
+if command -v ssh-pageant >/dev/null 2>&1; then
+	SSH_AUTH_SOCK="/tmp/S.ssh-pageant.${USERNAME}"
+fi
