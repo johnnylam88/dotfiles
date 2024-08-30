@@ -3,7 +3,7 @@
 #
 # REQUIRE: systype
 # PROVIDE: git_for_windows
-# BEFORE: defaults
+# BEFORE: SYSTEM
 
 # Environment variables specific to Git for Windows.
 case ${SYSTYPE} in

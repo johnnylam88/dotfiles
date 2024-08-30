@@ -3,7 +3,7 @@
 #
 # REQUIRE: systype
 # PROVIDE: cygwin
-# BEFORE: defaults
+# BEFORE: SYSTEM
 
 # Environment variables specific to Cygwin.
 case ${SYSTYPE} in

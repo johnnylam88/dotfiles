@@ -3,7 +3,7 @@
 #
 # REQUIRE: functions systype
 # PROVIDE: msys2
-# BEFORE: defaults
+# BEFORE: SYSTEM
 
 # Environment variables specific to MSYS2.
 case ${SYSTYPE} in

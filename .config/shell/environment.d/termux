@@ -3,7 +3,7 @@
 #
 # REQUIRE: functions systype
 # PROVIDE: termux
-# BEFORE: defaults
+# BEFORE: SYSTEM
 
 # Environment variables specific to Termux on Android.
 case ${SYSTYPE} in

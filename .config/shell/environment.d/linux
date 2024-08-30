@@ -3,7 +3,7 @@
 #
 # REQUIRE: systype
 # PROVIDE: linux
-# BEFORE: defaults
+# BEFORE: SYSTEM
 
 # Environment variables specific to Linux distributions.
 case ${SYSTYPE} in
