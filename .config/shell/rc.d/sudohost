@@ -1,0 +1,20 @@
+# vim: set filetype=sh :
+# shellcheck shell=sh
+#
+# PROVIDE: sudohost
+# BEFORE: interactive
+
+# Get an interactive root shell or run a command as root on the host.
+# https://tim.siosm.fr/blog/2023/12/19/ssh-over-unix-socket/
+
+sudohost() {
+	if [ "${#}" = 0 ]; then
+		cmd="$(printf "exec \"%s\" --login" "${SHELL}")"
+		# shellcheck disable=SC2029
+		ssh host.local "${cmd}"
+	else
+		cmd="$(printf "cd \"%s\"; exec %s" "${PWD}" "${*}")"
+		# shellcheck disable=SC2029
+		ssh host.local "${cmd}"
+	fi
+}
