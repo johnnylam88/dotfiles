@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Find a working ld(1) for use by gcc(1).
+for cmd in \
+	/usr/bin/ld \
+	/usr/bin/ld.gold \
+	/usr/bin/ld.bfd
+do
+	if [ -x "${cmd}" ]
+	then
+		exec "${cmd}" "${@}"
+	fi
+done
