@@ -9,4 +9,5 @@
 # protocol.
 if command -v ssh-pageant >/dev/null 2>&1; then
 	SSH_AUTH_SOCK="/tmp/S.ssh-pageant.${USERNAME}"
+	export SSH_AUTH_SOCK
 fi
